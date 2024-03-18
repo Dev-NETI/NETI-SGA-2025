@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+/* VIEWS */
+
+.card-layout{
+    margin-left: 20px;
+    margin-right: 20px;
+}
