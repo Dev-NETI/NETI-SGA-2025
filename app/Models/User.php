@@ -26,8 +26,22 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'f_name',
+        'm_name',
+        'l_name',
         'password',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $user = $model::orderBy('id', 'DESC')->first();
+            $hash_id = $user != NULL ? encrypt($user->id + 1) : encrypt(1);
+            $model->hash = $hash_id;
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -61,5 +75,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // relationship
+    public function user_role()
+    {
+        return $this->hasMany(UserRole::class, 'user_id', 'id' );
+    }
+
+    // acessor
+    public function getFullNameAttribute()
+    {
+        return $this->f_name . " " . $this->m_name . " " . $this->l_name;
     }
 }

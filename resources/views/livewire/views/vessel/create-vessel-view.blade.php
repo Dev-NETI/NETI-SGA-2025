@@ -16,7 +16,7 @@
                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 
                         appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 
                         focus:border-blue-600 peer"
-                        placeholder=" " value="{{$hash != null ? $vessel : old('vessel')}}" />
+                        placeholder=" " value="{{ $hash != null ? $vessel : old('vessel') }}" />
                     <label for="Vessel"
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 
                         origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 
@@ -37,11 +37,14 @@
                     <select name="VesselType" id="VesselType" wire:model="vesselType"
                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 
                                 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 
-                                focus:border-blue-600 peer" placeholder=" ">
-                                <option value="">Select</option>
-                                @foreach ($vesselTypeData as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
+                                focus:border-blue-600 peer"
+                        placeholder=" ">
+                        @if ($hash == null)
+                            <option value="">Select</option>
+                        @endif
+                        @foreach ($vesselTypeData as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
                     </select>
                     <label for="VesselType"
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 
@@ -60,7 +63,7 @@
                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 
                         appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 
                         focus:border-blue-600 peer"
-                        placeholder=" " value="{{$hash != null ? $code : old('code')}}" />
+                        placeholder=" " value="{{ $hash != null ? $code : old('code') }}" />
                     <label for="Code"
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 
                         origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 
@@ -77,7 +80,7 @@
                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 
                         appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 
                         focus:border-blue-600 peer"
-                        placeholder=" " value="{{$hash != null ? $trainingFee : old('trainingFee')}}" />
+                        placeholder=" " value="{{ $hash != null ? $trainingFee : old('trainingFee') }}" />
                     <label for="Training Fee"
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 
                         origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 

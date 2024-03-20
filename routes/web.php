@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\Views\User\AssignRolesView;
+use App\Livewire\Views\User\CreateUserView;
+use App\Livewire\Views\User\UserView;
 use App\Livewire\Views\Vessel\CreateVesselView;
 use App\Livewire\Views\Vessel\VesselView;
 use App\Livewire\Views\VesselType\CreateVesselTypeView;
@@ -29,6 +32,14 @@ Route::middleware([
     Route::prefix('vessel')->as('vessel.')->group(function (){
         Route::get('index', VesselView::class)->name('index');
         Route::get('create', CreateVesselView::class)->name('create');
+        Route::get('edit/{hash_id}', CreateVesselView::class)->name('edit');
+    });
+
+    Route::prefix('users')->as('users.')->group(function (){
+        Route::get('index', UserView::class)->name('index');
+        Route::get('create', CreateUserView::class)->name('create');
+        Route::get('edit/{hash_id}', CreateUserView::class)->name('edit');
+        Route::get('roles/index/{hash_id}', AssignRolesView::class)->name('roles-index');
     });
 
 });

@@ -28,8 +28,7 @@
         <tbody>
             @if (count($vesselTypeData) > 0)
                 @foreach ($vesselTypeData as $item)
-                    <livewire:components.vessel-type.vessel-type-list-item-component :vessel="$item"
-                        :key="$item->id" />
+                    <livewire:components.vessel-type.vessel-type-list-item-component :vessel="$item" wire:key="{{$item->id}}" />
                 @endforeach
             @else
             @endif

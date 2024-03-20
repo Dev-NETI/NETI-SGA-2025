@@ -23,11 +23,18 @@ class CreateVesselView extends Component
     public $vesselType;
     public $code;
     public $trainingFee;
+    public $vesselId;
 
-    public function mount($hash = null)
+    public function mount($hash_id = null)
     {
-        if ($hash != null) {
-            $this->hash = $hash;
+        if ($hash_id != null) {
+            $this->hash = $hash_id;
+            $vesselData = Vessel::where('hash', $this->hash)->first();
+            $this->vessel = $vesselData->name;
+            $this->vesselType = $vesselData->vessel_type_id;
+            $this->code = $vesselData->code;
+            $this->trainingFee = $vesselData->training_fee;
+            $this->vesselId = $vesselData->id;
         }
     }
 
@@ -57,6 +64,31 @@ class CreateVesselView extends Component
             }
 
             session()->flash('success', 'Vessel saved successfully!');
+            return $this->redirectRoute('vessel.index', navigate: true);
+        } catch (Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    public function update()
+    {
+        $this->validate();
+
+        try {
+            $vesselData = Vessel::find($this->vesselId);
+            $update = $vesselData->update([
+                'vessel_type_id' => $this->vesselType,
+                'name' => $this->vessel,
+                'code' => $this->code,
+                'training_fee' => $this->trainingFee,
+                'modified_by' => ''
+            ]);
+
+            if (!$update) {
+                session()->flash('error', 'Updating vessel failed!');
+            }
+
+            session()->flash('success', 'Vessel updated successfully!');
             return $this->redirectRoute('vessel.index', navigate: true);
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());

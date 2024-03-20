@@ -20,7 +20,7 @@ class Vessel_type extends Model
     public function setHashAttribute($value)
     {
         $vesselType = self::orderBy('id','DESC')->first();
-        $hash_id = encrypt($vesselType->id + 1);
+        $hash_id = $vesselType != NULL ? encrypt($vesselType->id + 1) : encrypt(1);
         $this->attributes['hash'] = $hash_id;
     }
 }

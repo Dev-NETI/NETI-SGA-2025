@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class Vessel extends Model
 {
     use HasFactory;
-    protected $fillable = ['vessel_type_id','hash','name','code','training_fee','modified_by'];
+    protected $fillable = ['vessel_type_id','hash','name','code','training_fee','modified_by','is_active'];
 
     // relationships
     public function vessel_type()
@@ -22,7 +22,7 @@ class Vessel extends Model
     public function setHashAttribute($value)
     {
         $vessel = self::orderBy('id','DESC')->first();
-        $hash_id = encrypt($vessel->id + 1);
+        $hash_id = $vessel != NULL ? encrypt($vessel->id + 1) : encrypt(1);
         $this->attributes['hash'] = $hash_id;
     }
 
