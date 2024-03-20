@@ -11,21 +11,15 @@
             </div>
             <input type="text" id="table-search" wire:model.live="search"
                 class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for vessel type">
+                placeholder="Search for user">
         </div>
     </div>
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
-                    Name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Email
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Action
-                </th>
+                <livewire:components.reusable.th label="Name" />
+                <livewire:components.reusable.th label="Email" />
+                <livewire:components.reusable.th label="Action" />
             </tr>
         </thead>
         <tbody>

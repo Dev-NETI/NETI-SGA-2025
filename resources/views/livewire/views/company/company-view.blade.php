@@ -6,7 +6,7 @@
                 <livewire:components.reusable.header5 :title="$title" />
             </div>
             <div class="sm:col-span-1 md:col-start-4 lg:col-start-6 justify-end">
-                <livewire:components.reusable.create-button label="Create" routeName="vessel.create" />
+                <livewire:components.reusable.create-button label="Create" routeName="company.create" />
             </div>
         </div>
 
@@ -15,7 +15,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
-            <livewire:components.vessel.vessel-list-component />
+            <livewire:components.company.company-list-component />
         </div>
 
     </div>

@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserRoleSeeder::class,
             VesselTypeSeeder::class,
-            VesselSeeder::class
+            VesselSeeder::class,
+            CompanySeeder::class
         ]);
     }
 }

@@ -83,6 +83,16 @@ class User extends Authenticatable
         return $this->hasMany(UserRole::class, 'user_id', 'id' );
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
     // acessor
     public function getFullNameAttribute()
     {

@@ -32,7 +32,22 @@ class ListItemComponent extends Component
             }
 
             session()->flash('success', 'Role saved successfully!');
-            return $this->redirectRoute('users.index', navigate:true);
+            return $this->redirectRoute('users.index', navigate: true);
+        } catch (Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $userRoleData = UserRole::find($id);
+            $destroy = $userRoleData->delete();
+            if (!$destroy) {
+                session()->flash('error', 'Deleting role failed!');
+            }
+            session()->flash('success', 'Role deleted successfully!');
+            return $this->redirectRoute('users.index', navigate: true);
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }

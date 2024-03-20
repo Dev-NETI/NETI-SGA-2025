@@ -11,24 +11,27 @@
             </div>
             <input type="text" id="table-search" wire:model.live="search"
                 class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for vessel type">
+                placeholder="Search for company">
         </div>
     </div>
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
-                <livewire:components.reusable.th label="Name" />
+                <livewire:components.reusable.th label="Company" />
+                <livewire:components.reusable.th label="Code" />
+                <livewire:components.reusable.th label="Modified By" />
+                <livewire:components.reusable.th label="Modified" />
                 <livewire:components.reusable.th label="Action" />
             </tr>
         </thead>
         <tbody>
-            @if (count($vesselTypeData) > 0)
-                @foreach ($vesselTypeData as $item)
-                    <livewire:components.vessel-type.vessel-type-list-item-component :vessel="$item" wire:key="{{$item->id}}" />
+            @if (count($companyData) > 0)
+                @foreach ($companyData as $item)
+                    <livewire:components.company.company-list-item-component :company="$item" wire:key="{{$item->id}}" />
                 @endforeach
             @else
             @endif
         </tbody>
     </table>
-    <div> {{ $vesselTypeData->links() }} </div>
+    <div> {{ $companyData->links() }} </div>
 </div>

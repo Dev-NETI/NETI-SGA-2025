@@ -1,13 +1,16 @@
 <?php
 
-use App\Livewire\Views\User\AssignRolesView;
-use App\Livewire\Views\User\CreateUserView;
 use App\Livewire\Views\User\UserView;
-use App\Livewire\Views\Vessel\CreateVesselView;
-use App\Livewire\Views\Vessel\VesselView;
-use App\Livewire\Views\VesselType\CreateVesselTypeView;
-use App\Livewire\Views\VesselType\VesselTypeView;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Views\Vessel\VesselView;
+use App\Livewire\Views\Company\CompanyView;
+use App\Livewire\Views\Company\CreateCompanyView;
+use App\Livewire\Views\Department\DepartmentView;
+use App\Livewire\Views\User\CreateUserView;
+use App\Livewire\Views\User\AssignRolesView;
+use App\Livewire\Views\Vessel\CreateVesselView;
+use App\Livewire\Views\VesselType\VesselTypeView;
+use App\Livewire\Views\VesselType\CreateVesselTypeView;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,6 +43,19 @@ Route::middleware([
         Route::get('create', CreateUserView::class)->name('create');
         Route::get('edit/{hash_id}', CreateUserView::class)->name('edit');
         Route::get('roles/index/{hash_id}', AssignRolesView::class)->name('roles-index');
+        Route::get('edit-password/{hash_id}/{pw_id}', CreateUserView::class)->name('edit-password');
+    });
+
+    Route::prefix('company')->as('company.')->group(function (){
+        Route::get('index', CompanyView::class)->name('index');
+        Route::get('create', CreateCompanyView::class)->name('create');
+        Route::get('edit/{hash_id}', CreateCompanyView::class)->name('edit');
+    });
+
+    Route::prefix('department')->as('department.')->group(function (){
+        Route::get('index', DepartmentView::class)->name('index');
+        // Route::get('create', CreateCompanyView::class)->name('create');
+        // Route::get('edit/{hash_id}', CreateCompanyView::class)->name('edit');
     });
 
 });

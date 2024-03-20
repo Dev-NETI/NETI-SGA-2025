@@ -14,9 +14,4 @@ class VesselView extends Component
     {
         return view('livewire.views.vessel.vessel-view');
     }
-
-    public function create()
-    {
-        return $this->redirectRoute('vessel.create', navigate:true);
-    }
 }

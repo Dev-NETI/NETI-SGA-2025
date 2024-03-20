@@ -1,8 +1,5 @@
 <tr class="border-b border-gray-200 dark:border-gray-700">
-    <th scope="row"
-        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
-        {{ $vessel->name }}
-    </th>
+    <livewire:components.reusable.td label="{{ $vessel->name }}" />
     <td class="px-6 py-4">
 
         <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown{{ $vessel->id }}"

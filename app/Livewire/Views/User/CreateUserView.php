@@ -23,9 +23,10 @@ class CreateUserView extends Component
     public $email;
     public $password;
     public $userId;
-    public $hash;
+    public $hash = null;
+    public $pwId = null; //not null = change password
 
-    public function mount($hash_id = null)
+    public function mount($hash_id = null, $pw_id = null)
     {
         if ($hash_id != NULL) {
             $this->hash = $hash_id;
@@ -35,6 +36,9 @@ class CreateUserView extends Component
             $this->lastname = $userData->l_name;
             $this->email = $userData->email;
             $this->userId = $userData->id;
+        }
+        if ($pw_id != NULL) {
+            $this->pwId = $pw_id;
         }
     }
 
@@ -76,12 +80,19 @@ class CreateUserView extends Component
 
         try {
             $userData = User::find($this->userId);
-            $update = $userData->update([
-                'f_name' => $this->firstname,
-                'm_name' => $this->middlename,
-                'l_name'  => $this->lastname,
-                'email' => $this->email,
-            ]);
+
+            if ($this->pwId == null) {
+                $update = $userData->update([
+                    'f_name' => $this->firstname,
+                    'm_name' => $this->middlename,
+                    'l_name'  => $this->lastname,
+                    'email' => $this->email,
+                ]);
+            } else {
+                $update = $userData->update([
+                    'password' => Hash::make($this->password),
+                ]);
+            }
 
             if (!$update) {
                 session()->flash('error', 'Updating user failed!');
