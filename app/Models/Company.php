@@ -30,7 +30,7 @@ class Company extends Model
     // relationship
     public function department()
     {
-        return $this->hasMany(Department::class, 'department_id', 'id');
+        return $this->hasMany(Department::class, 'company_id', 'id');
     }
 
     public function user()

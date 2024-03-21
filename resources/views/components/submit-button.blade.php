@@ -1,3 +1,4 @@
+@props(['label'])
 <button type="submit"
     class="text-white bg-gradient-to-r from-cyan-400 to-cyan-600
     rounded-md font-medium px-5 py-2 text-center 

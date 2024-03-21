@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Views\Vessel\VesselView;
 use App\Livewire\Views\Company\CompanyView;
 use App\Livewire\Views\Company\CreateCompanyView;
+use App\Livewire\Views\Department\CreateDepartmentView;
 use App\Livewire\Views\Department\DepartmentView;
 use App\Livewire\Views\User\CreateUserView;
 use App\Livewire\Views\User\AssignRolesView;
@@ -26,18 +27,18 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::prefix('vessel-type')->as('vessel-type.')->group(function (){
-        Route::get('index', VesselTypeView::class)->name('index');
-        Route::get('create', CreateVesselTypeView::class)->name('create');
-        Route::get('edit/{hash_id}', CreateVesselTypeView::class)->name('edit');
-    });
-
     Route::prefix('vessel')->as('vessel.')->group(function (){
         Route::get('index', VesselView::class)->name('index');
         Route::get('create', CreateVesselView::class)->name('create');
         Route::get('edit/{hash_id}', CreateVesselView::class)->name('edit');
     });
 
+    Route::prefix('vessel-type')->as('vessel-type.')->group(function (){
+        Route::get('index', VesselTypeView::class)->name('index');
+        Route::get('create', CreateVesselTypeView::class)->name('create');
+        Route::get('edit/{hash_id}', CreateVesselTypeView::class)->name('edit');
+    });
+    
     Route::prefix('users')->as('users.')->group(function (){
         Route::get('index', UserView::class)->name('index');
         Route::get('create', CreateUserView::class)->name('create');
@@ -54,8 +55,8 @@ Route::middleware([
 
     Route::prefix('department')->as('department.')->group(function (){
         Route::get('index', DepartmentView::class)->name('index');
-        // Route::get('create', CreateCompanyView::class)->name('create');
-        // Route::get('edit/{hash_id}', CreateCompanyView::class)->name('edit');
+        Route::get('create', CreateDepartmentView::class)->name('create');
+        Route::get('edit/{hash_id}', CreateDepartmentView::class)->name('edit');
     });
 
 });

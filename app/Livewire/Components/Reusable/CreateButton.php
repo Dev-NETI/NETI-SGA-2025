@@ -14,8 +14,5 @@ class CreateButton extends Component
         return view('livewire.components.reusable.create-button');
     }
 
-    public function create($route)
-    {
-        return $this->redirectRoute($route, navigate:true);
-    }
+    
 }

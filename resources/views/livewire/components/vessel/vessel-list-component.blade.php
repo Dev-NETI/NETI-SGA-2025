@@ -14,16 +14,16 @@
                 placeholder="Search for vessel">
         </div>
     </div>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table class="w-full text-sm text-left rtl:text-right rounded-lg shadow-lg text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
-                <livewire:components.reusable.th label="Vessel" />
-                <livewire:components.reusable.th label="Type" />
-                <livewire:components.reusable.th label="Code" />
-                <livewire:components.reusable.th label="Training Fee" />
-                <livewire:components.reusable.th label="Modified By" />
-                <livewire:components.reusable.th label="Modified" />
-                <livewire:components.reusable.th label="Action" />
+                <x-th>Vessel</x-th>
+                <x-th>Type</x-th>
+                <x-th>Code</x-th>
+                <x-th>Training Fee</x-th>
+                <x-th>Modified By</x-th>
+                <x-th>Modified</x-th>
+                <x-th>Action</x-th>
             </tr>
         </thead>
         <tbody>

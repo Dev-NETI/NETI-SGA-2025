@@ -45,7 +45,7 @@ class CreateVesselTypeView extends Component
                 session()->flash('error', 'Saving data failed!');
             }
             session()->flash('success', 'Vessel Type saved successfully!');
-            return $this->redirect(VesselTypeView::class, navigate: true);
+            return $this->redirect(VesselTypeView::class);
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }
@@ -68,7 +68,7 @@ class CreateVesselTypeView extends Component
                 session()->flash('error', 'Updating data failed!');
             }
             session()->flash('success', 'Vessel Type updated successfully!');
-            return $this->redirect(VesselTypeView::class, navigate: true);
+            return $this->redirect(VesselTypeView::class);
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }

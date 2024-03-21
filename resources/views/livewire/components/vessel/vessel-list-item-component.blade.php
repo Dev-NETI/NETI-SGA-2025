@@ -1,10 +1,11 @@
 <tr class="border-b border-gray-200 dark:border-gray-700">
-    <livewire:components.reusable.td label="{{ $vessel->name }}" />
-    <livewire:components.reusable.td label="{{ $vessel->vessel_type->name }}" />
-    <livewire:components.reusable.td label="{{ $vessel->code }}" />
-    <livewire:components.reusable.td label="{{ $vessel->training_fee }}" />
-    <livewire:components.reusable.td label="{{ $vessel->modified_by }}" />
-    <livewire:components.reusable.td label="{{ $vessel->formatted_updated_date }}" />
+    <x-td>{{ $vessel->name }}</x-td>
+    <x-td>{{ $vessel->vessel_type->name }}</x-td>
+    <x-td>{{ $vessel->code }}</x-td>
+    <x-td>{{ $vessel->training_fee }}</x-td>
+    <x-td>{{ $vessel->modified_by }}</x-td>
+    <x-td>{{ $vessel->formatted_updated_date }}</x-td>
+    
     <td class="px-6 py-4 hover:bg-cyan-500 hover:text-lg hover:text-slate-100">
 
         <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown{{$vessel->id}}"
@@ -18,7 +19,7 @@
             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                 <li>
-                    <a href="{{route('vessel.edit', ["hash_id"=>$vessel->hash])}}" wire:navigate
+                    <a href="{{route('vessel.edit', ["hash_id"=>$vessel->hash])}}"  
                         class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
                 </li>
                 <li>

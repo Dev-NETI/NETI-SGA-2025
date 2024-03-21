@@ -33,7 +33,7 @@ class VesselTypeListItemComponent extends Component
             }
 
             session()->flash('success', 'Vessel type deleted successfully!');
-            return $this->redirect(VesselTypeView::class, navigate:true);
+            return $this->redirect(VesselTypeView::class);
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }

@@ -14,9 +14,9 @@ class UserView extends Component
     {
         return view('livewire.views.user.user-view');
     }
-
-    public function create()
+    
+    public function create($route)
     {
-        return $this->redirectRoute('users.create', navigate:true);
+        return $this->redirectRoute($route);
     }
 }

@@ -14,4 +14,9 @@ class DepartmentView extends Component
     {
         return view('livewire.views.department.department-view');
     }
+
+    public function create($route)
+    {
+        return $this->redirectRoute($route);
+    }
 }

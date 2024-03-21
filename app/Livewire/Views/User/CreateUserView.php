@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Views\User;
 
+use App\Models\Company;
+use App\Models\Department;
 use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +18,8 @@ class CreateUserView extends Component
         'lastname' => 'required|min:2',
         'email' => 'required|email|unique:users,email',
         'password' => 'required',
+        'company' => 'required',
+        'department' => 'required',
     ])]
     public $firstname;
     public $middlename;
@@ -25,6 +29,9 @@ class CreateUserView extends Component
     public $userId;
     public $hash = null;
     public $pwId = null; //not null = change password
+    public $company;
+    public $department;
+    public $departmentData;
 
     public function mount($hash_id = null, $pw_id = null)
     {
@@ -36,6 +43,12 @@ class CreateUserView extends Component
             $this->lastname = $userData->l_name;
             $this->email = $userData->email;
             $this->userId = $userData->id;
+            $this->department = $userData->department_id;
+            $this->company = $userData->company_id;
+            $this->departmentData = Department::where('company_id', $userData->company_id)
+                ->where('is_active', true)
+                ->orderBy('name', 'asc')
+                ->get();
         }
         if ($pw_id != NULL) {
             $this->pwId = $pw_id;
@@ -45,7 +58,18 @@ class CreateUserView extends Component
     #[Layout('layouts.app')]
     public function render()
     {
-        return view('livewire.views.user.create-user-view');
+        $companyData = Company::where('is_active', true)
+            ->orderBy('name', 'asc')
+            ->get();
+        return view('livewire.views.user.create-user-view', compact('companyData'));
+    }
+
+    public function updatedCompany($value)
+    {
+        $this->departmentData = Department::where('company_id', $value)
+            ->where('is_active', true)
+            ->orderBy('name', 'asc')
+            ->get();
     }
 
     public function store()
@@ -58,13 +82,15 @@ class CreateUserView extends Component
                 'l_name'  => $this->lastname,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
+                'department_id' => $this->department,
+                'company_id' => $this->company,
             ]);
             if (!$store) {
                 session()->flash('error', 'Saving user failed!');
             }
 
             session()->flash('success', 'User saved successfully!');
-            return $this->redirectRoute('users.index', navigate: true);
+            return $this->redirectRoute('users.index');
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }
@@ -76,6 +102,8 @@ class CreateUserView extends Component
             'firstname' => 'required|min:2',
             'lastname' => 'required|min:2',
             'email' => 'required|email',
+            'company' => 'required',
+            'department' => 'required',
         ]);
 
         try {
@@ -87,6 +115,8 @@ class CreateUserView extends Component
                     'm_name' => $this->middlename,
                     'l_name'  => $this->lastname,
                     'email' => $this->email,
+                    'department_id' => $this->department,
+                    'company_id' => $this->company,
                 ]);
             } else {
                 $update = $userData->update([
@@ -99,7 +129,7 @@ class CreateUserView extends Component
             }
 
             session()->flash('success', 'User updated successfully!');
-            return $this->redirectRoute('users.index', navigate: true);
+            return $this->redirectRoute('users.index');
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }

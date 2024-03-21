@@ -3,9 +3,7 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4  rounded bg-gray-50 dark:bg-gray-800">
             <div class="col-span-2 md:col-span-2 lg:col-span-3">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    {{ $title ?? 'Page Title' }}
-                </h5>
+                <x-header-5 title="{{ $title ?? 'Page Title' }}" />
             </div>
         </div>
 

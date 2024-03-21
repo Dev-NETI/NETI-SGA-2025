@@ -1,5 +1,5 @@
 <tr class="border-b border-gray-200 dark:border-gray-700">
-    <livewire:components.reusable.td label="{{ $vessel->name }}" />
+    <x-td>{{ $vessel->name }}</x-td>
     <td class="px-6 py-4">
 
         <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown{{ $vessel->id }}"
@@ -16,7 +16,7 @@
                 <li>
                     <a href="{{ route('vessel-type.edit', ['hash_id' => $vessel->hash]) }}"
                         class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        wire:navigate>Edit</a>
+                        >Edit</a>
                 </li>
                 <li>
                     <a wire:confirm="Are you sure you want to delete vessel type?"

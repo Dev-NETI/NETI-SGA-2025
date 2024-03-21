@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Department;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DepartmentSeeder extends Seeder
 {
@@ -13,6 +14,7 @@ class DepartmentSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Department::truncate();
         $data = [
             '1' => ["Finance Department",1],
@@ -23,7 +25,8 @@ class DepartmentSeeder extends Seeder
             Department::create([
                 'name' => $name,
                 'company_id' =>  $company,
-                'modified_by' => ''
+                'modified_by' => '',
+                'hash' => encrypt($index)
             ]);
         }
     }

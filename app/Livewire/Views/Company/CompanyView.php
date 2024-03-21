@@ -14,4 +14,9 @@ class CompanyView extends Component
     {
         return view('livewire.views.company.company-view');
     }
+
+    public function create($route)
+    {
+        return $this->redirectRoute($route);
+    }
 }

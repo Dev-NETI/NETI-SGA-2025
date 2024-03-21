@@ -89,7 +89,7 @@ class CreateVesselView extends Component
             }
 
             session()->flash('success', 'Vessel updated successfully!');
-            return $this->redirectRoute('vessel.index', navigate: true);
+            return $this->redirectRoute('vessel.index');
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }

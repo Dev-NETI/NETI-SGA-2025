@@ -17,9 +17,13 @@
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
-                <livewire:components.reusable.th label="Name" />
-                <livewire:components.reusable.th label="Email" />
-                <livewire:components.reusable.th label="Action" />
+                <x-th>Name</x-th>
+                <x-th>Email</x-th>
+                <x-th>Company</x-th>
+                <x-th>Department</x-th>
+                <x-th>Modified By</x-th>
+                <x-th>Modified</x-th>
+                <x-th>Action</x-th>
             </tr>
         </thead>
         <tbody>

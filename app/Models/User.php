@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -30,6 +31,9 @@ class User extends Authenticatable
         'm_name',
         'l_name',
         'password',
+        'company_id',
+        'department_id',
+        'is_active'
     ];
 
     protected static function boot()
@@ -40,6 +44,11 @@ class User extends Authenticatable
             $user = $model::orderBy('id', 'DESC')->first();
             $hash_id = $user != NULL ? encrypt($user->id + 1) : encrypt(1);
             $model->hash = $hash_id;
+            $model->modified_by = Auth::user()->full_name;
+        });
+
+        static::updating(function ($model) {
+            $model->modified_by = Auth::user()->full_name;
         });
     }
 
