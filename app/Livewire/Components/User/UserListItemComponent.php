@@ -3,11 +3,13 @@
 namespace App\Livewire\Components\User;
 
 use App\Models\User;
+use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Component;
 
 class UserListItemComponent extends Component
 {
+    use QueryTrait;
     public $user;
 
     public function render()
@@ -17,19 +19,15 @@ class UserListItemComponent extends Component
 
     public function destroy($id)
     {
-        try {
-            $userData = User::find($id);
-            $update = $userData->update([
-                'is_active' => false,
-            ]);
-            if (!$update) {
-                session()->flash('error', 'Deleting user failed!');
-            }
-            session()->flash('success', 'Deleting user successful!');
-            return $this->redirectRoute('users.index');
-            
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $data = User::find($id);
+        $query = $data->update([
+            'is_active' => false,
+        ]);
+        $routeBack = "users.index";
+        $errorMsg = "Deleting user failed!";
+        $successMsg = "Deleting user successful!";
+
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 }

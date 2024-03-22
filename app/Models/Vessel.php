@@ -12,6 +12,22 @@ class Vessel extends Model
     use HasFactory;
     protected $fillable = ['vessel_type_id','hash','name','code','training_fee','modified_by','is_active'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $vessel = $model::orderBy('id', 'DESC')->first();
+            $hash_id = $vessel != NULL ? encrypt($vessel->id + 1) : encrypt(1);
+            $model->hash = $hash_id;
+            $model->modified_by = Auth::user()->full_name;
+        });
+
+        static::updating(function ($model) {
+            $model->modified_by = Auth::user()->full_name;
+        });
+    }
+
     // relationships
     public function vessel_type()
     {
@@ -19,17 +35,6 @@ class Vessel extends Model
     }
 
     // mutator
-    public function setHashAttribute($value)
-    {
-        $vessel = self::orderBy('id','DESC')->first();
-        $hash_id = $vessel != NULL ? encrypt($vessel->id + 1) : encrypt(1);
-        $this->attributes['hash'] = $hash_id;
-    }
-
-    public function setModifiedByAttribute($value)
-    {
-        $this->attributes['modified_by'] = Auth::user()->name;
-    }
 
     // acessor
 

@@ -5,12 +5,14 @@ namespace App\Livewire\Views\Department;
 use Exception;
 use App\Models\Company;
 use App\Models\Department;
+use App\Traits\QueryTrait;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 
 class CreateDepartmentView extends Component
 {
+    use QueryTrait;
     public $hash;
 
     #[Validate([
@@ -45,39 +47,31 @@ class CreateDepartmentView extends Component
     public function store()
     {
         $this->validate();
-        try {
-            $store = Department::create([
-                'name' => $this->department,
-                'company_id' => $this->company,
-            ]);
+        $query = Department::create([
+            'name' => $this->department,
+            'company_id' => $this->company,
+        ]);
+        $errorMsg = "Saving department failed!";
+        $successMsg = "Saving department successful!";
+        $route = "department.index";
 
-            if (!$store) {
-                session()->flash('error', 'Saving department failed!');
-            }
-            session()->flash('success', 'Saving department successful!');
-            return $this->redirectRoute('department.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->storeTrait($query, $errorMsg, $successMsg);
+        return $this->redirectRoute($route);
     }
 
     public function update()
     {
         $this->validate();
-        try {
-            $departmentData = Department::find($this->departmentId);
-            $update = $departmentData->update([
-                'name' => $this->department,
-                'company_id' => $this->company,
-            ]);
+        $data = Department::find($this->departmentId);
+        $query = $data->update([
+            'name' => $this->department,
+            'company_id' => $this->company,
+        ]);
+        $routeBack = "department.index";
+        $errorMsg = "Updating deparment failed!";
+        $successMsg = "Updating deparment successful!";
 
-            if (!$update) {
-                session()->flash('error', 'Updating department failed!');
-            }
-            session()->flash('success', 'Updating department successful!');
-            return $this->redirectRoute('department.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 }

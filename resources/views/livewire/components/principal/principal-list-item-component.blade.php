@@ -8,8 +8,8 @@
         <x-action-dropdown :id="$principal->id">
             <x-action-dropdown-item label="Edit"
                 href="{{ route('principal.edit', ['hash_id' => $principal->hash]) }}" />
-            {{-- <x-action-dropdown-item label="Delete" wire:confirm="Are you sure you want to delete principal?"
-                wire:click="destroy({{ $principal->id }})" /> --}}
+            <x-action-dropdown-item label="Delete" wire:confirm="Are you sure you want to delete principal?"
+                wire:click="destroy({{ $principal->id }})" />
         </x-action-dropdown>
 
     </td>

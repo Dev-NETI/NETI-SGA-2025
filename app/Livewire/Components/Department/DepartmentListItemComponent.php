@@ -3,11 +3,13 @@
 namespace App\Livewire\Components\Department;
 
 use App\Models\Department;
+use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Component;
 
 class DepartmentListItemComponent extends Component
 {
+    use QueryTrait;
     public $department;
 
     public function render()
@@ -17,21 +19,15 @@ class DepartmentListItemComponent extends Component
 
     public function destroy($id)
     {
-        try {
-            
-            $departmentData = Department::find($id);
-            $destroy = $departmentData->update([
-                'is_active' => false,
-            ]);
+        $data = Department::find($id);
+        $query = $data->update([
+            'is_active' => false,
+        ]);
+        $routeBack = "department.index";
+        $errorMsg = "Deleting department failed!";
+        $successMsg = "Deleting department successful!";
 
-            if (!$destroy) {
-                session()->flash('error', 'Deleting department failed!');
-            }
-            session()->flash('success', 'Deleting department successful!');
-            return $this->redirectRoute('department.index');
-
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 }

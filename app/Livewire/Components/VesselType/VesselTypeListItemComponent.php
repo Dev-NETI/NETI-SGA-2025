@@ -4,11 +4,13 @@ namespace App\Livewire\Components\VesselType;
 
 use App\Livewire\Views\VesselType\VesselTypeView;
 use App\Models\Vessel_type;
+use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Component;
 
 class VesselTypeListItemComponent extends Component
 {
+    use QueryTrait;
     public $vessel;
 
     public function render()
@@ -18,24 +20,15 @@ class VesselTypeListItemComponent extends Component
 
     public function destroy($id)
     {
-        try {
-            $vesselTypeData = Vessel_type::find($id);
-            if (!$vesselTypeData) {
-                session()->flash('error', 'Vessel type data not found');
-            }
+        $data = Vessel_type::find($id);
+        $query = $data->update([
+            'is_active' => 0,
+        ]);
+        $routeBack = "vessel-type.index";
+        $errorMsg = "Deleting Vessel type failed!";
+        $successMsg = "Deleting Vessel type successful!";
 
-            $update = $vesselTypeData->update([
-                'is_active' => 0,
-            ]);
-
-            if (!$update) {
-                session()->flash('error', 'Deleting vessel type failed!');
-            }
-
-            session()->flash('success', 'Vessel type deleted successfully!');
-            return $this->redirect(VesselTypeView::class);
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 }

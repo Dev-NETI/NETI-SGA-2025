@@ -3,6 +3,7 @@
 namespace App\Livewire\Views\VesselType;
 
 use App\Models\Vessel_type;
+use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -10,6 +11,7 @@ use Livewire\Component;
 
 class CreateVesselTypeView extends Component
 {
+    use QueryTrait;
     public $title = 'Create Vessel Type';
     public $hash = NULL;
     public $vesselTypeId;
@@ -36,41 +38,30 @@ class CreateVesselTypeView extends Component
     public function store()
     {
         $this->validate();
-        try {
-            $store = Vessel_type::create([
-                'hash' => '',
-                'name' => $this->vesselType
-            ]);
-            if (!$store) {
-                session()->flash('error', 'Saving data failed!');
-            }
-            session()->flash('success', 'Vessel Type saved successfully!');
-            return $this->redirect(VesselTypeView::class);
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $query = Vessel_type::create([
+            'hash' => '',
+            'name' => $this->vesselType
+        ]);
+        $errorMsg = "Saving vessel type failed!";
+        $successMsg = "Saving vessel type successful!";
+        $route = "vessel-type.index";
+
+        $this->storeTrait($query, $errorMsg, $successMsg);
+        return $this->redirectRoute($route);
     }
 
     public function update()
     {
         $this->validate();
-        try {
-            $vesselTypeData = Vessel_type::find($this->vesselTypeId);
+        $data = Vessel_type::find($this->vesselTypeId);
+        $query = $data->update([
+            'name' => $this->vesselType
+        ]);
+        $routeBack = "vessel-type.index";
+        $errorMsg = "Updating Vessel type failed!";
+        $successMsg = "Updating Vessel type success!";
 
-            if (!$vesselTypeData) {
-                session()->flash('error', 'Vessel Type data not found!');
-            }
-
-            $update = $vesselTypeData->update([
-                'name' => $this->vesselType
-            ]);
-            if (!$update) {
-                session()->flash('error', 'Updating data failed!');
-            }
-            session()->flash('success', 'Vessel Type updated successfully!');
-            return $this->redirect(VesselTypeView::class);
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 }

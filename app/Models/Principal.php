@@ -25,4 +25,10 @@ class Principal extends Model
             $model->modified_by = Auth::user()->full_name;
         });
     }
+
+    // relationships
+    public function recipient()
+    {
+        return $this->hasMany(Recipient::class, 'principal_id','id');
+    }
 }

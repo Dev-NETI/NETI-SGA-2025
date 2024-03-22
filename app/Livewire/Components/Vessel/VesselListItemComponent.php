@@ -4,11 +4,13 @@ namespace App\Livewire\Components\Vessel;
 
 use Exception;
 use App\Models\Vessel;
+use App\Traits\QueryTrait;
 use Livewire\Component;
 use Livewire\Attributes\Reactive;
 
 class VesselListItemComponent extends Component
 {
+    use QueryTrait;
     public $vessel;
 
     public function render()
@@ -18,22 +20,18 @@ class VesselListItemComponent extends Component
 
     public function destroy($id)
     {
-        try {
-            $vesselData = Vessel::find($id);
-            $update = $vesselData->update([
-                'is_active' => 0,
-                'modified_by' => ''
-            ]);
+        $data = Vessel::find($id);
+        $query = $data->update([
+            'is_active' => 0,
+            'modified_by' => ''
+        ]);
 
-            if (!$update) {
-                session()->flash('error', 'Deleting vessel failed!');
-            }
+        $routeBack = "vessel.index";
+        $errorMsg = "Deleting vessel failed!";
+        $successMsg = "Deleting vessel successful!";
 
-            session()->flash('success', 'Vessel deleted successfully!');
-            return $this->redirectRoute('vessel.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 
 }

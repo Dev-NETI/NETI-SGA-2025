@@ -9,6 +9,11 @@ use App\Livewire\Views\Department\CreateDepartmentView;
 use App\Livewire\Views\Department\DepartmentView;
 use App\Livewire\Views\Principal\CreatePrincipalView;
 use App\Livewire\Views\Principal\PrincipalView;
+use App\Livewire\Views\Recipient\CreateRecipientView;
+use App\Livewire\Views\Recipient\RecipientView;
+use App\Livewire\Views\SGA\LetterView;
+use App\Livewire\Views\SGA\SGAView;
+use App\Livewire\Views\SGA\TrainingFeeView;
 use App\Livewire\Views\User\CreateUserView;
 use App\Livewire\Views\User\AssignRolesView;
 use App\Livewire\Views\Vessel\CreateVesselView;
@@ -65,6 +70,17 @@ Route::middleware([
         Route::get('index', PrincipalView::class)->name('index');
         Route::get('create', CreatePrincipalView::class)->name('create');
         Route::get('edit/{hash_id}', CreatePrincipalView::class)->name('edit');
+    });
+
+    Route::prefix('recipient')->as('recipient.')->group(function (){
+        Route::get('index', RecipientView::class)->name('index');
+        Route::get('create', CreateRecipientView::class)->name('create');
+        Route::get('edit/{hash_id}', CreateRecipientView::class)->name('edit');
+    });
+
+    Route::prefix('sga')->as('sga.')->group(function (){
+        Route::get('letter-index', LetterView::class)->name('letter-index');
+        Route::get('tFee-index', TrainingFeeView::class)->name('tFee-index');
     });
 
 });

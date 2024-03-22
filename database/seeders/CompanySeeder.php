@@ -26,7 +26,7 @@ class CompanySeeder extends Seeder
                 'name' => $name,
                 'hash' => encrypt($index),
                 'code' => $code,
-                'modified_by' => ''
+                'modified_by' => 'John Doe'
             ]);
         }
     }

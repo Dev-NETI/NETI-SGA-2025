@@ -25,7 +25,7 @@ class DepartmentSeeder extends Seeder
             Department::create([
                 'name' => $name,
                 'company_id' =>  $company,
-                'modified_by' => '',
+                'modified_by' => 'John Doe',
                 'hash' => encrypt($index)
             ]);
         }

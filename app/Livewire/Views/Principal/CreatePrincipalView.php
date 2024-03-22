@@ -15,9 +15,11 @@ class CreatePrincipalView extends Component
 
     #[Validate([
         'principal' => 'required|min:2',
+        'address' => 'required|min:5',
     ])]
     public $principal;
     public $principalId;
+    public $address;
 
     public function mount($hash_id = null)
     {
@@ -26,6 +28,7 @@ class CreatePrincipalView extends Component
             $principalData = Principal::where('hash', $this->hash)->first();
             $this->principal = $principalData->name;
             $this->principalId = $principalData->id;
+            $this->address = $principalData->address;
         }
     }
 
@@ -40,28 +43,29 @@ class CreatePrincipalView extends Component
         $this->validate();
         $query = Principal::create([
             'name' => $this->principal,
+            'address' => $this->address,
         ]);
-        $errorMsg = "Principal saved!";
-        $successMsg = "Saving principal failed!";
+        $errorMsg = "Saving principal failed!";
+        $successMsg = "Saving principal successful!";
         $route = "principal.index";
 
-        $this->store($query, $errorMsg, $successMsg);
+        $this->storeTrait($query, $errorMsg, $successMsg);
         return $this->redirectRoute($route);
     }
 
-    // public function update()
-    // {
-    //     $this->validate();
-    //     $data = Principal::find($this->principalId);
-    //     $query = $data->update([
-    //         'name' => $this->principal,
-    //     ]);
-    //     $routeBack = "principal.index";
-    //     $errorMsg = "Principal updated!";
-    //     $successMsg = "Updating principal failed!";
-    //     $route = "principal.index";
+    public function update()
+    {
+        $this->validate();
+        $data = Principal::find($this->principalId);
+        $query = $data->update([
+            'name' => $this->principal,
+            'address' => $this->address,
+        ]);
+        $routeBack = "principal.index";
+        $errorMsg = "Updating principal failed!";
+        $successMsg = "Updating principal successful!";
 
-    //     $this->update($data,$routeBack,$query, $errorMsg, $successMsg, $route);
-    // }
-
+        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
+    }
 }

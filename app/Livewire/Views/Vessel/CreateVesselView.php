@@ -4,6 +4,7 @@ namespace App\Livewire\Views\Vessel;
 
 use App\Models\Vessel;
 use App\Models\Vessel_type;
+use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -11,6 +12,7 @@ use Livewire\Component;
 
 class CreateVesselView extends Component
 {
+    use QueryTrait;
     public $hash;
 
     #[Validate([
@@ -48,50 +50,38 @@ class CreateVesselView extends Component
     public function store()
     {
         $this->validate();
+        $query = Vessel::create([
+            'vessel_type_id' => $this->vesselType,
+            'hash' => '',
+            'name' => $this->vessel,
+            'code' => $this->code,
+            'training_fee' => $this->trainingFee,
+        ]);
+        $errorMsg = "Saving vessel failed!";
+        $successMsg = "Saving vessel successful!";
+        $route = "vessel.index";
 
-        try {
-            $create = Vessel::create([
-                'vessel_type_id' => $this->vesselType,
-                'hash' => '',
-                'name' => $this->vessel,
-                'code' => $this->code,
-                'training_fee' => $this->trainingFee,
-                'modified_by' => ''
-            ]);
-
-            if (!$create) {
-                session()->flash('error', 'Saving vessel failed!');
-            }
-
-            session()->flash('success', 'Vessel saved successfully!');
-            return $this->redirectRoute('vessel.index', navigate: true);
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->storeTrait($query, $errorMsg, $successMsg);
+        return $this->redirectRoute($route);
     }
 
     public function update()
     {
         $this->validate();
 
-        try {
-            $vesselData = Vessel::find($this->vesselId);
-            $update = $vesselData->update([
-                'vessel_type_id' => $this->vesselType,
-                'name' => $this->vessel,
-                'code' => $this->code,
-                'training_fee' => $this->trainingFee,
-                'modified_by' => ''
-            ]);
+        $data = Vessel::find($this->vesselId);
+        $query = $data->update([
+            'vessel_type_id' => $this->vesselType,
+            'name' => $this->vessel,
+            'code' => $this->code,
+            'training_fee' => $this->trainingFee,
+        ]);
 
-            if (!$update) {
-                session()->flash('error', 'Updating vessel failed!');
-            }
+        $routeBack = "vessel.index";
+        $errorMsg = "Updating vessel failed!";
+        $successMsg = "Updating vessel successful!";
 
-            session()->flash('success', 'Vessel updated successfully!');
-            return $this->redirectRoute('vessel.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 }

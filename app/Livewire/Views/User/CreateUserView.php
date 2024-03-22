@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\Department;
 use Exception;
 use App\Models\User;
+use App\Traits\QueryTrait;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -13,6 +14,7 @@ use Livewire\Attributes\Validate;
 
 class CreateUserView extends Component
 {
+    use QueryTrait;
     #[Validate([
         'firstname' => 'required|min:2',
         'lastname' => 'required|min:2',
@@ -75,25 +77,21 @@ class CreateUserView extends Component
     public function store()
     {
         $this->validate();
-        try {
-            $store = User::create([
-                'f_name' => $this->firstname,
-                'm_name' => $this->middlename,
-                'l_name'  => $this->lastname,
-                'email' => $this->email,
-                'password' => Hash::make($this->password),
-                'department_id' => $this->department,
-                'company_id' => $this->company,
-            ]);
-            if (!$store) {
-                session()->flash('error', 'Saving user failed!');
-            }
+        $query = User::create([
+            'f_name' => $this->firstname,
+            'm_name' => $this->middlename,
+            'l_name'  => $this->lastname,
+            'email' => $this->email,
+            'password' => Hash::make($this->password),
+            'department_id' => $this->department,
+            'company_id' => $this->company,
+        ]);
+        $errorMsg = "Saving user failed!";
+        $successMsg = "Saving user successful!";
+        $route = "users.index";
 
-            session()->flash('success', 'User saved successfully!');
-            return $this->redirectRoute('users.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->storeTrait($query, $errorMsg, $successMsg);
+        return $this->redirectRoute($route);
     }
 
     public function update()
@@ -105,34 +103,29 @@ class CreateUserView extends Component
             'company' => 'required',
             'department' => 'required',
         ]);
-
-        try {
-            $userData = User::find($this->userId);
-
-            if ($this->pwId == null) {
-                $update = $userData->update([
-                    'f_name' => $this->firstname,
-                    'm_name' => $this->middlename,
-                    'l_name'  => $this->lastname,
-                    'email' => $this->email,
-                    'department_id' => $this->department,
-                    'company_id' => $this->company,
-                ]);
-            } else {
-                $update = $userData->update([
-                    'password' => Hash::make($this->password),
-                ]);
-            }
-
-            if (!$update) {
-                session()->flash('error', 'Updating user failed!');
-            }
-
-            session()->flash('success', 'User updated successfully!');
-            return $this->redirectRoute('users.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
+        
+        $data = User::find($this->userId);
+        if ($this->pwId == null) {
+            $query = $data->update([
+                'f_name' => $this->firstname,
+                'm_name' => $this->middlename,
+                'l_name'  => $this->lastname,
+                'email' => $this->email,
+                'department_id' => $this->department,
+                'company_id' => $this->company,
+            ]);
+        } else {
+            $query = $data->update([
+                'password' => Hash::make($this->password),
+            ]);
         }
+        
+        $routeBack = "users.index";
+        $errorMsg = "Updating user failed!";
+        $successMsg = "Updating user successful!";
+
+        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 
     public function generatePassword()

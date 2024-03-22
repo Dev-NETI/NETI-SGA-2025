@@ -3,6 +3,7 @@
 namespace App\Livewire\Views\Company;
 
 use App\Models\Company;
+use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -10,6 +11,7 @@ use Livewire\Component;
 
 class CreateCompanyView extends Component
 {
+    use QueryTrait;
     public $hash = null;
 
     #[Validate([
@@ -41,39 +43,31 @@ class CreateCompanyView extends Component
     public function store()
     {
         $this->validate();
-        try {
-            $store = Company::create([
-                'name' => $this->name,
-                'code' => $this->code
-            ]);
+        $query = Company::create([
+            'name' => $this->name,
+            'code' => $this->code
+        ]);
+        $errorMsg = "Saving company failed!";
+        $successMsg = "Saving company successful!";
+        $route = "company.index";
 
-            if(!$store){
-                session()->flash('error', 'Saving company failed!');
-            }
-            session()->flash('success', 'Company saved successfully!');
-            return $this->redirectRoute('company.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->storeTrait($query, $errorMsg, $successMsg);
+        return $this->redirectRoute($route);
     }
 
     public function update()
     {
         $this->validate();
-        try {
-            $companyData = Company::find($this->companyId);
-            $update = $companyData->update([
-                'name' => $this->name,
-                'code' => $this->code
-            ]);
+        $data = Company::find($this->companyId);
+        $query = $data->update([
+            'name' => $this->name,
+            'code' => $this->code
+        ]);
+        $routeBack = "company.index";
+        $errorMsg = "Updating company failed!";
+        $successMsg = "Updating company successful!";
 
-            if(!$update){
-                session()->flash('error', 'Updating company failed!');
-            }
-            session()->flash('success', 'Company updated successfully!');
-            return $this->redirectRoute('company.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 }

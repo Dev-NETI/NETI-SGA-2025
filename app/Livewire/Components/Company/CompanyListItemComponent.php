@@ -3,11 +3,13 @@
 namespace App\Livewire\Components\Company;
 
 use App\Models\Company;
+use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Component;
 
 class CompanyListItemComponent extends Component
 {
+    use QueryTrait;
     public $company;
 
     public function render()
@@ -17,19 +19,15 @@ class CompanyListItemComponent extends Component
 
     public function destroy($id)
     {
-        try {
-            $companyData = Company::find($id);
-            $destroy = $companyData->update([
-                'is_active' => false,
-            ]);
-            if(!$destroy){
-                session()->flash('error', 'Deleting company failed!');
-            }
+        $data = Company::find($id);
+        $query = $data->update([
+            'is_active' => false,
+        ]);
+        $routeBack = "company.index";
+        $errorMsg = "Deleting company failed!";
+        $successMsg = "Deleting company successful!";
 
-            session()->flash('success', 'Deleting company successful!');
-            return $this->redirectRoute('company.index');
-        } catch (Exception $e) {
-            session()->flash('error', $e->getMessage());
-        }
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
+        return $this->redirectRoute($routeBack);
     }
 }
