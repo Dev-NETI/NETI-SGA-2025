@@ -7,6 +7,8 @@ use App\Livewire\Views\Company\CompanyView;
 use App\Livewire\Views\Company\CreateCompanyView;
 use App\Livewire\Views\Department\CreateDepartmentView;
 use App\Livewire\Views\Department\DepartmentView;
+use App\Livewire\Views\Principal\CreatePrincipalView;
+use App\Livewire\Views\Principal\PrincipalView;
 use App\Livewire\Views\User\CreateUserView;
 use App\Livewire\Views\User\AssignRolesView;
 use App\Livewire\Views\Vessel\CreateVesselView;
@@ -57,6 +59,12 @@ Route::middleware([
         Route::get('index', DepartmentView::class)->name('index');
         Route::get('create', CreateDepartmentView::class)->name('create');
         Route::get('edit/{hash_id}', CreateDepartmentView::class)->name('edit');
+    });
+
+    Route::prefix('principal')->as('principal.')->group(function (){
+        Route::get('index', PrincipalView::class)->name('index');
+        Route::get('create', CreatePrincipalView::class)->name('create');
+        Route::get('edit/{hash_id}', CreatePrincipalView::class)->name('edit');
     });
 
 });

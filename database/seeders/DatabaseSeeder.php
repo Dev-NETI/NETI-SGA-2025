@@ -22,7 +22,9 @@ class DatabaseSeeder extends Seeder
             UserRoleSeeder::class,
             VesselTypeSeeder::class,
             VesselSeeder::class,
-            CompanySeeder::class
+            CompanySeeder::class,
+            DepartmentSeeder::class,
+            PrincipalSeeder::class
         ]);
     }
 }
