@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Views\Vessel;
 
+use App\Models\Principal;
 use App\Models\Vessel;
 use App\Models\Vessel_type;
 use App\Traits\QueryTrait;
@@ -19,6 +20,7 @@ class CreateVesselView extends Component
         'vessel' => 'required|min:2',
         'vesselType' => 'required',
         'code' => 'required|min:2',
+        'principal' => 'required',
         'trainingFee' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
     ])]
     public $vessel;
@@ -26,6 +28,7 @@ class CreateVesselView extends Component
     public $code;
     public $trainingFee;
     public $vesselId;
+    public $principal;
 
     public function mount($hash_id = null)
     {
@@ -37,6 +40,7 @@ class CreateVesselView extends Component
             $this->code = $vesselData->code;
             $this->trainingFee = $vesselData->training_fee;
             $this->vesselId = $vesselData->id;
+            $this->principal = $vesselData->principal_id;
         }
     }
 
@@ -44,7 +48,8 @@ class CreateVesselView extends Component
     public function render()
     {
         $vesselTypeData = Vessel_type::where('is_active', 1)->orderBy('name', 'asc')->get();
-        return view('livewire.views.vessel.create-vessel-view', compact('vesselTypeData'));
+        $principalData = Principal::where('is_active', 1)->orderBy('name', 'asc')->get();
+        return view('livewire.views.vessel.create-vessel-view', compact('vesselTypeData','principalData'));
     }
 
     public function store()
@@ -56,6 +61,7 @@ class CreateVesselView extends Component
             'name' => $this->vessel,
             'code' => $this->code,
             'training_fee' => $this->trainingFee,
+            'principal_id' => $this->principal,
         ]);
         $errorMsg = "Saving vessel failed!";
         $successMsg = "Saving vessel successful!";
@@ -75,6 +81,7 @@ class CreateVesselView extends Component
             'name' => $this->vessel,
             'code' => $this->code,
             'training_fee' => $this->trainingFee,
+            'principal_id' => $this->principal,
         ]);
 
         $routeBack = "vessel.index";

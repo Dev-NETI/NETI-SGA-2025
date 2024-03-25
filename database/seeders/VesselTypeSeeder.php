@@ -17,21 +17,14 @@ class VesselTypeSeeder extends Seeder
         Vessel_type::truncate();
 
         $data = [
-            "1" => ["PCC"],
-            "2" => ["LNG"],
-            "3" => ["Tanker"],
-            "4" => ["Container"],
-            "5" => ["Bulker"],
-            "6" => ["LPG"],
-            "7" => ["CTNR & LNG"],
-            "8" => ["Container & PCC"],
-            "9" => ["Tanker & Product Tanker"],
-            "10" => ["Container & Tanker"],
-            "11" => ["Product Tanker"],
-            "12" => ["Camless Engine"],
-            "13" => ["Coal Tar"],
-            "14" => ["Woodchip Carrier"],
-            "15" => ["VLCC"],
+            "1" => ["TANKER - LNG VESSELS"],
+            "2" => ["TANKER - LPG VESSELS"],
+            "3" => ["GAZ OCEAN VESSELS (LNG CARRIER)"],
+            "4" => ["TANKER VESSELS"],
+            "5" => ["CONTAINER VESSELS"],
+            "6" => ["PCC VESSELS"],
+            "7" => ["BULK VESSELS"],
+            "8" => ["LNG BUNKER VESSELS"],
         ];
 
         foreach($data as $index=>[$name]){

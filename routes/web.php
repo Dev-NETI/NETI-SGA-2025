@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Reports\SGA\LetterComponent;
 use App\Livewire\Views\User\UserView;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Views\Vessel\VesselView;
@@ -81,6 +82,10 @@ Route::middleware([
     Route::prefix('sga')->as('sga.')->group(function (){
         Route::get('letter-index', LetterView::class)->name('letter-index');
         Route::get('tFee-index', TrainingFeeView::class)->name('tFee-index');
+    });
+
+    Route::prefix('generate')->as('generate.')->group(function (){
+        Route::get('letter', [LetterComponent::class, 'generate'])->name('letter');
     });
 
 });

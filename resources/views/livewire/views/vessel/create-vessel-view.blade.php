@@ -3,6 +3,7 @@
 
         <x-text-input name="vessel" title="Vessel" wire:model="vessel" type="text" />
         <x-select-input name="vesselType" title="Vessel Type" wire:model="vesselType" :data="$vesselTypeData" :hash="$hash" />
+        <x-select-input name="principal" title="Principal" wire:model="principal" :data="$principalData" :hash="$hash" />
         <x-text-input name="code" title="Code" wire:model="code" type="text" />
         <x-text-input name="trainingFee" title="Training Fee" wire:model="trainingFee" type="text" />
 

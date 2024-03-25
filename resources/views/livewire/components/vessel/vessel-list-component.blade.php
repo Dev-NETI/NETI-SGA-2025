@@ -2,8 +2,9 @@
     <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
         <tr>
             <x-th>Vessel</x-th>
-            <x-th>Type</x-th>
             <x-th>Code</x-th>
+            <x-th>Type</x-th>
+            <x-th>Principal</x-th>
             <x-th>Training Fee</x-th>
             <x-th>Modified By</x-th>
             <x-th>Modified</x-th>
@@ -13,7 +14,8 @@
     <tbody>
         @if (count($vesselData) > 0)
             @foreach ($vesselData as $item)
-                <livewire:components.vessel.vessel-list-item-component :vessel="$item"
+                <livewire:components.vessel.vessel-list-item-component 
+                :vessel="$item"
                     wire:key="{{ $item->id }}" />
             @endforeach
         @else

@@ -31,4 +31,9 @@ class Principal extends Model
     {
         return $this->hasMany(Recipient::class, 'principal_id','id');
     }
+
+    public function vessel()
+    {
+        return $this->hasMany(Vessel::class,'principal_id','id');
+    }
 }

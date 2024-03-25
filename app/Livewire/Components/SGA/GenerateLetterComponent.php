@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Components\SGA;
 
+use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use Livewire\Component;
+use Illuminate\Support\Facades\Session;
 
 class GenerateLetterComponent extends Component
 {
@@ -22,5 +23,7 @@ class GenerateLetterComponent extends Component
     public function generate()
     {
         $this->validate();
+        Session::put('month', $this->month);
+        return $this->redirectRoute('generate.letter');
     }
 }
