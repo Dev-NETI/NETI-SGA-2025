@@ -4,6 +4,7 @@ namespace App\Livewire\Views\User;
 
 use App\Models\Company;
 use App\Models\Department;
+use App\Models\Position;
 use Exception;
 use App\Models\User;
 use App\Traits\QueryTrait;
@@ -11,9 +12,11 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
+use Livewire\WithFileUploads;
 
 class CreateUserView extends Component
 {
+    use WithFileUploads;
     use QueryTrait;
     #[Validate([
         'firstname' => 'required|min:2',
@@ -22,6 +25,7 @@ class CreateUserView extends Component
         'password' => 'required',
         'company' => 'required',
         'department' => 'required',
+        'position' => 'required',
     ])]
     public $firstname;
     public $middlename;
@@ -34,6 +38,9 @@ class CreateUserView extends Component
     public $company;
     public $department;
     public $departmentData;
+    public $position;
+    public $signature;
+    public $signature_path = null;
 
     public function mount($hash_id = null, $pw_id = null)
     {
@@ -47,6 +54,7 @@ class CreateUserView extends Component
             $this->userId = $userData->id;
             $this->department = $userData->department_id;
             $this->company = $userData->company_id;
+            $this->position = $userData->position_id;
             $this->departmentData = Department::where('company_id', $userData->company_id)
                 ->where('is_active', true)
                 ->orderBy('name', 'asc')
@@ -63,7 +71,10 @@ class CreateUserView extends Component
         $companyData = Company::where('is_active', true)
             ->orderBy('name', 'asc')
             ->get();
-        return view('livewire.views.user.create-user-view', compact('companyData'));
+        $positionData = Position::where('is_active', true)
+            ->orderBy('name', 'asc')
+            ->get();
+        return view('livewire.views.user.create-user-view', compact('companyData', 'positionData'));
     }
 
     public function updatedCompany($value)
@@ -77,6 +88,12 @@ class CreateUserView extends Component
     public function store()
     {
         $this->validate();
+
+        if ($this->signature != null) {
+            $signature_path = $this->signature->store('public/signature');
+            $this->signature_path = basename($signature_path);
+        }
+
         $query = User::create([
             'f_name' => $this->firstname,
             'm_name' => $this->middlename,
@@ -85,6 +102,8 @@ class CreateUserView extends Component
             'password' => Hash::make($this->password),
             'department_id' => $this->department,
             'company_id' => $this->company,
+            'position_id' => $this->position,
+            'signature_path' => $this->signature_path,
         ]);
         $errorMsg = "Saving user failed!";
         $successMsg = "Saving user successful!";
@@ -102,8 +121,14 @@ class CreateUserView extends Component
             'email' => 'required|email',
             'company' => 'required',
             'department' => 'required',
+            'position' => 'required',
         ]);
-        
+
+        if ($this->signature != null) {
+            $signature_path = $this->signature->store('public/signature');
+            $this->signature_path = basename($signature_path);
+        }
+
         $data = User::find($this->userId);
         if ($this->pwId == null) {
             $query = $data->update([
@@ -113,18 +138,20 @@ class CreateUserView extends Component
                 'email' => $this->email,
                 'department_id' => $this->department,
                 'company_id' => $this->company,
+                'position_id' => $this->position,
+                'signature_path' => $this->signature_path,
             ]);
         } else {
             $query = $data->update([
                 'password' => Hash::make($this->password),
             ]);
         }
-        
+
         $routeBack = "users.index";
         $errorMsg = "Updating user failed!";
         $successMsg = "Updating user successful!";
 
-        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
         return $this->redirectRoute($routeBack);
     }
 

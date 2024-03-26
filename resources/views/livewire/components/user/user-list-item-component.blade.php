@@ -3,6 +3,7 @@
     <x-td>{{ $user->email }}</x-td>
     <x-td>{{ $user->company->name }}</x-td>
     <x-td>{{ $user->department->name }}</x-td>
+    <x-td>{{ $user->position->name }}</x-td>
     <x-td>{{ $user->modified_by }}</x-td>
     <x-td>{{ $user->updated_at }}</x-td>
     <td>

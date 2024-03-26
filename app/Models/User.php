@@ -33,7 +33,9 @@ class User extends Authenticatable
         'password',
         'company_id',
         'department_id',
-        'is_active'
+        'is_active',
+        'position_id',
+        'signature_path'
     ];
 
     protected static function boot()
@@ -87,9 +89,14 @@ class User extends Authenticatable
     }
 
     // relationship
+    public function position()
+    {
+        return $this->belongsTo(Position::class, 'position_id', 'id');
+    }
+
     public function user_role()
     {
-        return $this->hasMany(UserRole::class, 'user_id', 'id' );
+        return $this->hasMany(UserRole::class, 'user_id', 'id');
     }
 
     public function department()
@@ -106,5 +113,10 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return $this->f_name . " " . $this->m_name . " " . $this->l_name;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->f_name . " " . $this->m_name . " " . $this->l_name." / ".$this->position->name;
     }
 }

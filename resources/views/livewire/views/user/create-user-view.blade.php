@@ -1,7 +1,7 @@
 <x-main-content pageTitle="{{ $hash != null ? 'Update User' : 'Create User' }}">
 
-    <form class="max-w-md mx-auto mt-8" wire:submit.prevent="{{ $hash != null ? 'update' : 'store' }}">
-
+    <form class="max-w-md mx-auto mt-8" wire:submit.prevent="{{ $hash != null ? 'update' : 'store' }}" enctype="multipart/form-data">
+        @csrf
         @if ($pwId == null)
             <x-text-input name="firstname" title="Firstname" wire:model="firstname" type="text" />
             <x-text-input name="middlename" title="Middlename" wire:model="middlename" type="text" />
@@ -37,7 +37,9 @@
                     <livewire:components.reusable.error-span-red message="{{ $message }}" />
                 @enderror
             </div>
-
+            <x-select-input name="position" title="Position" :data="$positionData" :hash="$hash"
+                wire:model="position" />
+            <x-text-input name="signature" title="Upload signature" wire:model="signature" type="file" />
         @endif
         @if ($hash == null || ($hash != null && $pwId == 1))
             <div class="relative z-0 w-full mb-5 group grid grid-cols-1">
