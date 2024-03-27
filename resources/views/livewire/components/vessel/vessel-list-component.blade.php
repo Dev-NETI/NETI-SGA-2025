@@ -6,6 +6,8 @@
             <x-th>Type</x-th>
             <x-th>Principal</x-th>
             <x-th>Training Fee</x-th>
+            <x-th>Serial #</x-th>
+            <x-th>Remarks</x-th>
             <x-th>Modified By</x-th>
             <x-th>Modified</x-th>
             <x-th>Action</x-th>

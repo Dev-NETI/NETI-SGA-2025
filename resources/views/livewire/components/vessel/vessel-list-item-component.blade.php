@@ -4,6 +4,8 @@
     <x-td>{{ $vessel->vessel_type->name }}</x-td>
     <x-td>{{ $vessel->principal->name }}</x-td>
     <x-td>{{ $vessel->training_fee }}</x-td>
+    <x-td>{{ $vessel->serial_number }}</x-td>
+    <x-td>{{ $vessel->remarks }}</x-td>
     <x-td>{{ $vessel->modified_by }}</x-td>
     <x-td>{{ $vessel->formatted_updated_date }}</x-td>
     

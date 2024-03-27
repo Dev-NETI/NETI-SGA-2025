@@ -21,7 +21,7 @@ class CreateVesselView extends Component
         'vesselType' => 'required',
         'code' => 'required|min:2',
         'principal' => 'required',
-        'trainingFee' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/'
+        'trainingFee' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
     ])]
     public $vessel;
     public $vesselType;
@@ -29,6 +29,8 @@ class CreateVesselView extends Component
     public $trainingFee;
     public $vesselId;
     public $principal;
+    public $serialNumber;
+    public $remarks;
 
     public function mount($hash_id = null)
     {
@@ -41,6 +43,8 @@ class CreateVesselView extends Component
             $this->trainingFee = $vesselData->training_fee;
             $this->vesselId = $vesselData->id;
             $this->principal = $vesselData->principal_id;
+            $this->serialNumber = $vesselData->serial_number;
+            $this->remarks = $vesselData->remarks;
         }
     }
 
@@ -62,6 +66,7 @@ class CreateVesselView extends Component
             'code' => $this->code,
             'training_fee' => $this->trainingFee,
             'principal_id' => $this->principal,
+            'remarks' => $this->remarks,
         ]);
         $errorMsg = "Saving vessel failed!";
         $successMsg = "Saving vessel successful!";
@@ -82,6 +87,8 @@ class CreateVesselView extends Component
             'code' => $this->code,
             'training_fee' => $this->trainingFee,
             'principal_id' => $this->principal,
+            'serial_number' => $this->serialNumber,
+            'remarks' => $this->remarks,
         ]);
 
         $routeBack = "vessel.index";

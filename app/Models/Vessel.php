@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\Auth;
 class Vessel extends Model
 {
     use HasFactory;
-    protected $fillable = ['vessel_type_id','hash','name','code','training_fee','modified_by','is_active','principal_id'];
+    protected $fillable = [
+        'vessel_type_id', 'hash', 'name', 'code', 'training_fee', 'modified_by', 'is_active', 'principal_id',
+        'serial_number', 'remarks'
+    ];
 
     protected static function boot()
     {
@@ -36,7 +39,7 @@ class Vessel extends Model
 
     public function principal()
     {
-        return $this->belongsTo(Principal::class,'principal_id','id');
+        return $this->belongsTo(Principal::class, 'principal_id', 'id');
     }
 
     // mutator
