@@ -50,4 +50,25 @@ class Vessel extends Model
     {
         return Carbon::parse($this->updated_at)->format('F d, Y');
     }
+
+    public function getFormattedSerialNumberAttribute()
+    {
+        return $this->serial_number."-B";
+    }
+
+    public function getTrainingFeeSerialNumberAttribute()
+    {
+        return "Fee# ".$this->serial_number."-B";
+    }
+
+    public function getSubtractedSerialNumberAttribute()
+    {
+        $subtractedSerialNumber = $this->serial_number - 1;
+        return "Fee# ".$subtractedSerialNumber."-B";
+    }
+
+    public function getFormattedNameWithCodeAttribute()
+    {
+        return $this->name." (".$this->code.")";
+    }
 }

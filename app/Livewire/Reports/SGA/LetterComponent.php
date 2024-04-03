@@ -11,6 +11,7 @@ use App\Models\Principal;
 use App\Models\Recipient;
 use App\Models\User;
 use App\Models\Vessel_type;
+use App\Traits\FpdiTrait;
 use Illuminate\Support\Str;
 use setasign\Fpdi\Tcpdf\Fpdi;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,8 @@ use TCPDF;
 
 class LetterComponent extends Component
 {
+    use FpdiTrait;
+
     public function render()
     {
         return view('livewire.reports.s-g-a.letter-component');
@@ -26,6 +29,7 @@ class LetterComponent extends Component
 
     public function generate()
     {
+        // data
         // session
         $month = Session::get('month');
         $principalId = Session::get('principalId');
@@ -53,21 +57,96 @@ class LetterComponent extends Component
         $formattedStringTotalTrainingFee = $formatter->format($totalTrainingFee);
         // month in word
         $formattedMonth = Carbon::createFromFormat("Y-m", $month)->format('F Y');
+        // data end
 
-        $pdf = new Fpdi();
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 40, PDF_MARGIN_RIGHT);
-        $pdf->SetAutoPageBreak(false, 40);
-        $pdf->SetCreator('NETI-SGA');
-        $pdf->SetAuthor('NETI-SGA');
-        $pdf->SetTitle('Training Fee Summary and Letter');
+        //initiate pdf, imported from FpdiTrait
+        $pdf = $this->initiateFpdi('NETI-SGA', 'NETI-SGA', 'Training Fee Summary and Letter');
+
+        // LETTER PAGE
+        // LETTER PAGE
 
         // template
         $templatePath = storage_path('app/public/SGA/SGA-Letter.pdf');
         $template = $pdf->setSourceFile($templatePath);
         $importedPage = $pdf->importPage($template);
 
-        // LETTER PAGE
-        // LETTER PAGE
+        $this->letterPage(
+            $pdf,
+            $importedPage,
+            $currentDate,
+            $principalData,
+            $recipientData,
+            $formattedStringTotalTrainingFee,
+            $formattedTotalTrainingFee,
+            $vesselTypeData,
+            $formattedTrainingFee,
+            $formattedBankCharge,
+            $userData,
+            $formattedMonth
+        );
+        // LETTER PAGE END
+        // LETTER PAGE END
+
+        // TRAINEE FEE PAGE
+        // training template
+        $trainingFeeTemplatePath = storage_path('app/public/SGA/SGA-Training-Fee.pdf');
+        $trainingFeeTemplate = $pdf->setSourceFile($trainingFeeTemplatePath);
+        $importedTrainingFeePage = $pdf->importPage($trainingFeeTemplate);
+
+        foreach ($vesselTypeData as $vesselType) {
+
+            $vesselData = $vesselType->vessel;
+            $this->trainingFeePage(
+                $pdf,
+                $importedTrainingFeePage,
+                $formattedMonth,
+                $vesselType->name,
+                $principalData->name,
+                $currentDate
+            );
+
+            // vessel data
+            $totalFee = 0;
+            foreach ($vesselData as $index => $vessel) {
+                $totalFee += $vessel->training_fee;
+                $pdf->setX(21);
+                $pdf->Cell(7, 5, $index + 1, 1, 0, "C");
+                $pdf->Cell(50, 5, $vessel->name, 1, 0, "L");
+                $pdf->Cell(18, 5, $vessel->code, 1, 0, "C");
+                $pdf->Cell(32, 5, $vessel->formatted_serial_number, 1, 0, "C");
+                $pdf->Cell(32, 5, ($index + 1 == 1 ? "$  " : "") . number_format($vessel->training_fee, 2), 1, 0, "R");
+                $pdf->Cell(32, 5, $vessel->remarks, 1, 1, "C");
+
+                if ($index == 34) {
+                    $this->traineeFeeSignature($pdf, $totalFee);
+                    $this->trainingFeePage2(
+                        $pdf,
+                        $totalFee
+                    );
+                    $totalFee = 0;
+                }
+            }
+            $this->traineeFeeSignature($pdf, $totalFee);
+        }
+        // TRAINEE FEE PAGE END
+
+        $pdf->Output();
+    }
+
+    public function letterPage(
+        $pdf,
+        $importedPage,
+        $currentDate,
+        $principalData,
+        $recipientData,
+        $formattedStringTotalTrainingFee,
+        $formattedTotalTrainingFee,
+        $vesselTypeData,
+        $formattedTrainingFee,
+        $formattedBankCharge,
+        $userData,
+        $formattedMonth
+    ) {
         $pdf->AddPage('P');
 
         $pdf->useTemplate($importedPage);
@@ -98,8 +177,8 @@ class LetterComponent extends Component
 
                     We are please to enclose herewith our Statement of General Accounts (SGA) in the total amount of US Dollars: " . Str::upper($formattedStringTotalTrainingFee) . " (USD " . $formattedTotalTrainingFee . ") which covers Training Fees for the following types of vessel for the month of " . $formattedMonth . ".";
         // Encode the address as HTML with preserved line breaks
-        $conentHtml = nl2br(htmlspecialchars($htmlContent));
-        $pdf->writeHTMLCell(165, 0, 24, 71, $conentHtml, 0, 0, false, true, 'J');
+        $contentHtml = nl2br(htmlspecialchars($htmlContent));
+        $pdf->writeHTMLCell(165, 0, 24, 71, $contentHtml, 0, 0, false, true, 'J');
 
         //vessel type data and price
         $pdf->setXY(40, 106.7);
@@ -126,62 +205,7 @@ class LetterComponent extends Component
         $pdf->Cell(25, 0, $userData->position->name, 0, 0, "L");
 
         // Display the PNG image
-        $imagePath = storage_path('app/public/signature/' . $userData->signature_path);
-        $pdf->Image($imagePath, 35, 203, 44, 22, 'PNG', '', '', false, 300, '', false, false, 0, false, false);
-
-        // LETTER PAGE END
-        // LETTER PAGE END
-
-        //--------------------------------------------------------------------------------------------------------------------//
-        //--------------------------------------------------------------------------------------------------------------------//
-        //--------------------------------------------------------------------------------------------------------------------//
-
-        // training template
-        $trainingFeeTemplatePath = storage_path('app/public/SGA/SGA-Training-Fee.pdf');
-        $trainingFeeTemplate = $pdf->setSourceFile($trainingFeeTemplatePath);
-        $importedTrainingFeePage = $pdf->importPage($trainingFeeTemplate);
-
-        foreach ($vesselTypeData as $vesselType) {
-
-            $vesselData = $vesselType->vessel;
-            $this->trainingFeePage(
-                $pdf,
-                $importedTrainingFeePage,
-                $formattedMonth,
-                $vesselType->name,
-                $principalData->name,
-                $currentDate
-            );
-
-            // vessel data
-            $totalFee = 0;
-            foreach ($vesselData as $index => $vessel) {
-                $totalFee += $vessel->training_fee;
-                $pdf->setX(36);
-                $pdf->Cell(7, 5, $index + 1, 1, 0, "C");
-                $pdf->Cell(41, 5, $vessel->name, 1, 0, "L");
-                $pdf->Cell(18, 5, $vessel->code, 1, 0, "C");
-                $pdf->Cell(28, 5, $vessel->serial_number, 1, 0, "C");
-                $pdf->Cell(23, 5, ($index + 1 == 1 ? "$  " : "") . number_format($vessel->training_fee, 2), 1, 0, "R");
-                $pdf->Cell(25, 5, $vessel->remarks, 1, 1, "C");
-
-                if ($index == 34) {
-                    $this->traineeFeeSignature($pdf, $totalFee);
-                    $totalFee = 0;
-                    $this->trainingFeePage(
-                        $pdf,
-                        $importedTrainingFeePage,
-                        $formattedMonth,
-                        $vesselType->name,
-                        $principalData->name,
-                        $currentDate
-                    );
-                }
-            }
-            $this->traineeFeeSignature($pdf, $totalFee);
-        }
-
-        $pdf->Output();
+        $this->getSignature($pdf, $userData->signature_path, 35, 203, 44, 22);
     }
 
     public function trainingFeePage(
@@ -206,38 +230,75 @@ class LetterComponent extends Component
         $pdf->Cell(30, 0, $vesselTypeName, 0, 0, "C");
 
         // submitted to
-        $pdf->setXY(68, 46.1);
+        $pdf->setXY(48, 46.1);
         $pdf->Cell(30, 0, $principalName, 0, 0, "L");
-        $pdf->setXY(68, 49.1);
+        $pdf->setXY(48, 49.5);
         $pdf->Cell(30, 0, $currentDate, 0, 0, "L");
 
         // Set font
         $pdf->SetFont('Helvetica', 'B', 8);
         //table header
-        $pdf->setXY(36, 58);
+        $pdf->setXY(21, 58);
         $pdf->Cell(7, 5, "No.", 1, 0, "C");
-        $pdf->Cell(41, 5, "Name of Vessel", 1, 0, "C");
+        $pdf->Cell(50, 5, "Name of Vessel", 1, 0, "C");
         $pdf->Cell(18, 5, "Vessel Code", 1, 0, "C");
-        $pdf->Cell(28, 5, "SGA Serial Number", 1, 0, "C");
-        $pdf->Cell(23, 5, "Amount", 1, 0, "C");
-        $pdf->Cell(25, 5, "Remarks", 1, 1, "C");
+        $pdf->Cell(32, 5, "SGA Serial Number", 1, 0, "C");
+        $pdf->Cell(32, 5, "Amount", 1, 0, "C");
+        $pdf->Cell(32, 5, "Remarks", 1, 1, "C");
     }
 
-    public function traineeFeeSignature($pdf,$totalFee)
+    public function trainingFeePage2(
+        $pdf,
+        $forwardedBalance
+    ) {
+        $pdf->AddPage('P');
+        $pdf->setXY(21, 25);
+        $pdf->Cell(7, 5, '', 1, 0, "C");
+        $pdf->Cell(50, 5, 'BALANCE FORWARDED', 1, 0, "L");
+        $pdf->Cell(18, 5, '', 1, 0, "C");
+        $pdf->Cell(32, 5, '', 1, 0, "C");
+        $pdf->Cell(32, 5, "$  " . number_format($forwardedBalance, 2), 1, 0, "R");
+        $pdf->Cell(32, 5, "", 1, 1, "C");
+    }
+
+    public function traineeFeeSignature($pdf, $totalFee)
     {
-        $pdf->setX(36);
+        $pdf->setX(21);
         $pdf->Cell(7, 5,  "", 1, 0, "C");
-        $pdf->Cell(41, 5, "TOTAL", 1, 0, "L");
+        $pdf->Cell(50, 5, "TOTAL", 1, 0, "L");
         $pdf->Cell(18, 5, "", 1, 0, "C");
-        $pdf->Cell(28, 5, "", 1, 0, "C");
-        $pdf->Cell(23, 5, "$  ".number_format($totalFee, 2), 1, 0, "R");
-        $pdf->Cell(25, 5, "", 1, 1, "C");
+        $pdf->Cell(32, 5, "", 1, 0, "C");
+        $pdf->Cell(32, 5, "$  " . number_format($totalFee, 2), 1, 0, "R");
+        $pdf->Cell(32, 5, "", 1, 1, "C");
         //
-        $pdf->setX(36);
-        $pdf->MultiCell(48, 15, 'Prepared by:', 1, 'L', false, 0);
-        $pdf->MultiCell(18, 15, '', 1, 'L', false, 0);
-        $pdf->MultiCell(28, 15, '', 1, 'L', false, 0);
-        $pdf->MultiCell(23, 15, 'Noted by:', 1, 'L', false, 0);
-        $pdf->MultiCell(25, 15, 'Approved by:', 1, 'L', false, 0);
+        $pdf->setX(21);
+        $pdf->MultiCell(57, 15, 'Prepared by: ' .
+            // e-sign
+            $this->getSignature($pdf, 'dabucol e-sign.png', null, null, 25, 20)
+            . '
+        
+        
+J.V.DABUCOL', 1, 'L', false, 0);
+        $pdf->MultiCell(18, 15, '
+        ', 1, 'L', false, 0);
+        $pdf->MultiCell(32, 15, '
+        ', 1, 'L', false, 0);
+        $pdf->MultiCell(32, 15, 'Noted by:' .
+            // e-sign
+            $this->getSignature($pdf, 'macalino e-sign.png', null, null, 25, 17)
+            . '
+        
+        
+B.R.MACALINO', 1, 'L', false, 0);
+        $pdf->MultiCell(32, 15, 'Approved by: 
+        
+        
+M.A.MONIS', 1, 'L', false, 0);
+    }
+
+    public function getSignature($pdf, $signaturePath, $x, $y, $w, $h)
+    {
+        $imagePath = storage_path('app/public/signature/' . $signaturePath);
+        $pdf->Image($imagePath, $x, $y, $w, $h, 'PNG', '', '', false, 300, '', false, false, 0, false, false);
     }
 }

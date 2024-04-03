@@ -14,7 +14,7 @@
         </ul>
 
         <x-tab-content title="{{ $contentTitle }}">
-
+            <livewire:components.s-g-a.generate-training-fee-component />
         </x-tab-content>
 
     </div>

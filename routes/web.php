@@ -1,24 +1,25 @@
 <?php
 
-use App\Livewire\Reports\SGA\LetterComponent;
+use App\Livewire\Views\SGA\SGAView;
 use App\Livewire\Views\User\UserView;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Views\SGA\LetterView;
 use App\Livewire\Views\Vessel\VesselView;
 use App\Livewire\Views\Company\CompanyView;
-use App\Livewire\Views\Company\CreateCompanyView;
-use App\Livewire\Views\Department\CreateDepartmentView;
-use App\Livewire\Views\Department\DepartmentView;
-use App\Livewire\Views\Principal\CreatePrincipalView;
-use App\Livewire\Views\Principal\PrincipalView;
-use App\Livewire\Views\Recipient\CreateRecipientView;
-use App\Livewire\Views\Recipient\RecipientView;
-use App\Livewire\Views\SGA\LetterView;
-use App\Livewire\Views\SGA\SGAView;
 use App\Livewire\Views\SGA\TrainingFeeView;
 use App\Livewire\Views\User\CreateUserView;
 use App\Livewire\Views\User\AssignRolesView;
+use App\Livewire\Reports\SGA\LetterComponent;
+use App\Livewire\Views\Principal\PrincipalView;
+use App\Livewire\Views\Recipient\RecipientView;
 use App\Livewire\Views\Vessel\CreateVesselView;
+use App\Livewire\Views\Company\CreateCompanyView;
+use App\Livewire\Views\Department\DepartmentView;
 use App\Livewire\Views\VesselType\VesselTypeView;
+use App\Livewire\Reports\SGA\TrainingFeeComponent;
+use App\Livewire\Views\Principal\CreatePrincipalView;
+use App\Livewire\Views\Recipient\CreateRecipientView;
+use App\Livewire\Views\Department\CreateDepartmentView;
 use App\Livewire\Views\VesselType\CreateVesselTypeView;
 
 Route::get('/', function () {
@@ -30,11 +31,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    
     Route::prefix('vessel')->as('vessel.')->group(function (){
         Route::get('index', VesselView::class)->name('index');
         Route::get('create', CreateVesselView::class)->name('create');
@@ -86,6 +83,7 @@ Route::middleware([
 
     Route::prefix('generate')->as('generate.')->group(function (){
         Route::get('letter', [LetterComponent::class, 'generate'])->name('letter');
+        Route::get('training-fee', [TrainingFeeComponent::class, 'generate'])->name('training-fee');
     });
 
 });
