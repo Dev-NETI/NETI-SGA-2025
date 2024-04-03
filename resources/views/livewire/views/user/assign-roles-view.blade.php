@@ -11,12 +11,12 @@
             <x-result-message />
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-8 gap-4">
-            <div class="col-span-1 md:col-span-2 lg:col-span-3">
-                <livewire:components.user.list-component :user="$userId" :data="$roleData" isRole="1" />
+        <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-8 gap-4 mt-6">
+            <div class="col-span-1 md:col-span-3 lg:col-span-4">
+                <livewire:components.user.role-list-component :user="$userId" :hash="$hash" />
             </div>
-            <div class="col-span-1 md:col-span-2 md:col-start-4 lg:col-span-3 lg:col-start-6">
-                <livewire:components.user.list-component :user="$userId" :data="$userRoleData" isRole="2" />
+            <div class="col-span-1 md:col-span-3 md:col-start-4 lg:col-span-4 lg:col-start-5">
+                <livewire:components.user.user-role-list-component :user="$userId" :hash="$hash" />
             </div>
         </div>
 

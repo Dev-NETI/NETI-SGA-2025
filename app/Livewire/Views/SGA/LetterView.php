@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Views\SGA;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
