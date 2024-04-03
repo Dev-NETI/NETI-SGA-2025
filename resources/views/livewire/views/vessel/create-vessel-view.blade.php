@@ -1,6 +1,6 @@
 <x-main-content pageTitle="{{ $hash != null ? 'Update Vessel' : 'Create Vessel' }}">
     <form class="max-w-md mx-auto mt-8" wire:submit.prevent="{{ $hash != null ? 'update' : 'store' }}">
-
+        @csrf
         <x-text-input name="vessel" title="Vessel" wire:model="vessel" type="text" />
         <x-select-input name="vesselType" title="Vessel Type" wire:model="vesselType" :data="$vesselTypeData"
             :hash="$hash" />
