@@ -2,13 +2,16 @@
 
 namespace App\Livewire\Components\Company;
 
-use App\Models\Company;
-use App\Traits\QueryTrait;
 use Exception;
+use App\Models\Company;
 use Livewire\Component;
+use App\Traits\QueryTrait;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CompanyListItemComponent extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $company;
 
@@ -19,6 +22,7 @@ class CompanyListItemComponent extends Component
 
     public function destroy($id)
     {
+        Gate::authorize('Authorize', 33);
         $data = Company::find($id);
         $query = $data->update([
             'is_active' => false,

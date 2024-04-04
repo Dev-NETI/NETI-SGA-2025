@@ -2,13 +2,21 @@
 
 namespace App\Livewire\Views\SGA;
 
-use Livewire\Attributes\Layout;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Gate;
 
 class TrainingFeeView extends Component
 {
-    public $title="SGA";
-    public $contentTitle="Training Fee";
+    use AuthorizesRequests;
+    public $title = "SGA";
+    public $contentTitle = "Training Fee";
+
+    public function mount()
+    {
+        Gate::authorize('Authorize', 3);
+    }
 
     #[Layout('layouts.app')]
     public function render()

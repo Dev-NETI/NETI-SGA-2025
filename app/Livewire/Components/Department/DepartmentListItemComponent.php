@@ -2,13 +2,16 @@
 
 namespace App\Livewire\Components\Department;
 
-use App\Models\Department;
-use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Component;
+use App\Models\Department;
+use App\Traits\QueryTrait;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class DepartmentListItemComponent extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $department;
 
@@ -19,6 +22,7 @@ class DepartmentListItemComponent extends Component
 
     public function destroy($id)
     {
+        Gate::authorize('Authorize', 37);
         $data = Department::find($id);
         $query = $data->update([
             'is_active' => false,

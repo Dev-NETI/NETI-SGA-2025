@@ -2,13 +2,16 @@
 
 namespace App\Livewire\Components\User;
 
-use App\Models\User;
-use App\Traits\QueryTrait;
 use Exception;
+use App\Models\User;
 use Livewire\Component;
+use App\Traits\QueryTrait;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class UserListItemComponent extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $user;
 
@@ -19,6 +22,7 @@ class UserListItemComponent extends Component
 
     public function destroy($id)
     {
+        Gate::authorize('Authorize', 27);
         $data = User::find($id);
         $query = $data->update([
             'is_active' => false,

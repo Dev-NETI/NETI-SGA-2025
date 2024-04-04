@@ -2,17 +2,20 @@
 
 namespace App\Livewire\Views\Vessel;
 
-use App\Models\Principal;
-use App\Models\Vessel;
-use App\Models\Vessel_type;
-use App\Traits\QueryTrait;
 use Exception;
+use App\Models\Vessel;
+use Livewire\Component;
+use App\Models\Principal;
+use App\Traits\QueryTrait;
+use App\Models\Vessel_type;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use Livewire\Component;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CreateVesselView extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $hash;
 
@@ -58,6 +61,7 @@ class CreateVesselView extends Component
 
     public function store()
     {
+        Gate::authorize('Authorize', 8);
         $this->validate();
         $query = Vessel::create([
             'vessel_type_id' => $this->vesselType,
@@ -78,6 +82,7 @@ class CreateVesselView extends Component
 
     public function update()
     {
+        Gate::authorize('Authorize', 9);
         $this->validate();
 
         $data = Vessel::find($this->vesselId);

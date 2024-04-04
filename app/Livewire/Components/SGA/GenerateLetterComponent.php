@@ -2,17 +2,20 @@
 
 namespace App\Livewire\Components\SGA;
 
+use App\Models\User;
+use Livewire\Component;
 use App\Models\Position;
 use App\Models\Principal;
 use App\Models\Recipient;
-use App\Models\User;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GenerateLetterComponent extends Component
 {
+    use AuthorizesRequests;
     #[Validate([
         'month' => 'required',
         'principal' => 'required',
@@ -48,6 +51,7 @@ class GenerateLetterComponent extends Component
 
     public function generate()
     {
+        Gate::authorize('Authorize', 4);
         $this->validate();
         Session::put('month', $this->month);
         Session::put('principalId', $this->principal);

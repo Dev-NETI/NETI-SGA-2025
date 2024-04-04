@@ -2,14 +2,17 @@
 
 namespace App\Livewire\Components\VesselType;
 
-use App\Livewire\Views\VesselType\VesselTypeView;
-use App\Models\Vessel_type;
-use App\Traits\QueryTrait;
 use Exception;
 use Livewire\Component;
+use App\Traits\QueryTrait;
+use App\Models\Vessel_type;
+use Illuminate\Support\Facades\Gate;
+use App\Livewire\Views\VesselType\VesselTypeView;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class VesselTypeListItemComponent extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $vessel;
 
@@ -20,6 +23,7 @@ class VesselTypeListItemComponent extends Component
 
     public function destroy($id)
     {
+        Gate::authorize('Authorize', 14);
         $data = Vessel_type::find($id);
         $query = $data->update([
             'is_active' => 0,

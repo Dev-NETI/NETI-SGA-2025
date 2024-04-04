@@ -2,14 +2,17 @@
 
 namespace App\Livewire\Views\Principal;
 
+use Livewire\Component;
 use App\Models\Principal;
 use App\Traits\QueryTrait;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use Livewire\Component;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CreatePrincipalView extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $hash;
 
@@ -40,6 +43,7 @@ class CreatePrincipalView extends Component
 
     public function store()
     {
+        Gate::authorize('Authorize', 16);
         $this->validate();
         $query = Principal::create([
             'name' => $this->principal,
@@ -55,6 +59,7 @@ class CreatePrincipalView extends Component
 
     public function update()
     {
+        Gate::authorize('Authorize', 17);
         $this->validate();
         $data = Principal::find($this->principalId);
         $query = $data->update([
@@ -65,7 +70,7 @@ class CreatePrincipalView extends Component
         $errorMsg = "Updating principal failed!";
         $successMsg = "Updating principal successful!";
 
-        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
         return $this->redirectRoute($routeBack);
     }
 }

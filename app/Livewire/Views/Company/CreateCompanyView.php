@@ -2,15 +2,18 @@
 
 namespace App\Livewire\Views\Company;
 
-use App\Models\Company;
-use App\Traits\QueryTrait;
 use Exception;
+use App\Models\Company;
+use Livewire\Component;
+use App\Traits\QueryTrait;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use Livewire\Component;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CreateCompanyView extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $hash = null;
 
@@ -25,10 +28,10 @@ class CreateCompanyView extends Component
     #[Layout('layouts.app')]
     public function mount($hash_id = null)
     {
-        if($hash_id != NULL){
+        if ($hash_id != NULL) {
             $this->hash = $hash_id;
             $companyData = Company::where('hash', $this->hash)
-            ->first();
+                ->first();
             $this->name = $companyData->name;
             $this->code = $companyData->code;
             $this->companyId = $companyData->id;
@@ -42,6 +45,7 @@ class CreateCompanyView extends Component
 
     public function store()
     {
+        Gate::authorize('Authorize', 31);
         $this->validate();
         $query = Company::create([
             'name' => $this->name,
@@ -57,6 +61,7 @@ class CreateCompanyView extends Component
 
     public function update()
     {
+        Gate::authorize('Authorize', 32);
         $this->validate();
         $data = Company::find($this->companyId);
         $query = $data->update([
@@ -67,7 +72,7 @@ class CreateCompanyView extends Component
         $errorMsg = "Updating company failed!";
         $successMsg = "Updating company successful!";
 
-        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
         return $this->redirectRoute($routeBack);
     }
 }

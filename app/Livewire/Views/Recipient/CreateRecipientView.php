@@ -2,15 +2,18 @@
 
 namespace App\Livewire\Views\Recipient;
 
+use Livewire\Component;
 use App\Models\Principal;
 use App\Models\Recipient;
 use App\Traits\QueryTrait;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use Livewire\Component;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CreateRecipientView extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $hash;
 
@@ -51,6 +54,7 @@ class CreateRecipientView extends Component
 
     public function store()
     {
+        Gate::authorize('Authorize', 20);
         $this->validate();
         $query = Recipient::create([
             'principal_id' => $this->principal,
@@ -68,6 +72,7 @@ class CreateRecipientView extends Component
 
     public function update()
     {
+        Gate::authorize('Authorize', 21);
         $this->validate();
 
         $data = Recipient::find($this->recipientId);

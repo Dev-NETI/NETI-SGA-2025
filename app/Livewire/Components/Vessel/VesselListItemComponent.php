@@ -4,12 +4,15 @@ namespace App\Livewire\Components\Vessel;
 
 use Exception;
 use App\Models\Vessel;
-use App\Traits\QueryTrait;
 use Livewire\Component;
+use App\Traits\QueryTrait;
 use Livewire\Attributes\Reactive;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class VesselListItemComponent extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $vessel;
 
@@ -20,6 +23,7 @@ class VesselListItemComponent extends Component
 
     public function destroy($id)
     {
+        Gate::authorize('Authorize', 10);
         $data = Vessel::find($id);
         $query = $data->update([
             'is_active' => 0,
@@ -33,5 +37,4 @@ class VesselListItemComponent extends Component
         $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
         return $this->redirectRoute($routeBack);
     }
-
 }

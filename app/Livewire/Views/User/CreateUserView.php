@@ -2,20 +2,23 @@
 
 namespace App\Livewire\Views\User;
 
-use App\Models\Company;
-use App\Models\Department;
-use App\Models\Position;
 use Exception;
 use App\Models\User;
-use App\Traits\QueryTrait;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Company;
 use Livewire\Component;
+use App\Models\Position;
+use App\Models\Department;
+use App\Traits\QueryTrait;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CreateUserView extends Component
 {
+    use AuthorizesRequests;
     use WithFileUploads;
     use QueryTrait;
     #[Validate([
@@ -87,6 +90,7 @@ class CreateUserView extends Component
 
     public function store()
     {
+        Gate::authorize('Authorize', 25);
         $this->validate();
 
         if ($this->signature != null) {
@@ -131,6 +135,7 @@ class CreateUserView extends Component
 
         $data = User::find($this->userId);
         if ($this->pwId == null) {
+            Gate::authorize('Authorize', 26);
             $query = $data->update([
                 'f_name' => $this->firstname,
                 'm_name' => $this->middlename,
@@ -142,6 +147,7 @@ class CreateUserView extends Component
                 'signature_path' => $this->signature_path,
             ]);
         } else {
+            Gate::authorize('Authorize', 29);
             $query = $data->update([
                 'password' => Hash::make($this->password),
             ]);

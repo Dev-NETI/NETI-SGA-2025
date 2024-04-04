@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Components\Recipient;
 
+use Livewire\Component;
 use App\Models\Recipient;
 use App\Traits\QueryTrait;
-use Livewire\Component;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RecipientListItemComponent extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $recipient;
 
@@ -18,6 +21,7 @@ class RecipientListItemComponent extends Component
 
     public function destroy($id)
     {
+        Gate::authorize('Authorize', 22);
         $data = Recipient::find($id);
         $query = $data->update([
             'is_active' => 0,

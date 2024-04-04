@@ -5,9 +5,12 @@ namespace App\Livewire\Components\Principal;
 use Livewire\Component;
 use App\Models\Principal;
 use App\Traits\QueryTrait;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PrincipalListItemComponent extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
 
     public $principal;
@@ -18,6 +21,7 @@ class PrincipalListItemComponent extends Component
 
     public function destroy($id)
     {
+        Gate::authorize('Authorize', 18);
         $data = Principal::find($id);
         $query = $data->update([
             'is_active' => false,

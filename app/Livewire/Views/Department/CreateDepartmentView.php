@@ -4,14 +4,17 @@ namespace App\Livewire\Views\Department;
 
 use Exception;
 use App\Models\Company;
+use Livewire\Component;
 use App\Models\Department;
 use App\Traits\QueryTrait;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CreateDepartmentView extends Component
 {
+    use AuthorizesRequests;
     use QueryTrait;
     public $hash;
 
@@ -46,6 +49,7 @@ class CreateDepartmentView extends Component
 
     public function store()
     {
+        Gate::authorize('Authorize', 35);
         $this->validate();
         $query = Department::create([
             'name' => $this->department,
@@ -61,6 +65,7 @@ class CreateDepartmentView extends Component
 
     public function update()
     {
+        Gate::authorize('Authorize', 36);
         $this->validate();
         $data = Department::find($this->departmentId);
         $query = $data->update([
