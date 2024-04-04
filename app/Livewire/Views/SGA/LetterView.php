@@ -12,7 +12,7 @@ class LetterView extends Component
 {
     use AuthorizesRequests;
     public $title="SGA";
-    public $contentTitle="Letter for Principal";
+    public $contentTitle="Summary";
 
     public function mount()
     {

@@ -22,6 +22,7 @@ class GenerateTrainingFeeComponent extends Component
     public $principal;
     public $hash;
     public $vesselType;
+    public $isGenerated = 0;
 
     public function render()
     {
@@ -39,6 +40,7 @@ class GenerateTrainingFeeComponent extends Component
         Session::put('principalId', $this->principal);
         Session::put('month', $this->month);
         Session::put('vesselTypeId', $this->vesselType);
-        return $this->redirectRoute('generate.training-fee');
+        $this->isGenerated = 1;
+        // return $this->redirectRoute('generate.training-fee');
     }
 }

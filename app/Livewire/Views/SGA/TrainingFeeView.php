@@ -11,7 +11,7 @@ class TrainingFeeView extends Component
 {
     use AuthorizesRequests;
     public $title = "SGA";
-    public $contentTitle = "Training Fee";
+    public $contentTitle = "FC-007";
 
     public function mount()
     {

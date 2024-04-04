@@ -20,14 +20,17 @@
 </head>
 
 <body class="font-sans antialiased">
-    
+
     <main>
         <div
             class="h-screen bg-gradient-to-r from-cyan-500 to-cyan-950
                     grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
 
             <div class="col-span-1 md:col-start-1 lg:col-start-1 flex flex-col justify-center">
-                <div class="flex justify-center">
+                <div class="flex justify-center md:-mt-52 lg:-mt-52">
+                    <x-authentication-card-logo />
+                </div>
+                <div class="flex justify-center md:mt-40 lg:mt-40">
                     <x-welcome-title title="NETI-SGA" />
                 </div>
                 <div class="flex justify-center md:justify-end lg:justify-end ">

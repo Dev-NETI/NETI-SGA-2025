@@ -28,6 +28,8 @@ class GenerateLetterComponent extends Component
     public $recipient;
     public $recipientData;
     public $signature;
+    public $isGenerated = 0;
+    public $generateButton;
 
     #[Layout('layouts.app')]
     public function render()
@@ -57,7 +59,7 @@ class GenerateLetterComponent extends Component
         Session::put('principalId', $this->principal);
         Session::put('recipientId', $this->recipient);
         Session::put('userlId', $this->signature);
-
-        return $this->redirectRoute('generate.letter');
+        $this->isGenerated = 1;
+        // return $this->redirectRoute('generate.letter');
     }
 }

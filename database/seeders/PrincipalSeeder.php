@@ -17,16 +17,16 @@ class PrincipalSeeder extends Seeder
 
         $data = [
             'NYK SHIPMANAGEMENT PTE LTD.',
-            'HorizonHaul Maritime',
-            'WaveCrest Cargo Lines',
-            'SeaStar Logistics',
-            'BlueSail Freight Services',
+            // 'HorizonHaul Maritime',
+            // 'WaveCrest Cargo Lines',
+            // 'SeaStar Logistics',
+            // 'BlueSail Freight Services',
         ];
 
         foreach ($data as $index => $name) {
             Principal::create([
                 'name' => $name,
-                'modified_by' => 'John Doe',
+                'modified_by' => 'System',
                 'hash' => encrypt($index + 1) // Increment index by 1 since array index starts from 0
             ]);
         }
