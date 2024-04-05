@@ -64,12 +64,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-    // mutator
-    public function setHashAttribute($value)
-    {
-        $vessel = self::orderBy('id','DESC')->first();
-        $hash_id = encrypt($vessel->id + 1);
-        $this->attributes['hash'] = $hash_id;
-    }
 }
