@@ -1,4 +1,4 @@
-<div x-data="{ anchorProperty: 'text-sgaFontBlue rounded-lg hover:text-stone-100 hover:bg-sgaDarkerBlue' }" >
+<div x-data="{ anchorProperty: 'text-sgaFontBlue rounded-lg hover:text-sgaBlue hover:bg-sgaDarkerBlue' }" >
     <x-sidebar-menu >
 
         @can('Authorize', 1)

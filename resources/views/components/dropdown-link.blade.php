@@ -2,7 +2,7 @@
 <button type="button" class="flex items-center w-full p-2 text-base transition duration-75 rounded-lg group "
     aria-controls="dropdown-example" data-collapse-toggle="dropdown-{{ $id }}" {{$attributes}}>
 
-    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-sgaBlue"
         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
         <path d="{{ $icon }}" />
     </svg>
