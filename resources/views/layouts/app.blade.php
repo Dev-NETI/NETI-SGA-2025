@@ -19,10 +19,8 @@
     @livewireStyles
 </head>
 
-<body class="font-sans antialiased">
-    {{-- <div class="min-h-screen bg-gray-100"> --}}
-    {{-- </div> --}}
-
+<body class="font-sans antialiased bg-gradient-to-r from-sgaBlue to-sgaDarkerBlue ">
+    
     @livewire('navigation-menu')
     @include('sidebar-menu')
     <main>

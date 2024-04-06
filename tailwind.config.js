@@ -14,6 +14,12 @@ export default {
 
     theme: {
         extend: {
+            colors:{
+                'sgaBlue': '#61d6bb',
+                'sgaDarkBlue' : '#006665',
+                'sgaDarkerBlue': '#1c4d50',
+                'sgaFontBlue' : '#111336',
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },

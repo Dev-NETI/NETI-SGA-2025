@@ -1,3 +1,3 @@
-<td class="px-6 py-4 text-xs hover:bg-cyan-500 hover:text-sm hover:text-slate-100 duration-700 ">
+<td class="px-6 py-4 text-sgaFontBlue hover:bg-sgaDarkerBlue hover:text-xs hover:text-sgaBlue duration-700 ">
     {{ $slot }}
 </td>

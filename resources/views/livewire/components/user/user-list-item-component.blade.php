@@ -6,7 +6,7 @@
     <x-td>{{ $user->position->name }}</x-td>
     <x-td>{{ $user->modified_by }}</x-td>
     <x-td>{{ $user->updated_at }}</x-td>
-    <td>
+    <x-td>
 
         <x-action-dropdown :id="$user->id">
             <x-action-dropdown-item label="Edit" href="{{ route('users.edit', ['hash_id' => $user->hash]) }}" />
@@ -18,5 +18,5 @@
                 wire:click="destroy({{ $user->id }})" />
         </x-action-dropdown>
 
-    </td>
+    </x-td>
 </tr>

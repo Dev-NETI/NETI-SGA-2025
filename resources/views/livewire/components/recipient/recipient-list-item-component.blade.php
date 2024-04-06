@@ -5,7 +5,7 @@
     <x-td>{{ $recipient->position }}</x-td>
     <x-td>{{ $recipient->modified_by }}</x-td>
     <x-td>{{ $recipient->updated_at }}</x-td>
-    <td class="px-6 py-4 hover:bg-cyan-500 hover:text-lg hover:text-slate-100">
+    <x-td>
         
         <x-action-dropdown :id="$recipient->id">
             <x-action-dropdown-item label="Edit"
@@ -14,5 +14,5 @@
                 wire:click="destroy({{ $recipient->id }})" />
         </x-action-dropdown>
 
-    </td>
+    </x-td>
 </tr>

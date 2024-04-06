@@ -9,7 +9,7 @@
     <x-td>{{ $vessel->modified_by }}</x-td>
     <x-td>{{ $vessel->formatted_updated_date }}</x-td>
     
-    <td class="px-6 py-4 hover:bg-cyan-500 hover:text-lg hover:text-slate-100">
+    <x-td>
 
         <x-action-dropdown :id="$vessel->id">
             <x-action-dropdown-item label="Edit"
@@ -18,5 +18,5 @@
                 wire:click="destroy({{ $vessel->id }})" />
         </x-action-dropdown>
 
-    </td>
+    </x-td>
 </tr>

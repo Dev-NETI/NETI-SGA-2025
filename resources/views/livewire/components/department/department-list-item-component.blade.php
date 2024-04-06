@@ -3,7 +3,7 @@
     <x-td>{{ $department->company->name }}</x-td>
     <x-td>{{ $department->modified_by }}</x-td>
     <x-td>{{ $department->updated_at }}</x-td>
-    <td class="px-6 py-4 hover:bg-cyan-500 hover:text-lg hover:text-slate-100">
+    <x-td>
 
         <x-action-dropdown :id="$department->id">
             <x-action-dropdown-item label="Edit"
@@ -12,5 +12,5 @@
                 wire:click="destroy({{ $department->id }})" />
         </x-action-dropdown>
         
-    </td>
+    </x-td>
 </tr>

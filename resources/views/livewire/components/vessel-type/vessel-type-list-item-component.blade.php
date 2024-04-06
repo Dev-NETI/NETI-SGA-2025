@@ -1,6 +1,6 @@
 <tr class="border-b border-gray-200 dark:border-gray-700">
     <x-td>{{ $vessel->name }}</x-td>
-    <td class="px-6 py-4">
+    <x-td>
 
         <x-action-dropdown :id="$vessel->id">
             <x-action-dropdown-item label="Edit"
@@ -9,5 +9,5 @@
                 wire:click="destroy({{ $vessel->id }})" />
         </x-action-dropdown>
 
-    </td>
+    </x-td>
 </tr>

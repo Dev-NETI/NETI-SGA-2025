@@ -1,6 +1,7 @@
 @props(['data'])
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <div class="pb-4 bg-white dark:bg-gray-900">
+<div class="relative overflow-x-auto sm:rounded-lg 
+bg-sgaBlue">
+    <div class="pb-4 ">
         <label for="table-search" class="sr-only">Search</label>
         <div class="relative mt-1">
             <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">

@@ -17,6 +17,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "alpinejs": "^3.13.8",
         "froala-editor": "^4.2.0",
         "tinymce": "^6.8.3"
     }

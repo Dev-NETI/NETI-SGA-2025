@@ -23,7 +23,7 @@
 
     <main>
         <div
-            class="h-screen bg-gradient-to-r from-cyan-500 to-cyan-950
+            class="h-screen bg-gradient-to-r from-sgaBlue to-sgaDarkerBlue
                     grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
 
             <div class="col-span-1 md:col-start-1 lg:col-start-1 flex flex-col justify-center">
