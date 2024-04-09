@@ -55,6 +55,9 @@ class RoleSeeder extends Seeder
             '35' => ['Create Department (User Management)'],
             '36' => ['Edit Department (User Management)'],
             '37' => ['Delete Department (User Management)'],
+            '38' => ['Logs (Log Module)'],
+            '39' => ['Summary (Log Module)'],
+            '40' => ['F-FC-007 (Log Module)'],
         ];
 
         foreach($data as $index=>[$name]){

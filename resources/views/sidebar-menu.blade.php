@@ -1,5 +1,5 @@
-<div x-data="{ anchorProperty: 'text-sgaFontBlue rounded-lg hover:text-sgaBlue hover:bg-sgaDarkerBlue' }" >
-    <x-sidebar-menu >
+<div x-data="{ anchorProperty: 'text-sgaFontBlue rounded-lg hover:text-sgaBlue hover:bg-sgaDarkerBlue' }">
+    <x-sidebar-menu>
 
         @can('Authorize', 1)
             <x-sidebar-link-item label="SGA" route="sga.letter-index" x-bind:class="anchorProperty">
@@ -47,6 +47,23 @@
                     </x-sidebar-link-item>
                 @endcan
 
+            </x-dropdown-link>
+        @endcan
+
+        @can('Authorize', 38)
+            <x-dropdown-link id="Logs" x-bind:class="anchorProperty"
+                icon="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 
+                0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"
+                title="Logs">
+                @can('Authorize', 7)
+                    <x-sidebar-link-item label="Summary Logs" route="report.summary" x-bind:class="anchorProperty">
+                        <x-sidebar-link-svg
+                            icon="M11.782 5.72a4.773 4.773 0 0 0-4.8 4.173 3.43 3.43 0 0 1 2.741-1.687c1.689 0 2.974 1.972 
+            3.758 2.587a5.733 5.733 0 0 0 5.382.935c2-.638 2.934-2.865 3.137-3.921-.969 1.379-2.44 2.207-4.259 1.231-1.253-.673-2.19-3.438-5.959-3.318ZM6.8 11.979A4.772 
+            4.772 0 0 0 2 16.151a3.431 3.431 0 0 1 2.745-1.687c1.689 0 2.974 1.972 3.758 2.587a5.733 5.733 
+            0 0 0 5.382.935c2-.638 2.933-2.865 3.137-3.921-.97 1.379-2.44 2.208-4.259 1.231-1.253-.673-2.19-3.443-5.963-3.317Z" />
+                    </x-sidebar-link-item>
+                @endcan
             </x-dropdown-link>
         @endcan
 

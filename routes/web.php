@@ -20,6 +20,7 @@ use App\Livewire\Reports\SGA\TrainingFeeComponent;
 use App\Livewire\Views\Principal\CreatePrincipalView;
 use App\Livewire\Views\Recipient\CreateRecipientView;
 use App\Livewire\Views\Department\CreateDepartmentView;
+use App\Livewire\Views\Logs\SummaryLogView;
 use App\Livewire\Views\VesselType\CreateVesselTypeView;
 
 Route::get('/', function () {
@@ -84,6 +85,10 @@ Route::middleware([
     Route::prefix('generate')->as('generate.')->group(function (){
         Route::get('letter', [LetterComponent::class, 'generate'])->name('letter');
         Route::get('training-fee', [TrainingFeeComponent::class, 'generate'])->name('training-fee');
+    });
+
+    Route::prefix('report')->as('report.')->group(function (){
+        Route::get('summary', SummaryLogView::class)->name('summary');
     });
 
 });
