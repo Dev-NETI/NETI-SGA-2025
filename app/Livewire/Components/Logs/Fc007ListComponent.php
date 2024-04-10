@@ -2,21 +2,20 @@
 
 namespace App\Livewire\Components\Logs;
 
-use App\Models\SummaryLog;
+use App\Models\Fc007Log;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class SummaryLogListComponent extends Component
+class Fc007ListComponent extends Component
 {
     use WithPagination;
     public $search;
 
     public function render()
     {
-        $summaryLogData = SummaryLog::where('reference_number', 'LIKE', '%' . $this->search . '%')
+        $fc007LogData = Fc007Log::where('reference_number', 'LIKE', '%' . $this->search . '%')
             ->orWhere('modified_by', 'LIKE', '%' . $this->search . '%')
             ->orderBy('id', 'desc')->paginate(10);
-
-        return view('livewire.components.logs.summary-log-list-component', compact('summaryLogData'));
+        return view('livewire.components.logs.fc007-list-component', compact('fc007LogData'));
     }
 }

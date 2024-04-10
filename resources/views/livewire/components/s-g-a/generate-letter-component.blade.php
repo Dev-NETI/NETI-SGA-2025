@@ -1,4 +1,4 @@
-<div class="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-9 mt-8" {{-- x-data="{ isGenerated: $wire.entangle('isGenerated').live }" --}}>
+<div class="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-9 mt-8">
     <x-result-message />
     <form class="sm:col-span-1 md:col-start-1 md:col-span-1 lg:col-start-1 lg:col-span-2 flex-row"
         wire:submit.prevent="generate">
@@ -28,12 +28,12 @@
          border-sgaDarkBlue border-2 border-dashed ">
 
         @if ($isGenerated)
-            <div class="flex flex-col" {{-- x-show="isGenerated" --}}>
+            <div class="flex flex-col">
                 <x-pdf-view reportRoute="/generate/letter" referenceNumber="{{ $referenceNumber }}"
                     wire:click="storeLog()" wire:confirm="Are you sure you want to save this report?" />
             </div>
         @else
-            <div class="flex justify-center" {{-- x-show="!isGenerated" --}}>
+            <div class="flex justify-center">
                 <h2 class="text-stone-700 text-2xl font-semibold mt-10">Generated report will be shown here!</h2>
             </div>
         @endif

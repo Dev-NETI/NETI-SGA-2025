@@ -18,7 +18,6 @@ class SummaryLogListItemComponent extends Component
     public function show($id)
     {
         $summaryFile = SummaryLog::find($id);
-        // dd(storage_path('app/public/Summary/'.$summaryFile->file_path));
         return Redirect::to(asset('storage/Summary/'.$summaryFile->file_path));
     }
 }

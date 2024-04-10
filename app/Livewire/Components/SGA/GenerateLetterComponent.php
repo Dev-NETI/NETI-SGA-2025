@@ -33,7 +33,7 @@ class GenerateLetterComponent extends Component
     public $recipientData;
     public $signature;
     public $generateButton;
-    public $isGenerated = false;
+    public $isGenerated;
     public $referenceNumber;
 
 

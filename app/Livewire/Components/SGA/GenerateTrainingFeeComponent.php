@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Components\SGA;
 
+use App\FC007Trait;
 use Livewire\Component;
 use App\Models\Principal;
 use App\Models\Vessel_type;
+use App\Traits\UtilitiesTrait;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
@@ -13,6 +15,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class GenerateTrainingFeeComponent extends Component
 {
     use AuthorizesRequests;
+    use UtilitiesTrait;
+    use FC007Trait;
     #[Validate([
         'month' => 'required',
         'principal' => 'required',
@@ -22,7 +26,8 @@ class GenerateTrainingFeeComponent extends Component
     public $principal;
     public $hash;
     public $vesselType;
-    public $isGenerated = 0;
+    public $isGenerated;
+    public $referenceNumber;
 
     public function render()
     {
@@ -40,7 +45,16 @@ class GenerateTrainingFeeComponent extends Component
         Session::put('principalId', $this->principal);
         Session::put('month', $this->month);
         Session::put('vesselTypeId', $this->vesselType);
-        $this->isGenerated = 1;
-        // return $this->redirectRoute('generate.training-fee');
+        $this->isGenerated = true;
+        $this->referenceNumber = $this->generateReferenceNumber();
     }
+
+    public function storeLog()
+    {
+        $sessionPrincipalId = Session::get('principalId', $this->principal);
+        $sessionMonth = Session::get('month', $this->month);
+        $sessionVesselTypeId = Session::get('vesselTypeId', $this->vesselType);
+        $this->generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, false,$this->referenceNumber);
+    }
+
 }

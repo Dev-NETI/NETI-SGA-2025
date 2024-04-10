@@ -7,7 +7,7 @@
         <h6 class="font-bold text-sgaFontBlue">Reference Number: {{$referenceNumber}}</h6>
     </div>
     <div class="basis-full">
-        <iframe src="{{ env('APP_DOMAIN') . $reportRoute }}" frameborder="0" width="100%" class="h-[45rem]">
+        <iframe src="{{ env('APP_DOMAIN') . $reportRoute }}#toolbar=0" frameborder="0" width="100%" class="h-[45rem]" >
         </iframe>
     </div>
 </div>

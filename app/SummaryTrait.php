@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use setasign\Fpdi\Tcpdf\Fpdi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use TCPDF;
 
 trait SummaryTrait
@@ -132,11 +133,18 @@ trait SummaryTrait
         } else {
             // save to folder
             $fileName = $referenceNumber . '.pdf';
-            $filePath = storage_path('app/public/Summary/'.$fileName);
+            $filePath = storage_path('app/public/Summary/' . $fileName);
             $pdfContents = $pdf->Output('', 'S');
-            file_put_contents($filePath, $pdfContents);
-            // save to database
-            $this->storeLogs($referenceNumber, $fileName);
+            $storeFile = file_put_contents($filePath, $pdfContents);
+
+            if (!$storeFile) {
+                session()->flash('error', ' Saving file failed!');
+            } else {
+                // save to database
+                $this->storeLogs($referenceNumber, $fileName);
+                // download pdf
+                Storage::download($filePath);
+            }
         }
     }
 

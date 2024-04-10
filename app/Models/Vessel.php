@@ -56,15 +56,19 @@ class Vessel extends Model
         return $this->serial_number."-B";
     }
 
+    public function getIncrementedSerialNumberAttribute()
+    {
+        return $this->serial_number+1;
+    }
+
     public function getTrainingFeeSerialNumberAttribute()
     {
-        return "Fee# ".$this->serial_number."-B";
+        return "Fee# ".$this->incremented_serial_number."-B";
     }
 
     public function getSubtractedSerialNumberAttribute()
     {
-        $subtractedSerialNumber = $this->serial_number - 1;
-        return "Fee# ".$subtractedSerialNumber."-B";
+        return "Fee# ".$this->serial_number."-B";
     }
 
     public function getFormattedNameWithCodeAttribute()

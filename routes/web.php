@@ -20,6 +20,7 @@ use App\Livewire\Reports\SGA\TrainingFeeComponent;
 use App\Livewire\Views\Principal\CreatePrincipalView;
 use App\Livewire\Views\Recipient\CreateRecipientView;
 use App\Livewire\Views\Department\CreateDepartmentView;
+use App\Livewire\Views\Logs\Fc007View;
 use App\Livewire\Views\Logs\SummaryLogView;
 use App\Livewire\Views\VesselType\CreateVesselTypeView;
 
@@ -89,6 +90,7 @@ Route::middleware([
 
     Route::prefix('report')->as('report.')->group(function (){
         Route::get('summary', SummaryLogView::class)->name('summary');
+        Route::get('fc007', Fc007View::class)->name('fc007');
     });
 
 });
