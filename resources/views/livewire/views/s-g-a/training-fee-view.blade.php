@@ -1,4 +1,4 @@
-<x-view-main-content pageTitle="{{ $title }}">
+<x-view-main-content-v2 pageTitle="{{ $title }}">
 
     <div class="sm:col-span-1 md:col-span-3 lg:col-span-6">
 
@@ -21,4 +21,4 @@
         
     </div>
 
-</x-view-main-content>
+</x-view-main-content-v2>

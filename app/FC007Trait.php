@@ -8,6 +8,8 @@ use App\Models\Vessel;
 use App\Traits\FpdiTrait;
 use App\Traits\QueryTrait;
 use App\Models\Vessel_type;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +18,7 @@ trait FC007Trait
     use FpdiTrait;
     use QueryTrait;
 
-    public function generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, $output = true,$referenceNumber = null)
+    public function generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, $output = true, $referenceNumber = null)
     {
         // data
         $principalId = $sessionPrincipalId;
@@ -55,12 +57,29 @@ trait FC007Trait
             if (!$storeFile) {
                 session()->flash('error', ' Saving file failed!');
             } else {
+                $errorMsg = "Saving summary report failed!";
+                $successMsg = "Summary report saved successfully!";
                 // save to database
-                $this->storeLogs($referenceNumber, $fileName);
+                $this->storeLogs($referenceNumber, $fileName, $errorMsg, $successMsg);
+                //update serial number
+                foreach ($vesselData as $data) {
+                    $this->updateSerialNumber($data->id, $data->incremented_serial_number, $errorMsg, $successMsg);
+                }
                 // download pdf
-                Storage::download($filePath);
+                // Storage::download('public/F-FC-007/' . $fileName);
+                return $this->redirectRoute('sga.tFee-index');
             }
         }
+    }
+
+    public function updateSerialNumber($id, $newSerialNumber, $errorMsg, $successMsg)
+    {
+        $vessel = Vessel::find($id);
+        $update = $vessel->update([
+            'serial_number' => $newSerialNumber,
+        ]);
+
+        $this->updateTraitNoRoute($vessel, $update, $errorMsg, $successMsg);
     }
 
     public function trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth)
@@ -120,15 +139,13 @@ trait FC007Trait
         $pdf->Cell(20.5, 5, number_format($lessedFee, 2), 0, 0, "L");
     }
 
-    public function storeLogs($referenceNumber, $filePath)
+    public function storeLogs($referenceNumber, $filePath, $errorMsg, $successMsg)
     {
         $query = Fc007Log::create([
             'reference_number' => $referenceNumber,
             'file_path' => $filePath,
         ]);
-        $errorMsg = "Saving summary report failed!";
-        $successMsg = "Summary report saved successfully!";
+
         $this->storeTrait($query, $errorMsg, $successMsg);
     }
-
 }

@@ -28,4 +28,13 @@ trait QueryTrait
         }
         $this->storeTrait($query, $errorMsg, $successMsg);
     }
+
+    public function updateTraitNoRoute($data,$query, $errorMsg, $successMsg)
+    {
+        if (!$data) {
+            session()->flash('error', 'Data not found');
+        }
+        $this->storeTrait($query, $errorMsg, $successMsg);
+    }
+
 }

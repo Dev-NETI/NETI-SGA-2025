@@ -143,7 +143,7 @@ trait SummaryTrait
                 // save to database
                 $this->storeLogs($referenceNumber, $fileName);
                 // download pdf
-                Storage::download($filePath);
+                return Storage::download('storage/app/public/Summary/' . $fileName);
             }
         }
     }
