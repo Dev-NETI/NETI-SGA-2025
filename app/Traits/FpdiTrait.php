@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use TCPDF_FONTS;
 use setasign\Fpdi\Tcpdf\Fpdi;
-use TCPDF;
 
 trait FpdiTrait
 {
@@ -17,6 +16,7 @@ trait FpdiTrait
         $pdf->SetCreator($creator);
         $pdf->SetAuthor($author);
         $pdf->SetTitle($title);
+        $pdf->setHeaderData('',0,'','',array(0,0,0), array(255,255,255));
 
         return $pdf;
     }

@@ -2,7 +2,7 @@ import './bootstrap';
 import 'flowbite';
 import Alpine from 'alpinejs';
 
-window.Alpine = Alpine
+Alpine.prefix("x-");
 Alpine.start()
 
 

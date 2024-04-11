@@ -67,6 +67,8 @@ trait SummaryTrait
         $templatePath = storage_path('app/public/SGA/SGA-Letter.pdf');
         $template = $pdf->setSourceFile($templatePath);
         $importedPage = $pdf->importPage($template);
+        $pageWidth = 210;
+        $pageHeight = 297;
 
         $this->letterPage(
             $pdf,
@@ -80,7 +82,9 @@ trait SummaryTrait
             $formattedTrainingFee,
             $formattedBankCharge,
             $userData,
-            $formattedMonth
+            $formattedMonth,
+            $pageWidth,
+            $pageHeight
         );
         // LETTER PAGE END
         // LETTER PAGE END
@@ -100,7 +104,9 @@ trait SummaryTrait
                 $formattedMonth,
                 $vesselType->name,
                 $principalData->name,
-                $currentDate
+                $currentDate,
+                $pageWidth,
+                $pageHeight
             );
 
             // vessel data
@@ -119,7 +125,9 @@ trait SummaryTrait
                     $this->traineeFeeSignature($pdf, $totalFee);
                     $this->trainingFeePage2(
                         $pdf,
-                        $totalFee
+                        $totalFee,
+                        $pageWidth,
+                        $pageHeight
                     );
                     $totalFee = 0;
                 }
@@ -160,9 +168,11 @@ trait SummaryTrait
         $formattedTrainingFee,
         $formattedBankCharge,
         $userData,
-        $formattedMonth
+        $formattedMonth,
+        $pageWidth,
+        $pageHeight
     ) {
-        $pdf->AddPage('P');
+        $pdf->AddPage('P', [$pageWidth, $pageHeight]);
 
         $pdf->useTemplate($importedPage);
         // Set font
@@ -229,9 +239,11 @@ trait SummaryTrait
         $formattedMonth,
         $vesselTypeName,
         $principalName,
-        $currentDate
+        $currentDate,
+        $pageWidth,
+        $pageHeight
     ) {
-        $pdf->AddPage('P');
+        $pdf->AddPage('P', [$pageWidth, $pageHeight]);
         $pdf->useTemplate($importedTrainingFeePage);
         // Set font
         $pdf->SetFont('Helvetica', 'B', 7);
@@ -264,9 +276,11 @@ trait SummaryTrait
 
     public function trainingFeePage2(
         $pdf,
-        $forwardedBalance
+        $forwardedBalance,
+        $pageWidth,
+        $pageHeight
     ) {
-        $pdf->AddPage('P');
+        $pdf->AddPage('P', [$pageWidth, $pageHeight]);
         $pdf->setXY(21, 25);
         $pdf->Cell(7, 5, '', 1, 0, "C");
         $pdf->Cell(50, 5, 'BALANCE FORWARDED', 1, 0, "L");

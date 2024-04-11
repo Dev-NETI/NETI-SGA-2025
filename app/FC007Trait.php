@@ -40,9 +40,11 @@ trait FC007Trait
         $templatePath = storage_path('app/public/SGA/Training Fee Template.pdf');
         $template = $pdf->setSourceFile($templatePath);
         $importedPage = $pdf->importPage($template);
+        $pageWidth = 210;
+        $pageHeight = 297;
 
         foreach ($vesselData as $data) {
-            $this->trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth);
+            $this->trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight);
         }
 
         if ($output) {
@@ -82,9 +84,9 @@ trait FC007Trait
         $this->updateTraitNoRoute($vessel, $update, $errorMsg, $successMsg);
     }
 
-    public function trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth)
+    public function trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight)
     {
-        $pdf->AddPage('P');
+        $pdf->AddPage('P', [$pageWidth,$pageHeight]);
         $pdf->useTemplate($importedPage);
         // Set font
         $pdf->SetFont('Helvetica', 'B', 9);

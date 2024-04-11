@@ -14,9 +14,6 @@
     <script src="{{asset('node_modules/tinymce/tinymce.min.js')}}" referrerpolicy="origin"></script>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <!-- Styles -->
-    @livewireStyles
 </head>
 
 <body class="font-sans antialiased bg-gradient-to-r from-sgaBlue to-sgaDarkerBlue ">
@@ -28,7 +25,6 @@
     </main>
 
     @stack('modals')
-    @livewireScripts
 </body>
 
 </html>
