@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Auth\VerificationView;
 use App\Livewire\Views\SGA\SGAView;
 use App\Livewire\Views\User\UserView;
 use Illuminate\Support\Facades\Route;
@@ -33,64 +34,68 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    
-    Route::prefix('vessel')->as('vessel.')->group(function (){
-        Route::get('index', VesselView::class)->name('index');
-        Route::get('create', CreateVesselView::class)->name('create');
-        Route::get('edit/{hash_id}', CreateVesselView::class)->name('edit');
-    });
 
-    Route::prefix('vessel-type')->as('vessel-type.')->group(function (){
-        Route::get('index', VesselTypeView::class)->name('index');
-        Route::get('create', CreateVesselTypeView::class)->name('create');
-        Route::get('edit/{hash_id}', CreateVesselTypeView::class)->name('edit');
-    });
-    
-    Route::prefix('users')->as('users.')->group(function (){
-        Route::get('index', UserView::class)->name('index');
-        Route::get('create', CreateUserView::class)->name('create');
-        Route::get('edit/{hash_id}', CreateUserView::class)->name('edit');
-        Route::get('roles/index/{hash_id}', AssignRolesView::class)->name('roles-index');
-        Route::get('edit-password/{hash_id}/{pw_id}', CreateUserView::class)->name('edit-password');
-    });
+    Route::get('login/verification', VerificationView::class)->name('login.verification');
 
-    Route::prefix('company')->as('company.')->group(function (){
-        Route::get('index', CompanyView::class)->name('index');
-        Route::get('create', CreateCompanyView::class)->name('create');
-        Route::get('edit/{hash_id}', CreateCompanyView::class)->name('edit');
-    });
+    Route::middleware(['VerifyPinMiddleware'])->group(function () {
 
-    Route::prefix('department')->as('department.')->group(function (){
-        Route::get('index', DepartmentView::class)->name('index');
-        Route::get('create', CreateDepartmentView::class)->name('create');
-        Route::get('edit/{hash_id}', CreateDepartmentView::class)->name('edit');
-    });
+        Route::prefix('vessel')->as('vessel.')->group(function () {
+            Route::get('index', VesselView::class)->name('index');
+            Route::get('create', CreateVesselView::class)->name('create');
+            Route::get('edit/{hash_id}', CreateVesselView::class)->name('edit');
+        });
 
-    Route::prefix('principal')->as('principal.')->group(function (){
-        Route::get('index', PrincipalView::class)->name('index');
-        Route::get('create', CreatePrincipalView::class)->name('create');
-        Route::get('edit/{hash_id}', CreatePrincipalView::class)->name('edit');
-    });
+        Route::prefix('vessel-type')->as('vessel-type.')->group(function () {
+            Route::get('index', VesselTypeView::class)->name('index');
+            Route::get('create', CreateVesselTypeView::class)->name('create');
+            Route::get('edit/{hash_id}', CreateVesselTypeView::class)->name('edit');
+        });
 
-    Route::prefix('recipient')->as('recipient.')->group(function (){
-        Route::get('index', RecipientView::class)->name('index');
-        Route::get('create', CreateRecipientView::class)->name('create');
-        Route::get('edit/{hash_id}', CreateRecipientView::class)->name('edit');
-    });
+        Route::prefix('users')->as('users.')->group(function () {
+            Route::get('index', UserView::class)->name('index');
+            Route::get('create', CreateUserView::class)->name('create');
+            Route::get('edit/{hash_id}', CreateUserView::class)->name('edit');
+            Route::get('roles/index/{hash_id}', AssignRolesView::class)->name('roles-index');
+            Route::get('edit-password/{hash_id}/{pw_id}', CreateUserView::class)->name('edit-password');
+        });
 
-    Route::prefix('sga')->as('sga.')->group(function (){
-        Route::get('letter-index', LetterView::class)->name('letter-index');
-        Route::get('tFee-index', TrainingFeeView::class)->name('tFee-index');
-    });
+        Route::prefix('company')->as('company.')->group(function () {
+            Route::get('index', CompanyView::class)->name('index');
+            Route::get('create', CreateCompanyView::class)->name('create');
+            Route::get('edit/{hash_id}', CreateCompanyView::class)->name('edit');
+        });
 
-    Route::prefix('generate')->as('generate.')->group(function (){
-        Route::get('letter', [LetterComponent::class, 'generate'])->name('letter');
-        Route::get('training-fee', [TrainingFeeComponent::class, 'generate'])->name('training-fee');
-    });
+        Route::prefix('department')->as('department.')->group(function () {
+            Route::get('index', DepartmentView::class)->name('index');
+            Route::get('create', CreateDepartmentView::class)->name('create');
+            Route::get('edit/{hash_id}', CreateDepartmentView::class)->name('edit');
+        });
 
-    Route::prefix('report')->as('report.')->group(function (){
-        Route::get('summary', SummaryLogView::class)->name('summary');
-        Route::get('fc007', Fc007View::class)->name('fc007');
-    });
+        Route::prefix('principal')->as('principal.')->group(function () {
+            Route::get('index', PrincipalView::class)->name('index');
+            Route::get('create', CreatePrincipalView::class)->name('create');
+            Route::get('edit/{hash_id}', CreatePrincipalView::class)->name('edit');
+        });
 
+        Route::prefix('recipient')->as('recipient.')->group(function () {
+            Route::get('index', RecipientView::class)->name('index');
+            Route::get('create', CreateRecipientView::class)->name('create');
+            Route::get('edit/{hash_id}', CreateRecipientView::class)->name('edit');
+        });
+
+        Route::prefix('sga')->as('sga.')->group(function () {
+            Route::get('letter-index', LetterView::class)->name('letter-index');
+            Route::get('tFee-index', TrainingFeeView::class)->name('tFee-index');
+        });
+
+        Route::prefix('generate')->as('generate.')->group(function () {
+            Route::get('letter', [LetterComponent::class, 'generate'])->name('letter');
+            Route::get('training-fee', [TrainingFeeComponent::class, 'generate'])->name('training-fee');
+        });
+
+        Route::prefix('report')->as('report.')->group(function () {
+            Route::get('summary', SummaryLogView::class)->name('summary');
+            Route::get('fc007', Fc007View::class)->name('fc007');
+        });
+    });
 });

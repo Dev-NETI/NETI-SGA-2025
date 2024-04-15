@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Str;
+
 
 trait UtilitiesTrait
 {
@@ -13,4 +15,11 @@ trait UtilitiesTrait
 
         return $date . '-' . $random;
     }
+
+    public function generateVerificationPin($length)
+    {
+        $verificationPin = mt_rand(100000, $length);
+        return $verificationPin;
+    }
+
 }
