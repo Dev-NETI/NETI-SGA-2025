@@ -20,9 +20,9 @@ class UserSeeder extends Seeder
         User::truncate();
 
         User::create([
-            'l_name' => 'Johnny',
-            'm_name' => 'System',
-            'f_name' => 'Administrator',
+            'l_name' => 'System',
+            'm_name' => 'SGA',
+            'f_name' => 'NETI',
             'hash' => encrypt(1),
             'email' => 'noc@neti.com.ph',
             'email_verified_at' => now(),

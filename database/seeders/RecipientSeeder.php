@@ -15,14 +15,12 @@ class RecipientSeeder extends Seeder
     {
         Recipient::truncate();
 
-        for($x = 1 ; $x <= 10 ; $x++){
-            Recipient::create([
-                'hash' => encrypt($x),
-                'name' => fake()->name,
-                'position' => fake()->randomElement(["General Manager","CEO","President","Manager"]),
-                'department' => fake()->randomElement(["Crewing Department","Manning Department","Shipping Department"]),
-                'modified_by' => fake()->name,
-            ]);
-        }
+        Recipient::create([
+            'hash' => encrypt(1),
+            'name' => 'CE Deepak Arora',
+            'position' => 'General Manager',
+            'department' => 'Crewing Department',
+            'modified_by' => 'System',
+        ]);
     }
 }

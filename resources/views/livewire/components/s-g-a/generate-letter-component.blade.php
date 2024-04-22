@@ -19,7 +19,7 @@
                 :hash="$hash" />
         </div>
         <div>
-            <x-submit-button label="Generate" x-on:click="isGenerated = !isGenerated" />
+            <x-submit-button label="Generate" />
         </div>
     </form>
 

@@ -3,16 +3,17 @@
 namespace App\Livewire\Components\SGA;
 
 use App\Models\User;
+use App\SummaryTrait;
 use Livewire\Component;
 use App\Models\Position;
 use App\Models\Principal;
 use App\Models\Recipient;
-use App\SummaryTrait;
 use App\Traits\UtilitiesTrait;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GenerateLetterComponent extends Component
@@ -44,6 +45,7 @@ class GenerateLetterComponent extends Component
             ->orderBy('name', 'asc')
             ->get();
         $userData = User::where('is_active', true)
+            ->where('position_id', 2)
             ->orderBy('f_name', 'asc')
             ->get();
         return view('livewire.components.s-g-a.generate-letter-component', compact('principalData', 'userData'));
@@ -76,6 +78,6 @@ class GenerateLetterComponent extends Component
         $recipientIdSession = Session::get('recipientId');
         $userIdSession = Session::get('userlId');
         $this->generateSummary($monthSession, $principalIdSession, $recipientIdSession, $userIdSession, false, $this->referenceNumber);
-        $this->redirectRoute('sga.letter-index');
+        // $this->redirectRoute('sga.letter-index');
     }
 }

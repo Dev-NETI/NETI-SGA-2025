@@ -10,6 +10,7 @@ use App\Traits\UtilitiesTrait;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GenerateTrainingFeeComponent extends Component
@@ -28,6 +29,13 @@ class GenerateTrainingFeeComponent extends Component
     public $vesselType;
     public $isGenerated;
     public $referenceNumber;
+
+    public function mount()
+    {
+        $fileName = "20240416055354-7750866813.pdf";
+        // download pdf
+        // Storage::download('public/F-FC-007/20240416055135-4131842886.pdf', $fileName);
+    }
 
     public function render()
     {

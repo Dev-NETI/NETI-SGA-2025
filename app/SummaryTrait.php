@@ -142,6 +142,7 @@ trait SummaryTrait
             // save to folder
             $fileName = $referenceNumber . '.pdf';
             $filePath = storage_path('app/public/Summary/' . $fileName);
+            $publicFilePath = public_path('storage/Summary/' . $fileName);
             $pdfContents = $pdf->Output('', 'S');
             $storeFile = file_put_contents($filePath, $pdfContents);
 
@@ -150,8 +151,7 @@ trait SummaryTrait
             } else {
                 // save to database
                 $this->storeLogs($referenceNumber, $fileName);
-                // download pdf
-                return Storage::download('storage/app/public/Summary/' . $fileName);
+                return $this->redirect(asset('storage/Summary/' . $fileName));
             }
         }
     }

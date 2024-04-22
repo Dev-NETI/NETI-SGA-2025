@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             VesselSeeder::class,
             CompanySeeder::class,
             DepartmentSeeder::class,
-            PrincipalSeeder::class
+            PrincipalSeeder::class,
+            RecipientSeeder::class
         ]);
     }
 }

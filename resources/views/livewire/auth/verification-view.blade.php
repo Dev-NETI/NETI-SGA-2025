@@ -7,7 +7,6 @@
 
         <x-validation-errors class="mb-4" />
         <x-result-message />
-        <label for="">One time pin is: {{ $verificationPin }}</label>
 
         <form wire:submit.prevent="verify">
             @csrf
@@ -69,6 +68,12 @@
                         }"
                         wire:model="input6" />
                 </div>
+                <div class="col-span-6 flex justify-start">
+                    <div>
+                        <x-label value="Didn't get the verification pin? click here to resend" class="text-sm hover:text-red-900"
+                            x-on:click="$wire.sendVerificationPin()" />
+                    </div>
+                </div>
                 <div class="col-span-6 flex justify-end">
                     <div>
                         <x-submit-button label="Verify" />
@@ -76,7 +81,7 @@
                 </div>
             </div>
         </form>
-        
+
     </x-authentication-card>
-    
+
 </section>

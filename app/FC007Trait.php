@@ -57,19 +57,22 @@ trait FC007Trait
             $storeFile = file_put_contents($filePath, $pdfContents);
 
             if (!$storeFile) {
-                session()->flash('error', ' Saving file failed!');
+                session()->flash('error', 'Saving file failed!');
             } else {
+                // Get the file size
+                $fileSize = filesize($filePath);
+
                 $errorMsg = "Saving summary report failed!";
                 $successMsg = "Summary report saved successfully!";
                 // save to database
-                $this->storeLogs($referenceNumber, $fileName, $errorMsg, $successMsg);
-                //update serial number
+                $this->storeLogs($referenceNumber, $fileName, $fileSize, $errorMsg, $successMsg);
+                // update serial number
                 foreach ($vesselData as $data) {
                     $this->updateSerialNumber($data->id, $data->incremented_serial_number, $errorMsg, $successMsg);
                 }
                 // download pdf
-                // Storage::download('public/F-FC-007/' . $fileName);
-                return $this->redirectRoute('sga.tFee-index');
+                return $this->redirect(asset('storage/F-FC-007/' . $fileName));
+                // return $this->redirectRoute('sga.tFee-index');
             }
         }
     }
@@ -86,7 +89,7 @@ trait FC007Trait
 
     public function trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight)
     {
-        $pdf->AddPage('P', [$pageWidth,$pageHeight]);
+        $pdf->AddPage('P', [$pageWidth, $pageHeight]);
         $pdf->useTemplate($importedPage);
         // Set font
         $pdf->SetFont('Helvetica', 'B', 9);
