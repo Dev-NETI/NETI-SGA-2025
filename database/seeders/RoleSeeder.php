@@ -58,6 +58,11 @@ class RoleSeeder extends Seeder
             '38' => ['Logs (Log Module)'],
             '39' => ['Summary (Log Module)'],
             '40' => ['F-FC-007 (Log Module)'],
+            '41' => ['Summary Report Dashboard'],//starting from here, hindi pa naimplement gates, do delete if ok na
+            '42' => ['Summary Maintenance'],
+            '43' => ['Generate Board(Summary Dashboard Module)'],
+            '44' => ['Verification Board(Summary Dashboard Module)'],
+            '45' => ['Approval Board(Summary Dashboard Module)'],
         ];
 
         foreach($data as $index=>[$name]){

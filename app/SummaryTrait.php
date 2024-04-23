@@ -122,7 +122,7 @@ trait SummaryTrait
                 $pdf->Cell(32, 5, $vessel->remarks, 1, 1, "C");
 
                 if ($index == 34) {
-                    $this->traineeFeeSignature($pdf, $totalFee);
+                    $this->traineeFeeSignature($pdf, $totalFee,$userData);
                     $this->trainingFeePage2(
                         $pdf,
                         $totalFee,
@@ -132,7 +132,7 @@ trait SummaryTrait
                     $totalFee = 0;
                 }
             }
-            $this->traineeFeeSignature($pdf, $totalFee);
+            $this->traineeFeeSignature($pdf, $totalFee,$userData);
         }
         // TRAINEE FEE PAGE END
 
@@ -290,7 +290,7 @@ trait SummaryTrait
         $pdf->Cell(32, 5, "", 1, 1, "C");
     }
 
-    public function traineeFeeSignature($pdf, $totalFee)
+    public function traineeFeeSignature($pdf, $totalFee,$userData)
     {
         $pdf->setX(21);
         $pdf->Cell(7, 5,  "", 1, 0, "C");
@@ -320,10 +320,11 @@ J.V.DABUCOL', 1, 'L', false, 0);
         
 B.R.MACALINO', 1, 'L', false, 0);
         $pdf->MultiCell(32, 15, 'Approved by: 
-        
+        '.$this->getSignature($pdf, $userData->signature_path, null, null, 25, 17).'
         
 M.A.MONIS', 1, 'L', false, 0);
     }
+
 
     public function getSignature($pdf, $signaturePath, $x, $y, $w, $h)
     {

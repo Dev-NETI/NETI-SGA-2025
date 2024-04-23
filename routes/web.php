@@ -23,6 +23,9 @@ use App\Livewire\Views\Recipient\CreateRecipientView;
 use App\Livewire\Views\Department\CreateDepartmentView;
 use App\Livewire\Views\Logs\Fc007View;
 use App\Livewire\Views\Logs\SummaryLogView;
+use App\Livewire\Views\SgaDashboard\SgaDashboardMaintenanceView;
+use App\Livewire\Views\SgaDashboard\SummaryDashboardMaintenanceView;
+use App\Livewire\Views\SgaDashboard\SummaryDashboardView;
 use App\Livewire\Views\VesselType\CreateVesselTypeView;
 
 Route::get('/', function () {
@@ -81,6 +84,12 @@ Route::middleware([
             Route::get('index', RecipientView::class)->name('index');
             Route::get('create', CreateRecipientView::class)->name('create');
             Route::get('edit/{hash_id}', CreateRecipientView::class)->name('edit');
+        });
+
+        //to be added in role, delete if added
+        Route::prefix('dashboard')->as('dashboard.')->group(function (){
+            Route::get('summary', SummaryDashboardView::class)->name('summary');
+            Route::get('summary-maintenance', SummaryDashboardMaintenanceView::class)->name('summary-maintenance');
         });
 
         Route::prefix('sga')->as('sga.')->group(function () {

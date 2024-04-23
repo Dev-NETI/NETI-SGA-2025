@@ -109,6 +109,11 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
+    public function summary_email_recipient()
+    {
+        return $this->hasMany(SummaryReportEmailRecipient::class, 'user_id', 'id');
+    }
+
     // acessor
     public function getFullNameAttribute()
     {

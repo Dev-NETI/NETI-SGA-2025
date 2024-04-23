@@ -19,19 +19,45 @@ class UserSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         User::truncate();
 
-        User::create([
-            'l_name' => 'System',
-            'm_name' => 'SGA',
-            'f_name' => 'NETI',
-            'hash' => encrypt(1),
-            'email' => 'noc@neti.com.ph',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
-        ]);
+        $data = [
+            "1" => [
+                'System', 'SGA', 'NETI', 'noc@neti.com.ph', now(), Hash::make('password'), null,
+                null, Str::random(10), null, null,
+            ],
+            "2" => [
+                'Dabucol', 'J', 'V', 'DabucolJ.V@neti.com.ph', now(), Hash::make('password'), null,
+                null, Str::random(10), null, null,
+            ],
+            "3" => [
+                'Macalino', 'B', 'R', 'MacalinoB.R@neti.com.ph', now(), Hash::make('password'), null,
+                null, Str::random(10), null, null,
+            ],
+            "4" => [
+                'Monis', 'M', 'A', 'MonisMA@neti.com.ph', now(), Hash::make('password'), null,
+                null, Str::random(10), null, null,
+            ],
+        ];
+
+        foreach ($data as $index => [
+            $lName, $mName, $fName, $email, $emailVerified, $password, $twoFaSecret, $twoFaRecovery,
+            $rememberToken, $profilePath, $currentTeam
+        ]) {
+
+            User::create([
+            'l_name' => $lName,
+            'm_name' => $mName,
+            'f_name' => $fName,
+            'hash' => encrypt($index),
+            'email' => $email,
+            'email_verified_at' => $emailVerified,
+            'password' => $password,
+            'two_factor_secret' => $twoFaSecret,
+            'two_factor_recovery_codes' => $twoFaRecovery,
+            'remember_token' => $rememberToken,
+            'profile_photo_path' => $profilePath,
+            'current_team_id' => $currentTeam,
+            ]);
+
+        }
     }
 }
