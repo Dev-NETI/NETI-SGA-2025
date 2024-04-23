@@ -63,6 +63,8 @@ class RoleSeeder extends Seeder
             '43' => ['Generate Board(Summary Dashboard Module)'],
             '44' => ['Verification Board(Summary Dashboard Module)'],
             '45' => ['Approval Board(Summary Dashboard Module)'],
+            '46' => ['Add Summary Email Recipient(Summary Dashboard Module)'],
+            '47' => ['Delete Summary Email Recipient(Summary Dashboard Module)'],
         ];
 
         foreach($data as $index=>[$name]){
@@ -70,5 +72,7 @@ class RoleSeeder extends Seeder
                 'name' => $name
             ]);
         }
+
     }
+    
 }

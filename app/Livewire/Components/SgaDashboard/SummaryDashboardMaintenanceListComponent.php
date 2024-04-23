@@ -8,7 +8,6 @@ use Livewire\Component;
 
 class SummaryDashboardMaintenanceListComponent extends Component
 {
-
     use QueryTrait;
     public $processId;
 
@@ -34,5 +33,4 @@ class SummaryDashboardMaintenanceListComponent extends Component
         $this->updateTrait($emailData,'dashboard.summary-maintenance',$destroy, 'Deleting email recipient failed!', 'Deleting email recipient successful!');
         return $this->redirectRoute('dashboard.summary-maintenance');
     }
-
 }

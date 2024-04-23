@@ -114,6 +114,11 @@ class User extends Authenticatable
         return $this->hasMany(SummaryReportEmailRecipient::class, 'user_id', 'id');
     }
 
+    public function fc_email_recipient()
+    {
+        return $this->hasMany(Fc007ReportEmailRecipient::class, 'user_id', 'id');
+    }
+
     // acessor
     public function getFullNameAttribute()
     {

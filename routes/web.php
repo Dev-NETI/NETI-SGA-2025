@@ -18,11 +18,13 @@ use App\Livewire\Views\Company\CreateCompanyView;
 use App\Livewire\Views\Department\DepartmentView;
 use App\Livewire\Views\VesselType\VesselTypeView;
 use App\Livewire\Reports\SGA\TrainingFeeComponent;
+use App\Livewire\Views\Dashboard\Fc007DashboardMaintenanceView;
 use App\Livewire\Views\Principal\CreatePrincipalView;
 use App\Livewire\Views\Recipient\CreateRecipientView;
 use App\Livewire\Views\Department\CreateDepartmentView;
 use App\Livewire\Views\Logs\Fc007View;
 use App\Livewire\Views\Logs\SummaryLogView;
+use App\Livewire\Views\SgaDashboard\Fc007DashboardView;
 use App\Livewire\Views\SgaDashboard\SgaDashboardMaintenanceView;
 use App\Livewire\Views\SgaDashboard\SummaryDashboardMaintenanceView;
 use App\Livewire\Views\SgaDashboard\SummaryDashboardView;
@@ -90,6 +92,8 @@ Route::middleware([
         Route::prefix('dashboard')->as('dashboard.')->group(function (){
             Route::get('summary', SummaryDashboardView::class)->name('summary');
             Route::get('summary-maintenance', SummaryDashboardMaintenanceView::class)->name('summary-maintenance');
+            Route::get('fc007', Fc007DashboardView::class)->name('fc007');
+            Route::get('fc007-maintenance', Fc007DashboardMaintenanceView::class)->name('fc007-maintenance');
         });
 
         Route::prefix('sga')->as('sga.')->group(function () {
@@ -106,5 +110,7 @@ Route::middleware([
             Route::get('summary', SummaryLogView::class)->name('summary');
             Route::get('fc007', Fc007View::class)->name('fc007');
         });
+
     });
+
 });
