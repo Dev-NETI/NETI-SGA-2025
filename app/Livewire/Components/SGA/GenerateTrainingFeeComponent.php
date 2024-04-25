@@ -29,14 +29,7 @@ class GenerateTrainingFeeComponent extends Component
     public $vesselType;
     public $isGenerated;
     public $referenceNumber;
-
-    public function mount()
-    {
-        $fileName = "20240416055354-7750866813.pdf";
-        // download pdf
-        // Storage::download('public/F-FC-007/20240416055135-4131842886.pdf', $fileName);
-    }
-
+    
     public function render()
     {
         $principalData = Principal::where('is_active', true)

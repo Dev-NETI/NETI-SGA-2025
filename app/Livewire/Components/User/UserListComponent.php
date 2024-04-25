@@ -15,6 +15,9 @@ class UserListComponent extends Component
     {
         $userData = User::where('is_active', true)
         ->where('f_name','LIKE','%'.$this->search.'%')
+        ->orWhere('m_name','LIKE','%'.$this->search.'%')
+        ->orWhere('l_name','LIKE','%'.$this->search.'%')
+        ->orWhere('email','LIKE','%'.$this->search.'%')
         ->orderBy('f_name','asc')
         ->paginate(5);
 

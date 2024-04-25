@@ -9,6 +9,7 @@ use App\Traits\FpdiTrait;
 use App\Traits\QueryTrait;
 use App\Models\Vessel_type;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -17,6 +18,7 @@ trait FC007Trait
 {
     use FpdiTrait;
     use QueryTrait;
+    use UtilitiesTrait;
 
     public function generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, $output = true, $referenceNumber = null)
     {
@@ -47,6 +49,9 @@ trait FC007Trait
             $this->trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight);
         }
 
+        //signature 
+        $this->getSignature($pdf, Auth::user()->signature_path, 42, 269, 12, 12);
+
         if ($output) {
             $pdf->Output();
         } else {
@@ -59,21 +64,24 @@ trait FC007Trait
             if (!$storeFile) {
                 session()->flash('error', 'Saving file failed!');
             } else {
-                // Get the file size
-                $fileSize = filesize($filePath);
-
+                // save to databaseF
+                $query = Fc007Log::create([
+                    'reference_number' => $referenceNumber,
+                    'file_path' => $fileName,
+                    'status_id' => 2
+                ]);
                 $errorMsg = "Saving summary report failed!";
                 $successMsg = "Summary report saved successfully!";
-                // save to database
-                $this->storeLogs($referenceNumber, $fileName, $fileSize, $errorMsg, $successMsg);
+                $this->storeTrait($query, $errorMsg, $successMsg);
+
                 // update serial number
                 foreach ($vesselData as $data) {
                     $this->updateSerialNumber($data->id, $data->incremented_serial_number, $errorMsg, $successMsg);
                 }
-                // download pdf
-                return $this->redirect(asset('storage/F-FC-007/' . $fileName));
-                // return $this->redirectRoute('sga.tFee-index');
+
+                return $this->redirectRoute('sga.tFee-index');
             }
+
         }
     }
 
@@ -142,15 +150,9 @@ trait FC007Trait
         $pdf->SetFont('Helvetica', 'B', 9);
         $pdf->setXY(180, 105);
         $pdf->Cell(20.5, 5, number_format($lessedFee, 2), 0, 0, "L");
-    }
 
-    public function storeLogs($referenceNumber, $filePath, $errorMsg, $successMsg)
-    {
-        $query = Fc007Log::create([
-            'reference_number' => $referenceNumber,
-            'file_path' => $filePath,
-        ]);
+        $this->getSignature($pdf, Auth::user()->signature_path, 42, 270, 12, 12);
 
-        $this->storeTrait($query, $errorMsg, $successMsg);
     }
+    
 }

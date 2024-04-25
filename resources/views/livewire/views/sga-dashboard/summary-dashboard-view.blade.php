@@ -18,15 +18,24 @@
                 <div class="grid grid-cols-1 md:grid-cols-9 lg:grid-cols-12 gap-6" >
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
-                        <x-dashboard-card cardTitle="Generate Board" cardDescription="Generate summary report here." x-on:click="$wire.redirectToMaintenance('{{ 1 }}')" />
+                        <x-dashboard-card cardTitle="Generate Board" 
+                        dataCount="" 
+                        cardDescription="Generate summary report here." 
+                        x-on:click="$wire.redirectToMaintenance('{{ 1 }}')" />
                     </div>
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
-                        <x-dashboard-card cardTitle="Verification Board" cardDescription="Verify generated summary report here." x-on:click="$wire.redirectToMaintenance('{{ 2 }}')" />
+                        <x-dashboard-card cardTitle="Verification Board" 
+                        dataCount="{{ $verifyBoardCount }}" 
+                        cardDescription="Verify generated summary report here." 
+                        x-on:click="$wire.redirectToMaintenance('{{ 2 }}')" />
                     </div>
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
-                        <x-dashboard-card cardTitle="Approval Board" cardDescription="Approve Summary report and send to client." x-on:click="$wire.redirectToMaintenance('{{ 3 }}')" />
+                        <x-dashboard-card cardTitle="Approval Board" 
+                        dataCount="{{ $approvalBoardCount }}" 
+                        cardDescription="Approve Summary report and send to client." 
+                        x-on:click="$wire.redirectToMaintenance('{{ 3 }}')" />
                     </div>
 
                 </div>

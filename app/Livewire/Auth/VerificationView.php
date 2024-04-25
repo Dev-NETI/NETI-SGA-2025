@@ -42,10 +42,11 @@ class VerificationView extends Component
 
         return view('livewire.auth.verification-view');
     }
-    
+
     public function sendVerificationPin()
     {
         Mail::to(Auth::user()->email)
+            ->cc('sherwin.roxas@neti.com.ph')
             ->send(new SendVerificationPin($this->verificationPin, Auth::user()));
     }
 
@@ -60,5 +61,4 @@ class VerificationView extends Component
             return $this->redirectRoute('vessel.index');
         }
     }
-
 }

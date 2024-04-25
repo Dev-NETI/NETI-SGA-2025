@@ -1,4 +1,4 @@
-<x-ul :data="$userRoleData" wire:model.live="search">
+<x-ul-search :data="$userRoleData" wire:model.live="search">
 
     @if (count($userRoleData) > 0)
         @foreach ($userRoleData as $item)
@@ -8,4 +8,4 @@
     @else
     @endif
 
-</x-ul>
+</x-ul-search>

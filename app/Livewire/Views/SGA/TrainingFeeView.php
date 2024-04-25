@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Gate;
 class TrainingFeeView extends Component
 {
     use AuthorizesRequests;
-    public $title = "SGA";
-    public $contentTitle = "FC-007";
+    public $title = "Reports Module";
+    public $contentTitle = "Generate FC-007";
 
     public function mount()
     {

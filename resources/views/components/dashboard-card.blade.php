@@ -1,4 +1,4 @@
-@props(['cardTitle', 'cardDescription'])
+@props(['cardTitle', 'cardDescription', 'dataCount','route'=>'sga.tFee-index'])
 
 <section>
     <div
@@ -7,7 +7,7 @@
     transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 h-[11rem]">
 
         <div class="w-full rounded-t-lg  md:h-auto md:w-48 md:rounded-none md:rounded-s-lg">
-            <h2 class="font-bold text-center text-4xl">0</h2>
+            <h2 class="font-bold text-center text-4xl">{{ $dataCount }}</h2>
         </div>
 
         <div class="flex flex-col justify-between p-4 leading-normal bg-sgaDarkerBlue h-full w-full">
@@ -24,9 +24,12 @@
                     Maintenance
                 </x-tooltip>
             </div>
+            
 
-
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-stone-300 dark:text-white">{{ $cardTitle }}</h5>
+            <a href="{{ route($route) }}">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-stone-300 dark:text-white">{{ $cardTitle }}
+                </h5>
+            </a>
             <p class="mb-3 font-normal text-sgaBlue dark:text-gray-400">{{ $cardDescription }}</p>
 
         </div>

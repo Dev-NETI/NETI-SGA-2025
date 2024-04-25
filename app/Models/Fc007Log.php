@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class Fc007Log extends Model
 {
     use HasFactory;
-    protected $fillable = ['reference_number', 'file_path', 'modified_by', 'hash'];
+    protected $fillable = ['reference_number', 'file_path', 'modified_by', 'hash','status_id'];
 
     protected static function boot()
     {

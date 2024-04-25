@@ -24,6 +24,7 @@ trait SummaryTrait
 {
     use FpdiTrait;
     use QueryTrait;
+    use UtilitiesTrait;
 
     public function generateSummary($monthSession, $principalIdSession, $recipientIdSession, $userIdSession, $output = true, $referenceNumber = null)
     {
@@ -122,7 +123,7 @@ trait SummaryTrait
                 $pdf->Cell(32, 5, $vessel->remarks, 1, 1, "C");
 
                 if ($index == 34) {
-                    $this->traineeFeeSignature($pdf, $totalFee,$userData);
+                    $this->traineeFeeSignature($pdf, $totalFee, $userData);
                     $this->trainingFeePage2(
                         $pdf,
                         $totalFee,
@@ -132,7 +133,7 @@ trait SummaryTrait
                     $totalFee = 0;
                 }
             }
-            $this->traineeFeeSignature($pdf, $totalFee,$userData);
+            $this->traineeFeeSignature($pdf, $totalFee, $userData);
         }
         // TRAINEE FEE PAGE END
 
@@ -149,8 +150,10 @@ trait SummaryTrait
             if (!$storeFile) {
                 session()->flash('error', ' Saving file failed!');
             } else {
+                $errorMsg = "Saving summary report failed!";
+                $successMsg = "Summary report saved successfully!";
                 // save to database
-                $this->storeLogs($referenceNumber, $fileName);
+                $this->storeLogs($referenceNumber, $fileName, $errorMsg, $successMsg);
                 return $this->redirect(asset('storage/Summary/' . $fileName));
             }
         }
@@ -290,7 +293,7 @@ trait SummaryTrait
         $pdf->Cell(32, 5, "", 1, 1, "C");
     }
 
-    public function traineeFeeSignature($pdf, $totalFee,$userData)
+    public function traineeFeeSignature($pdf, $totalFee, $userData)
     {
         $pdf->setX(21);
         $pdf->Cell(7, 5,  "", 1, 0, "C");
@@ -320,26 +323,18 @@ J.V.DABUCOL', 1, 'L', false, 0);
         
 B.R.MACALINO', 1, 'L', false, 0);
         $pdf->MultiCell(32, 15, 'Approved by: 
-        '.$this->getSignature($pdf, $userData->signature_path, null, null, 25, 17).'
+        ' . $this->getSignature($pdf, $userData->signature_path, null, null, 25, 17) . '
         
 M.A.MONIS', 1, 'L', false, 0);
     }
 
-
-    public function getSignature($pdf, $signaturePath, $x, $y, $w, $h)
-    {
-        $imagePath = storage_path('app/public/signature/' . $signaturePath);
-        $pdf->Image($imagePath, $x, $y, $w, $h, 'PNG', '', '', false, 300, '', false, false, 0, false, false);
-    }
-
-    public function storeLogs($referenceNumber, $filePath)
+    public function storeLogs($referenceNumber, $filePath, $errorMsg, $successMsg)
     {
         $query = SummaryLog::create([
             'reference_number' => $referenceNumber,
             'file_path' => $filePath,
         ]);
-        $errorMsg = "Saving summary report failed!";
-        $successMsg = "Summary report saved successfully!";
+
         $this->storeTrait($query, $errorMsg, $successMsg);
     }
 }

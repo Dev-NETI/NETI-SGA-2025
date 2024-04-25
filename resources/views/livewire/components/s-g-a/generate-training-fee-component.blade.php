@@ -1,5 +1,7 @@
-<div class="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-9 mt-8">
+<div class="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-9 mt-8 gap-6">
+
     <x-result-message />
+
     <form class="sm:col-span-1 md:col-start-1 md:col-span-1 lg:col-start-1 lg:col-span-2 flex-row"
         wire:submit.prevent="generate">
         @csrf
@@ -20,7 +22,7 @@
     </form>
 
     <div
-        class="h-[52rem] sm:col-span-1 md:col-start-3 md:col-span-3 lg:col-start-4 lg:col-span-6 md:-mt-16 lg:-mt-16
+        class="h-[52rem] sm:col-span-1 md:col-start-2 md:col-span-4 lg:col-start-3 lg:col-span-7 md:-mt-16 lg:-mt-16
          border-sgaDarkBlue border-2 border-dashed ">
 
         @if ($isGenerated)
@@ -35,6 +37,5 @@
         @endif
 
     </div>
-
-
+    
 </div>
