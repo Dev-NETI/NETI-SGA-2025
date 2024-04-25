@@ -1,4 +1,4 @@
-@props(['cardTitle', 'cardDescription', 'dataCount','route'=>'sga.tFee-index'])
+@props(['cardTitle', 'cardDescription', 'dataCount','processId' => '','route'=>'sga.tFee-index'])
 
 <section>
     <div
@@ -26,7 +26,7 @@
             </div>
             
 
-            <a href="{{ route($route) }}">
+            <a href="{{ route($route, ['processId' => $processId]) }}">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-stone-300 dark:text-white">{{ $cardTitle }}
                 </h5>
             </a>

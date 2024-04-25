@@ -3,24 +3,24 @@
 namespace App\Livewire\Views\SgaDashboard;
 
 use Livewire\Component;
+use App\Models\Fc007Log;
+use App\UtilitiesTrait;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Session;
 
 class Fc007DashboardView extends Component
 {
+    use UtilitiesTrait;
     public $title = "F-FC-007 Dashboard";
     public $contentTitle = "Process View";
 
     #[Layout('layouts.app')]
     public function render()
     {
-        return view('livewire.views.sga-dashboard.fc007-dashboard-view');
-    }
+        $verifyBoardCount = count(Fc007Log::where('status_id', 2)->get());
+        $approvalBoardCount = count(Fc007Log::where('status_id', 3)->get());
 
-    public function redirectToMaintenance($id)
-    {
-        Session::put('processId', $id);
-        return $this->redirectRoute('dashboard.fc007-maintenance');
+        return view('livewire.views.sga-dashboard.fc007-dashboard-view', compact('verifyBoardCount','approvalBoardCount'));
     }
-
+    
 }

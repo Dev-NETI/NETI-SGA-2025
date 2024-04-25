@@ -1,6 +1,6 @@
 @props(['id'])
 
-<div x-data="{ open: false }">
+<div x-data="{ open: false }" {{ $attributes->merge(['class'=>'']) }}>
     <button x-on:click="open = ! open"
         class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 
         rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 

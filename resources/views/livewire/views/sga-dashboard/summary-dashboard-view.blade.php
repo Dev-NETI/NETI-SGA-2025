@@ -26,14 +26,14 @@
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
                         <x-dashboard-card cardTitle="Verification Board" 
-                        dataCount="{{ $verifyBoardCount }}" 
+                        dataCount="" 
                         cardDescription="Verify generated summary report here." 
                         x-on:click="$wire.redirectToMaintenance('{{ 2 }}')" />
                     </div>
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
                         <x-dashboard-card cardTitle="Approval Board" 
-                        dataCount="{{ $approvalBoardCount }}" 
+                        dataCount="" 
                         cardDescription="Approve Summary report and send to client." 
                         x-on:click="$wire.redirectToMaintenance('{{ 3 }}')" />
                     </div>
