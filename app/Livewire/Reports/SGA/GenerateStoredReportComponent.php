@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Reports\SGA;
 
-use App\StoredReportTrait;
 use Livewire\Component;
+use App\StoredReportTrait;
+use Illuminate\Support\Facades\Session;
 
 class GenerateStoredReportComponent extends Component
 {
@@ -11,6 +12,8 @@ class GenerateStoredReportComponent extends Component
 
     public function __invoke()
     {
-        $this->generateFC007();
+        $fcLogId = Session::get('logId');
+        $referenceNumber = Session::get('referenceNumber');
+        $this->generateFC007($fcLogId,$referenceNumber);
     }
 }

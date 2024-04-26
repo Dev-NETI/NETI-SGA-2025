@@ -1,5 +1,5 @@
 <x-view-main-content-v2 pageTitle="{{ $title }}">
-
+    <x-result-message />
     <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6">
 
         <div class="col-span-1 md:col-span-3 lg:col-span-4">
@@ -11,15 +11,14 @@
                  border-sgaDarkBlue border-2 border-dashed">
 
             @if ($isGenerated == 1)
-                <x-pdf-view reportRoute="/generate/stored-report" referenceNumber="{{ $referenceNumber }}" button="false"
-                    {{-- wire:click="storeLog()" wire:confirm="Are you sure you want to save this report?"  --}}>
+                <x-pdf-view reportRoute="/generate/stored-report" referenceNumber="{{ $referenceNumber }}" button="false">
 
                     <div class="flex flex-row">
                         <div class="mt-4 ml-4">
-                            <x-red-button label="Cancel" />
+                            <x-red-button label="Cancel" wire:click="cancel()" />
                         </div>
                         <div class="mt-4 ml-4">
-                            <x-create-button label="Save" />
+                            <x-create-button label="Verify" wire:click="update()" wire:confirm="Are you sure you want to verify and send to Comptroller?" />
                         </div>
                     </div>
 

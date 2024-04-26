@@ -3,6 +3,8 @@
 namespace App\Livewire\Views\SGA;
 
 use App\EmailManagementTrait;
+use App\StoredReportTrait;
+use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -10,10 +12,12 @@ use Livewire\Component;
 class Fc007ProcessModuleView extends Component
 {
     use EmailManagementTrait;
+    use StoredReportTrait;
     public $title;
     public $processId;
     public $isGenerated = 0;
     public $referenceNumber;
+    public $fcLogId;
 
     public function mount($processId)
     {
@@ -30,8 +34,22 @@ class Fc007ProcessModuleView extends Component
     #[On('generate')]
     public function generate($data)
     {
-        $this->referenceNumber = $data['referenceNumber'];
-        $this->isGenerated = $data['isGenerated'];
-        // $this->isGenerated = $isGenerated;
+        Session::put('logId', $data['id']);
+        Session::put('referenceNumber', $data['reference_number']);
+        $this->referenceNumber = $data['reference_number'];
+        $this->isGenerated = 1;
+        $this->fcLogId = $data['id'];
     }
+
+    public function cancel()
+    {
+        Session::forget(['logId', 'referenceNumber']);
+        $this->reset(['isGenerated','fcLogId','referenceNumber']);
+    }
+
+    public function update()
+    {
+        $this->generateFC007($this->fcLogId, $this->referenceNumber, false,$this->processId);
+    }
+
 }
