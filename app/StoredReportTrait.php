@@ -29,7 +29,8 @@ trait StoredReportTrait
             $pdf->AddPage('P', [$pageWidth, $pageHeight]);
             $importedPage = $pdf->importPage($pageNumber);
 
-            $this->getSignature($pdf, Auth::user()->signature_path, 90, 269, 12, 12);
+            //attach signature method
+            $this->attachSignature($pdf, $processId);
 
             $pdf->useTemplate($importedPage);
         }
@@ -40,8 +41,8 @@ trait StoredReportTrait
 
             //delete old file
             $deleteFile = Storage::disk('public')->delete('F-FC-007/' . $referenceNumber . '.pdf');
-            
-            if(!$deleteFile){
+
+            if (!$deleteFile) {
                 session()->flash('error', 'Sending file saved!');
             }
 
@@ -56,15 +57,58 @@ trait StoredReportTrait
             } else {
                 // save to database
                 $query = Fc007Log::find($fcLogId);
-                $update = $query->update([
-                    'status_id' => 3
-                ]);
+                $newStatusId = $this->getNewStatus($processId);
+                $update = $this->updateQuery($processId, $query, $newStatusId);
 
-                $this->updateTrait($query,'sga.process-fc007',$update, "Sending file failed!", "File sent successfully!");
-                return $this->redirectRoute('sga.process-fc007',['processId'=>$processId]);
-
+                $this->updateTrait($query, 'sga.process-fc007', $update, "Sending file failed!", "File sent successfully!");
+                return $this->redirectRoute('sga.process-fc007', ['processId' => $processId]);
             }
-
         }
+    }
+
+    public function updateQuery($processId, $query, $newStatusId)
+    {
+        switch ($processId) {
+            case 2:
+                $update = $query->update([
+                    'status_id' => $newStatusId,
+                    'verified_by' => Auth::user()->full_name,
+                    'verified_at' => now(),
+                ]);
+                break;
+            case 3:
+                $update = $query->update([
+                    'status_id' => $newStatusId,
+                    'approved_by' => Auth::user()->full_name,
+                    'approved_at' => now(),
+                ]);
+                break;
+        }
+        return $update;
+    }
+
+    public function attachSignature($pdf, $processId)
+    {
+        switch ($processId) {
+            case 2:
+                $this->getSignature($pdf, Auth::user()->signature_path, 90, 269, 12, 12);
+                break;
+            case 3:
+                $this->getSignature($pdf, Auth::user()->signature_path, 170, 269, 12, 12);
+                break;
+        }
+    }
+
+    public function getNewStatus($processId)
+    {
+        switch ($processId) {
+            case 2:
+                $statusId = 3;
+                break;
+            case 3:
+                $statusId = 4;
+                break;
+        }
+        return $statusId;
     }
 }

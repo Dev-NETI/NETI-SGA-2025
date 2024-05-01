@@ -14,13 +14,12 @@ trait QueryTrait
                 session()->flash('error', $errorMsg);
             }
             session()->flash('success', $successMsg);
-
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
         }
     }
 
-    public function updateTrait($data,$routeBack,$query, $errorMsg, $successMsg)
+    public function updateTrait($data, $routeBack, $query, $errorMsg, $successMsg)
     {
         if (!$data) {
             session()->flash('error', 'Data not found');
@@ -29,7 +28,7 @@ trait QueryTrait
         $this->storeTrait($query, $errorMsg, $successMsg);
     }
 
-    public function updateTraitNoRoute($data,$query, $errorMsg, $successMsg)
+    public function updateTraitNoRoute($data, $query, $errorMsg, $successMsg)
     {
         if (!$data) {
             session()->flash('error', 'Data not found');
@@ -37,4 +36,9 @@ trait QueryTrait
         $this->storeTrait($query, $errorMsg, $successMsg);
     }
 
+    public function saveFileToStorage($storagePath,$filename)
+    {
+        $save = $this->file->storeAs($storagePath, $filename);
+        return $save;
+    }
 }

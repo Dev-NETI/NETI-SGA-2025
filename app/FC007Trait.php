@@ -68,7 +68,8 @@ trait FC007Trait
                 $query = Fc007Log::create([
                     'reference_number' => $referenceNumber,
                     'file_path' => $fileName,
-                    'status_id' => 2
+                    'status_id' => 2,
+                    'generated_by' => Auth::user()->full_name,
                 ]);
                 $errorMsg = "Saving summary report failed!";
                 $successMsg = "Summary report saved successfully!";

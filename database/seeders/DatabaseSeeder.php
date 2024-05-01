@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             DepartmentSeeder::class,
             PrincipalSeeder::class,
-            RecipientSeeder::class
+            RecipientSeeder::class,
+            AttachmentTypeSeeder::class,
         ]);
     }
 }

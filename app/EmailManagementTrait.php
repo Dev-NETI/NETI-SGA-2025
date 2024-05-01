@@ -8,13 +8,19 @@ trait EmailManagementTrait
     {
         switch ($value) {
             case '1':
-                $title = " Generate Board";
+                $title = "Generate Board";
                 break;
             case '2':
-                $title = " Verification Board";
+                $title = "Verification Board";
+                break;
+            case '3':
+                $title = "Approval Board";
+                break;
+            case '4':
+                $title = "Principal Board";
                 break;
             default:
-                $title = " Approval Board";
+                $title = "";
                 break;
         }
 

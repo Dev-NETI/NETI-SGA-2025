@@ -8,7 +8,7 @@
     <tbody>
         @if (count($fc007LogData) > 0)
             @foreach ($fc007LogData as $item)
-                <livewire:components.logs.fc007-list-item-component :data="$item"
+                <livewire:components.logs.fc007-list-item-component :data="$item" statusId="{{ $statusId }}"
                     wire:key="{{ $item->id }}" />
             @endforeach
         @else

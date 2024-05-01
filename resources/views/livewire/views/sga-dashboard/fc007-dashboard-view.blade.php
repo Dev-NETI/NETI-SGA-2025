@@ -24,20 +24,23 @@
                     </div>
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
-                        <x-dashboard-card cardTitle="Verification Board" 
-                            route="sga.process-fc007" 
-                            processId="2"
+                        <x-dashboard-card cardTitle="Verification Board" route="sga.process-fc007" processId="2"
                             cardDescription="Verify generated F-FC-007 report here." dataCount="{{ $verifyBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 2 }}','dashboard.fc007-maintenance')" />
                     </div>
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
                         <x-dashboard-card cardTitle="Approval Board"
-                            cardDescription="Approve F-FC-007 report and send to client."
-                            route="sga.process-fc007"
-                            processId="3"
-                            dataCount="{{ $approvalBoardCount }}"
+                            cardDescription="Approve F-FC-007 report and send to client." route="sga.process-fc007"
+                            processId="3" dataCount="{{ $approvalBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 3 }}','dashboard.fc007-maintenance')" />
+                    </div>
+
+                    <div class="col-span-1 md:col-span-3 lg:col-span-4">
+                        <x-dashboard-card cardTitle="Principal Board"
+                            cardDescription="Principal receives F-FC-007 here." route="sga.process-fc007"
+                            processId="4" dataCount="{{ $principalBoardCount }}"
+                            x-on:click="$wire.redirectToMaintenance('{{ 4 }}','dashboard.fc007-maintenance')" />
                     </div>
 
                 </div>

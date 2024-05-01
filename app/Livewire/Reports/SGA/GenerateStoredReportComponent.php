@@ -14,6 +14,7 @@ class GenerateStoredReportComponent extends Component
     {
         $fcLogId = Session::get('logId');
         $referenceNumber = Session::get('referenceNumber');
-        $this->generateFC007($fcLogId,$referenceNumber);
+        $processId = Session::get('processId');
+        $this->generateFC007($fcLogId,$referenceNumber,true,$processId);
     }
 }
