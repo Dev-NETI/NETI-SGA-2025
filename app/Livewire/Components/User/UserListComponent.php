@@ -14,12 +14,14 @@ class UserListComponent extends Component
     public function render()
     {
         $userData = User::where('is_active', true)
-        ->where('f_name','LIKE','%'.$this->search.'%')
-        ->orWhere('m_name','LIKE','%'.$this->search.'%')
-        ->orWhere('l_name','LIKE','%'.$this->search.'%')
-        ->orWhere('email','LIKE','%'.$this->search.'%')
+        ->where(function ($query){
+            $query->where('f_name','LIKE','%'.$this->search.'%')
+            ->orWhere('m_name','LIKE','%'.$this->search.'%')
+            ->orWhere('l_name','LIKE','%'.$this->search.'%')
+            ->orWhere('email','LIKE','%'.$this->search.'%');
+        })
         ->orderBy('f_name','asc')
-        ->paginate(5);
+        ->paginate(7);
 
         return view('livewire.components.user.user-list-component', compact('userData'));
     }

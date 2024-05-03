@@ -24,6 +24,7 @@ class CreateCompanyView extends Component
     public $name;
     public $code;
     public $companyId;
+    public $address;
 
     #[Layout('layouts.app')]
     public function mount($hash_id = null)
@@ -49,7 +50,8 @@ class CreateCompanyView extends Component
         $this->validate();
         $query = Company::create([
             'name' => $this->name,
-            'code' => $this->code
+            'code' => $this->code,
+            'address' => $this->address,
         ]);
         $errorMsg = "Saving company failed!";
         $successMsg = "Saving company successful!";
@@ -66,7 +68,8 @@ class CreateCompanyView extends Component
         $data = Company::find($this->companyId);
         $query = $data->update([
             'name' => $this->name,
-            'code' => $this->code
+            'code' => $this->code,
+            'address' => $this->address,
         ]);
         $routeBack = "company.index";
         $errorMsg = "Updating company failed!";

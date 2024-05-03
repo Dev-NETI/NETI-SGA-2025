@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class Company extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'code', 'modified_by','is_active'];
+    protected $fillable = ['name', 'code', 'modified_by','is_active','address'];
 
     public static function boot()
     {

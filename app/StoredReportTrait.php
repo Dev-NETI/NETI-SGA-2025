@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Mail\SendFc007Email;
 use App\Models\Fc007Log;
 use App\Traits\FpdiTrait;
 use App\Traits\QueryTrait;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 trait StoredReportTrait
@@ -13,6 +15,7 @@ trait StoredReportTrait
     use QueryTrait;
     use UtilitiesTrait;
     use FpdiTrait;
+    use EmailManagementTrait;
 
     public function generateFC007($fcLogId, $referenceNumber, $output = true, $processId = null)
     {
@@ -61,6 +64,16 @@ trait StoredReportTrait
                 $update = $this->updateQuery($processId, $query, $newStatusId);
 
                 $this->updateTrait($query, 'sga.process-fc007', $update, "Sending file failed!", "File sent successfully!");
+
+                // send email notification
+                $emailData = $this->sendEmailNotification($newStatusId);
+                $subject = $this->fcEmailSubject($newStatusId);
+                foreach ($emailData as $name => $email) {
+                    Mail::to($email)
+                        ->cc('sherwin.roxas@neti.com.ph')
+                        ->send(new SendFc007Email($referenceNumber, $subject, $name));
+                }
+                
                 return $this->redirectRoute('sga.process-fc007', ['processId' => $processId]);
             }
         }

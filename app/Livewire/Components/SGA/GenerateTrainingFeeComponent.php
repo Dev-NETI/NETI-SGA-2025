@@ -3,6 +3,7 @@
 namespace App\Livewire\Components\SGA;
 
 use App\FC007Trait;
+use App\Models\Fc007ReportEmailRecipient;
 use Livewire\Component;
 use App\Models\Principal;
 use App\Models\Vessel_type;
@@ -29,7 +30,7 @@ class GenerateTrainingFeeComponent extends Component
     public $vesselType;
     public $isGenerated;
     public $referenceNumber;
-    
+
     public function render()
     {
         $principalData = Principal::where('is_active', true)
@@ -55,7 +56,6 @@ class GenerateTrainingFeeComponent extends Component
         $sessionPrincipalId = Session::get('principalId', $this->principal);
         $sessionMonth = Session::get('month', $this->month);
         $sessionVesselTypeId = Session::get('vesselTypeId', $this->vesselType);
-        $this->generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, false,$this->referenceNumber);
+        $this->generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, false, $this->referenceNumber);
     }
-
 }

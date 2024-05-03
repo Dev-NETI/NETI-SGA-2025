@@ -6,7 +6,7 @@
             <x-th>Company</x-th>
             <x-th>Department</x-th>
             <x-th>Position</x-th>
-            <x-th>Modified By</x-th>
+            <x-th>Principal</x-th>
             <x-th>Modified</x-th>
             <x-th>Action</x-th>
         </tr>

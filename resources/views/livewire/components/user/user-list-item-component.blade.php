@@ -4,8 +4,11 @@
     <x-td>{{ $user->company->name }}</x-td>
     <x-td>{{ $user->department->name }}</x-td>
     <x-td>{{ $user->position->name }}</x-td>
-    <x-td>{{ $user->modified_by }}</x-td>
-    <x-td>{{ $user->updated_at }}</x-td>
+    <x-td>{{ $user->principal }}</x-td>
+    <x-td>
+        <p class="text-sm font-bold">{{ $user->modified_by }}</p>
+        <p class="text-sm text-red-800 font-semibold">{{ $user->updated_at }}</p>
+    </x-td>
     <x-td>
 
         <x-action-dropdown :id="$user->id">

@@ -19,6 +19,7 @@ class PositionSeeder extends Seeder
             2 => ["Comptroller"],
             3 => ["Accountant"],
             4 => ["Employee"],
+            5 => ["General Manager"]
         ];
 
         foreach($data as $index=>[$name]){

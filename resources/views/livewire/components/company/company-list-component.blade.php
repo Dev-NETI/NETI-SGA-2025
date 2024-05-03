@@ -3,6 +3,7 @@
         <tr>
             <x-th>Company</x-th>
             <x-th>Code</x-th>
+            <x-th>Address</x-th>
             <x-th>Modified By</x-th>
             <x-th>Modified</x-th>
             <x-th>Action</x-th>

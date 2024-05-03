@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Mail\SendFc007Email;
 use App\Models\Fc007Log;
+use App\Models\Fc007ReportEmailRecipient;
 use Carbon\Carbon;
 use App\Models\Vessel;
 use App\Traits\FpdiTrait;
@@ -11,6 +13,7 @@ use App\Models\Vessel_type;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,6 +22,7 @@ trait FC007Trait
     use FpdiTrait;
     use QueryTrait;
     use UtilitiesTrait;
+    use EmailManagementTrait;
 
     public function generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, $output = true, $referenceNumber = null)
     {
@@ -64,7 +68,7 @@ trait FC007Trait
             if (!$storeFile) {
                 session()->flash('error', 'Saving file failed!');
             } else {
-                // save to databaseF
+                // save to database
                 $query = Fc007Log::create([
                     'reference_number' => $referenceNumber,
                     'file_path' => $fileName,
@@ -80,9 +84,18 @@ trait FC007Trait
                     $this->updateSerialNumber($data->id, $data->incremented_serial_number, $errorMsg, $successMsg);
                 }
 
+                // send email notification
+                $emailData = $this->sendEmailNotification(2);
+                $subject = $this->fcEmailSubject(2);
+                foreach ($emailData as $name => $email) {
+                    Mail::to($email)
+                        ->cc('sherwin.roxas@neti.com.ph')
+                        ->send(new SendFc007Email($referenceNumber, $subject, $name));
+                }
+
+                session()->flash('success', "F-FC-007 report successfully sent for verification!");
                 return $this->redirectRoute('sga.tFee-index');
             }
-
         }
     }
 
@@ -153,7 +166,5 @@ trait FC007Trait
         $pdf->Cell(20.5, 5, number_format($lessedFee, 2), 0, 0, "L");
 
         $this->getSignature($pdf, Auth::user()->signature_path, 42, 270, 12, 12);
-
     }
-    
 }

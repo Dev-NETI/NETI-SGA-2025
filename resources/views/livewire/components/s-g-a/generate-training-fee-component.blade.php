@@ -1,7 +1,5 @@
 <div class="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-9 mt-8 gap-6">
-
-    <x-result-message />
-
+    
     <form class="sm:col-span-1 md:col-start-1 md:col-span-1 lg:col-start-1 lg:col-span-2 flex-row"
         wire:submit.prevent="generate">
         @csrf
