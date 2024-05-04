@@ -26,4 +26,10 @@ class Fc007Attachment extends Model
             $model->modified_by = Auth::user()->full_name;
         });
     }
+
+    // relationship
+    public function attachment_type()
+    {
+        return $this->belongsTo(AttachmentType::class,'attachment_type_id','id');
+    }
 }

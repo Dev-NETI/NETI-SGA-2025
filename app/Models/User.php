@@ -36,7 +36,6 @@ class User extends Authenticatable
         'is_active',
         'position_id',
         'signature_path',
-        'is_principal'
     ];
 
     protected static function boot()
@@ -130,9 +129,5 @@ class User extends Authenticatable
     {
         return $this->f_name . " " . $this->m_name . " " . $this->l_name." / ".$this->position->name;
     }
-
-    public function getPrincipalAttribute()
-    {
-        return $this->is_principal === 1 ? 'Yes':'No';
-    }
+    
 }

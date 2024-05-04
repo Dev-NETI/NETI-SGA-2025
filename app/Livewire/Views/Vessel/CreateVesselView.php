@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Views\Vessel;
 
+use App\Models\Company;
 use Exception;
 use App\Models\Vessel;
 use Livewire\Component;
@@ -55,7 +56,7 @@ class CreateVesselView extends Component
     public function render()
     {
         $vesselTypeData = Vessel_type::where('is_active', 1)->orderBy('name', 'asc')->get();
-        $principalData = Principal::where('is_active', 1)->orderBy('name', 'asc')->get();
+        $principalData = Company::where('is_active', 1)->where('is_principal', 1)->orderBy('name', 'asc')->get();
         return view('livewire.views.vessel.create-vessel-view', compact('vesselTypeData','principalData'));
     }
 

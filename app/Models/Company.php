@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class Company extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'code', 'modified_by','is_active','address'];
+    protected $fillable = ['name', 'code', 'modified_by','is_active','address','is_principal'];
 
     public static function boot()
     {
@@ -36,5 +36,20 @@ class Company extends Model
     public function user()
     {
         return $this->hasMany(User::class, 'company_id', 'id');
+    }
+
+    public function getPrincipalAttribute()
+    {
+        return $this->is_principal === 1 ? 'Yes':'No';
+    }
+
+    public function fclog()
+    {
+        return $this->hasMany(Fc007Log::class, 'principal_id', 'id');
+    }
+
+    public function vessel()
+    {
+        return $this->belongsTo(Vessel::class, 'principal_id', 'id');
     }
 }

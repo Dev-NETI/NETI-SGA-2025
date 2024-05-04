@@ -20,15 +20,23 @@ class CreateCompanyView extends Component
     #[Validate([
         'name' => 'required|min:2',
         'code' => 'required|min:2',
+        'principal' => 'required'
     ])]
     public $name;
     public $code;
     public $companyId;
     public $address;
+    public $principal;
+    public $principalData;
 
     #[Layout('layouts.app')]
     public function mount($hash_id = null)
     {
+        $this->principalData =  [
+            (object)['id' => 0, 'name' => 'No'],
+            (object)['id' => 1, 'name' => 'Yes']
+        ];
+
         if ($hash_id != NULL) {
             $this->hash = $hash_id;
             $companyData = Company::where('hash', $this->hash)
@@ -36,6 +44,8 @@ class CreateCompanyView extends Component
             $this->name = $companyData->name;
             $this->code = $companyData->code;
             $this->companyId = $companyData->id;
+            $this->principal = $companyData->is_principal;
+            $this->address = $companyData->address;
         }
     }
 
@@ -52,6 +62,7 @@ class CreateCompanyView extends Component
             'name' => $this->name,
             'code' => $this->code,
             'address' => $this->address,
+            'is_principal' => $this->principal
         ]);
         $errorMsg = "Saving company failed!";
         $successMsg = "Saving company successful!";
@@ -70,6 +81,7 @@ class CreateCompanyView extends Component
             'name' => $this->name,
             'code' => $this->code,
             'address' => $this->address,
+            'is_principal' => $this->principal
         ]);
         $routeBack = "company.index";
         $errorMsg = "Updating company failed!";

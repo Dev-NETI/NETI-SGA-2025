@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\User;
+use App\Models\Fc007Log;
 use App\Models\Fc007ReportEmailRecipient;
 
 trait EmailManagementTrait
@@ -21,6 +23,9 @@ trait EmailManagementTrait
             case '4':
                 $title = "Principal Board";
                 break;
+            case '5':
+                $title = "O.R. Board";
+                break;
             default:
                 $title = "";
                 break;
@@ -29,9 +34,9 @@ trait EmailManagementTrait
         return $title;
     }
 
-    public function fcEmailSubject($value)
+    public function fcEmailSubject($newStatusId)
     {
-        switch ($value) {
+        switch ($newStatusId) {
             case '1':
                 $subject = "Generate Process";
                 break;
@@ -44,6 +49,12 @@ trait EmailManagementTrait
             case '4':
                 $subject = "Principal Process";
                 break;
+            case '5':
+                $subject = "Upload O.R. Process";
+                break;
+            case '6':
+                $subject = "O.R ready for viewing";
+                break;
             default:
                 $subject = "";
                 break;
@@ -52,14 +63,27 @@ trait EmailManagementTrait
         return $subject;
     }
 
-    public function sendEmailNotification($processId)
+    public function sendEmailNotification($newProcessId, $principalId = null, $currentProcessId)
     {
-        $emailData = Fc007ReportEmailRecipient::where('process_id', $processId)
-            ->where('is_active', 1)
-            ->with('user:id,email,f_name')
-            ->get()
-            ->pluck('user.email','user.f_name');
-            
+        switch ($currentProcessId) {
+            case (1 || 2 || 4):
+                $emailData = Fc007ReportEmailRecipient::where('process_id', $newProcessId)
+                    ->where('is_active', 1)
+                    ->with('user:id,email,f_name')
+                    ->get()
+                    ->pluck('user.email', 'user.f_name');
+                break;
+            default:
+                $emailData = User::whereHas('company', function ($query) use ($principalId) {
+                    $query->whereHas('fclog', function ($query) use ($principalId) {
+                        $query->where('principal_id', $principalId);
+                    });
+                })
+                    ->get()
+                    ->pluck('email');
+                break;
+        }
+
         return $emailData;
     }
 }

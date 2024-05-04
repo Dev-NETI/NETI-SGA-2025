@@ -13,9 +13,6 @@
 
             <x-text-input name="email" title="Email" wire:model="email" type="email" />
 
-            <x-select-input name="principal" title="Principal" :data="$principalData" :hash="$hash"
-                wire:model.live="principal" />
-
             <x-select-input name="company" title="Company" :data="$companyData" :hash="$hash"
                 wire:model.live="company" />
 

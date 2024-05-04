@@ -3,6 +3,7 @@
 namespace App\Livewire\Components\SGA;
 
 use App\FC007Trait;
+use App\Models\Company;
 use App\Models\Fc007ReportEmailRecipient;
 use Livewire\Component;
 use App\Models\Principal;
@@ -33,7 +34,7 @@ class GenerateTrainingFeeComponent extends Component
 
     public function render()
     {
-        $principalData = Principal::where('is_active', true)
+        $principalData = Company::where('is_active', true)->where('is_principal', true)
             ->orderBy('name', 'asc')
             ->get();
         $vesselTypeData = Vessel_type::where('is_active', true)->orderBy('name', 'asc')->get();

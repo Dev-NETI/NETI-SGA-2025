@@ -38,9 +38,23 @@
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
                         <x-dashboard-card cardTitle="Principal Board"
-                            cardDescription="Principal receives F-FC-007 here." route="sga.process-fc007"
-                            processId="4" dataCount="{{ $principalBoardCount }}"
+                            cardDescription="Principal receives F-FC-007 here." route="sga.process-fc007" processId="4"
+                            dataCount="{{ $principalBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 4 }}','dashboard.fc007-maintenance')" />
+                    </div>
+
+                    <div class="col-span-1 md:col-span-3 lg:col-span-4">
+                        <x-dashboard-card cardTitle="O.R Board"
+                            cardDescription="Upload Official Receipt here." route="sga.process-fc007" processId="5"
+                            dataCount="{{ $OrBoardCount }}"
+                            x-on:click="$wire.redirectToMaintenance('{{ 5 }}','dashboard.fc007-maintenance')" />
+                    </div>
+
+                    <div class="col-span-1 md:col-span-3 lg:col-span-4">
+                        <x-dashboard-card cardTitle="Close"
+                            cardDescription="All finished transactions are stored here." route="sga.process-fc007" processId="6"
+                            dataCount="{{ $principalBoardCount }}"
+                            x-on:click="$wire.redirectToMaintenance('{{ 6 }}','dashboard.fc007-maintenance')" />
                     </div>
 
                 </div>

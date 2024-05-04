@@ -12,7 +12,7 @@ class Fc007Log extends Model
     protected $fillable = [
         'reference_number', 'file_path', 'modified_by', 'hash', 'status_id', 'generated_by',
         'verified_by', 'verified_at', 'approved_by', 'approved_at', 'send_back_details', 
-        'send_back_at', 'send_back_by'
+        'send_back_at', 'send_back_by','principal_id','payment_slip_by','payment_slip_at'
     ];
 
     protected static function boot()
@@ -28,6 +28,12 @@ class Fc007Log extends Model
         static::updating(function ($model) {
             $model->modified_by = Auth::user()->full_name;
         });
+    }
+
+    // relationship
+    public function principal()
+    {
+        return $this->belongsTo(Company::class, 'principal_id', 'id');
     }
 
     // acessor

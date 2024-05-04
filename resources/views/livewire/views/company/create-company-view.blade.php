@@ -3,6 +3,8 @@
         @csrf
         <x-text-input name="name" title="Name" wire:model="name" type="text" />
         <x-text-input name="code" title="Code" wire:model="code" type="text" />
+        <x-select-input name="principal" title="Principal" :data="$principalData" :hash="$hash"
+                wire:model.live="principal" />
         <x-text-area name="address" title="Address" wire:model="address" />
         <div class="flex justify-end mt-2">
             <x-submit-button label="{{ $hash != null ? 'Update' : 'Create' }}" />

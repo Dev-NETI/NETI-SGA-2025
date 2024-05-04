@@ -39,7 +39,7 @@ class Vessel extends Model
 
     public function principal()
     {
-        return $this->belongsTo(Principal::class, 'principal_id', 'id');
+        return $this->belongsTo(Company::class, 'principal_id', 'id');
     }
 
     // mutator

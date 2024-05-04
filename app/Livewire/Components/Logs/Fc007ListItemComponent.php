@@ -32,7 +32,21 @@ class Fc007ListItemComponent extends Component
 
     public function render()
     {
-        $attachmentTypeData = AttachmentType::where('is_active', 1)->get();
+        $query = AttachmentType::where('is_active', 1);
+        switch ($this->statusId) {
+            case (2 || 3):
+                $attachmentTypeData = $query->where('id', 3)->get();
+                break;
+            case 4:
+                $attachmentTypeData = $query->where('id', 1)->get();
+                break;
+            case 5:
+                $attachmentTypeData = $query->where('id', 2)->get();
+                break;
+            default:
+                $attachmentTypeData = null;
+                break;
+        }
         return view('livewire.components.logs.fc007-list-item-component', compact('attachmentTypeData'));
     }
 
@@ -47,9 +61,9 @@ class Fc007ListItemComponent extends Component
 
         // save to folder
         $filename = $this->file->hashName();
-        $save = $this->saveFileToStorage('public/F-FC-007-Attachments',$filename);
+        $save = $this->saveFileToStorage('public/F-FC-007-Attachments', $filename);
 
-        if(!$save){
+        if (!$save) {
             session()->flash('error', 'Failed to save attachment to storage');
         }
 
@@ -61,19 +75,18 @@ class Fc007ListItemComponent extends Component
             'filepath' => $filename,
         ]);
         $store = $this->storeTrait($query, "Saving attachment failed!", "Saving attachment success!");
-        if(!$store){
+        if (!$store) {
             session()->flash('error', 'Saving attachment failed!');
         }
         session()->flash('success', 'Saving attachment success!');
-        return $this->redirectRoute('sga.process-fc007',['processId'=>$this->statusId]);
+        return $this->redirectRoute('sga.process-fc007', ['processId' => $this->statusId]);
     }
 
     public function showAttachment($id)
     {
-        $attachmentData = Fc007Attachment::where('fc_log_id', $id)->where('is_active',1)->get();
-        if($attachmentData !== NULL){
+        $attachmentData = Fc007Attachment::where('fc_log_id', $id)->where('is_active', 1)->get();
+        if ($attachmentData !== NULL) {
             $this->attachmentData = $attachmentData;
         }
     }
-
 }

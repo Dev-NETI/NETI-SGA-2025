@@ -2,6 +2,7 @@
     <x-td>{{ $company->name }}</x-td>
     <x-td>{{ $company->code }}</x-td>
     <x-td>{{ $company->address }}</x-td>
+    <x-td>{{ $company->principal }}</x-td>
     <x-td>{{ $company->modified_by }}</x-td>
     <x-td>{{ $company->updated_at }}</x-td>
     <x-td>

@@ -29,7 +29,6 @@ class CreateUserView extends Component
         'company' => 'required',
         'department' => 'required',
         'position' => 'required',
-        'principal' => 'required'
     ])]
     public $firstname;
     public $middlename;
@@ -45,15 +44,10 @@ class CreateUserView extends Component
     public $position;
     public $signature;
     public $signature_path = null;
-    public $principal;
-    public $principalData;
+    
 
     public function mount($hash_id = null, $pw_id = null)
     {
-        $this->principalData =  [
-            (object)['id' => 0, 'name' => 'No'],
-            (object)['id' => 1, 'name' => 'Yes']
-        ];
         if ($hash_id != NULL) {
             $this->hash = $hash_id;
             $userData = User::where('hash', $this->hash)->first();
@@ -69,7 +63,6 @@ class CreateUserView extends Component
                 ->where('is_active', true)
                 ->orderBy('name', 'asc')
                 ->get();
-            $this->principal = $userData->is_principal;
         }
         if ($pw_id != NULL) {
             $this->pwId = $pw_id;
@@ -116,7 +109,6 @@ class CreateUserView extends Component
             'company_id' => $this->company,
             'position_id' => $this->position,
             'signature_path' => $this->signature_path,
-            'is_principal' => $this->principal
         ]);
         $errorMsg = "Saving user failed!";
         $successMsg = "Saving user successful!";
@@ -135,7 +127,6 @@ class CreateUserView extends Component
             'company' => 'required',
             'department' => 'required',
             'position' => 'required',
-            'principal' => 'required'
         ]);
 
         if ($this->signature != null) {
@@ -155,7 +146,6 @@ class CreateUserView extends Component
                 'company_id' => $this->company,
                 'position_id' => $this->position,
                 'signature_path' => $this->signature_path,
-                'is_principal' => $this->principal
             ]);
         } else {
             Gate::authorize('Authorize', 29);
