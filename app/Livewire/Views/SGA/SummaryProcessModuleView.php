@@ -68,5 +68,5 @@ class SummaryProcessModuleView extends Component
     {
         $this->isGenerated = false;
     }
-    
+
 }

@@ -16,12 +16,12 @@
                         <div class="mt-4 ml-4">
                             <x-red-button label="Cancel" wire:click="cancel()" />
                         </div>
-                        
+
                         @if ($processId < 5)
                             <div class="mt-4 ml-4">
 
                                 <x-create-button label="{{ $buttonLabel }}" wire:click="update()"
-                                    wire:confirm="Are you sure you want to save?" />
+                                    wire:confirm="Are you sure you want to proceed?" />
 
                                 {{-- <div x-show="sendPaymentSlipModal">
                                 <x-modal title="Add Attachment">

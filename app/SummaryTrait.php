@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Mail\SendSummaryEmail;
 use Carbon\Carbon;
 use App\Models\User;
 use NumberFormatter;
@@ -15,6 +16,7 @@ use App\Traits\QueryTrait;
 use App\Models\Vessel_type;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 trait SummaryTrait
@@ -22,6 +24,7 @@ trait SummaryTrait
     use FpdiTrait;
     use QueryTrait;
     use UtilitiesTrait;
+    use EmailManagementTrait;
 
     public function generateSummary(
         $monthSession,
@@ -173,6 +176,17 @@ trait SummaryTrait
                     $this->storeLogs($query, $errorMsg, $successMsg);
                 }
             }
+
+            // send email notification
+            $emailRecipient = $this->getSummaryReportRecipient($currentProcessId, $principalId);
+            $emailSubject = $this->SummaryEmailSubject($currentProcessId);
+            foreach ($emailRecipient as $name => $email) {
+                Mail::to($email)
+                    ->cc('sherwin.roxas@neti.com.ph')
+                    ->send(new SendSummaryEmail($referenceNumber, $emailSubject, $name));
+            }
+
+
             return $this->redirectRoute('dashboard.summary');
         }
     }
