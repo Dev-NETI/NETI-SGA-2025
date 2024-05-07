@@ -10,12 +10,16 @@ class SummaryLogListComponent extends Component
 {
     use WithPagination;
     public $search;
+    public $statusId;
 
     public function render()
     {
         $summaryLogData = SummaryLog::where('reference_number', 'LIKE', '%' . $this->search . '%')
-            ->orWhere('modified_by', 'LIKE', '%' . $this->search . '%')
-            ->orderBy('id', 'desc')->paginate(10);
+            ->where('status_id', $this->statusId)
+            ->where(function ($query) {
+                $query->where('modified_by', 'LIKE', '%' . $this->search . '%');
+            })
+            ->orderBy('id', 'desc')->paginate(7);
 
         return view('livewire.components.logs.summary-log-list-component', compact('summaryLogData'));
     }

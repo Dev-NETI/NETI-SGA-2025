@@ -34,7 +34,10 @@ class Fc007ListItemComponent extends Component
     {
         $query = AttachmentType::where('is_active', 1);
         switch ($this->statusId) {
-            case (2 || 3):
+            case 2:
+                $attachmentTypeData = $query->where('id', 3)->get();
+                break;
+            case 3:
                 $attachmentTypeData = $query->where('id', 3)->get();
                 break;
             case 4:
@@ -47,6 +50,7 @@ class Fc007ListItemComponent extends Component
                 $attachmentTypeData = null;
                 break;
         }
+        
         return view('livewire.components.logs.fc007-list-item-component', compact('attachmentTypeData'));
     }
 

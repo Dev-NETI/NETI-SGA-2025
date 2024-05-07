@@ -17,6 +17,13 @@ trait StoredReportTrait
     use FpdiTrait;
     use EmailManagementTrait;
 
+    // summary methods
+    // summary methods
+    // summary methods end
+    // summary methods end
+
+    //training fee methods
+    //training fee methods
     public function generateFC007($fcLogId, $referenceNumber, $output = true, $processId = null, $principalId = null)
     {
         // initiate fpdi
@@ -66,7 +73,7 @@ trait StoredReportTrait
                     $this->updateStatus($fcLogId, $processId, $newStatusId);
 
                     // send email notification
-                    $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
+                    // $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
                 }
                 //---------------------------------------------------------------------------------------//
                 //---------------------------------------------------------------------------------------//
@@ -77,7 +84,7 @@ trait StoredReportTrait
                 $this->updateStatus($fcLogId, $processId, $newStatusId);
 
                 // send email notification
-                $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
+                // $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
                 //---------------------------------------------------------------------------------------//
                 //---------------------------------------------------------------------------------------//
             }
@@ -90,7 +97,8 @@ trait StoredReportTrait
     {
         $query = Fc007Log::find($fcLogId);
         $update = $this->updateQuery($processId, $query, $newStatusId);
-        $this->updateTrait($query, 'sga.process-fc007', $update, "Sending file failed!", "File sent successfully!");
+        $successMessage = $this->successMessage($newStatusId);
+        $this->updateTrait($query, 'sga.process-fc007', $update, "Sending report failed!", $successMessage);
     }
 
     public function sendEmail($newStatusId, $principalId, $processId, $referenceNumber)
@@ -125,6 +133,12 @@ trait StoredReportTrait
                     'status_id' => $newStatusId,
                     'payment_slip_by' => Auth::user()->full_name,
                     'payment_slip_at' => now(),
+                ]);
+            case 5:
+                $update = $query->update([
+                    'status_id' => $newStatusId,
+                    'or_by' => Auth::user()->full_name,
+                    'or_at' => now(),
                 ]);
                 break;
         }
@@ -186,4 +200,41 @@ trait StoredReportTrait
         }
         return $label;
     }
+
+    public function successMessage($newStatusId)
+    {
+        switch ($newStatusId) {
+            case 2:
+                $successMessage = "Report successfully sent for verification!";
+                break;
+            case 3:
+                $successMessage = "Report successfully sent for approval!";
+                break;
+            case 4:
+                $successMessage = "Report successfully sent to principal!";
+                break;
+            case 5:
+                $successMessage = "Payment slip successfully sent to NETI!";
+                break;
+            default:
+                $successMessage = "Official Receipt successfully sent to principal!";
+                break;
+        }
+        return $successMessage;
+    }
+
+    public function attachmentTypeId($processId)
+    {
+        switch ($processId) {
+            case 4:
+                $attachmentTypeId = 1;
+                break;
+            default:
+                $attachmentTypeId = 2;
+                break;
+        }
+        return $attachmentTypeId;
+    }
+    //training fee methods end
+    //training fee methods end
 }

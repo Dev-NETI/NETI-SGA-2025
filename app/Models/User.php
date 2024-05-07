@@ -119,6 +119,26 @@ class User extends Authenticatable
         return $this->hasMany(Fc007ReportEmailRecipient::class, 'user_id', 'id');
     }
 
+    public function summary_generated_by()
+    {
+        return $this->hasMany(SummaryLog::class,'generated_user_id','id');
+    }
+
+    public function summary_verified_by()
+    {
+        return $this->hasMany(SummaryLog::class,'verified_user_id','id');
+    }
+
+    public function summary_approved_by()
+    {
+        return $this->hasMany(SummaryLog::class,'approved_user_id','id');
+    }
+
+    public function summary_received_by()
+    {
+        return $this->hasMany(SummaryLog::class,'received_user_id','id');
+    }
+
     // acessor
     public function getFullNameAttribute()
     {
@@ -128,6 +148,11 @@ class User extends Authenticatable
     public function getNameAttribute()
     {
         return $this->f_name . " " . $this->m_name . " " . $this->l_name." / ".$this->position->name;
+    }
+
+    public function getSummaryRecipientNameAttribute()
+    {
+        return $this->f_name . " " . $this->l_name;
     }
     
 }

@@ -38,7 +38,7 @@ class VerificationView extends Component
     public function render()
     {
         $this->verificationPin = $this->generateVerificationPin(999999);
-        $this->sendVerificationPin();
+        // $this->sendVerificationPin();
 
         return view('livewire.auth.verification-view');
     }

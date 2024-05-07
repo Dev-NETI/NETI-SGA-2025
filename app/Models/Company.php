@@ -37,19 +37,25 @@ class Company extends Model
     {
         return $this->hasMany(User::class, 'company_id', 'id');
     }
-
-    public function getPrincipalAttribute()
-    {
-        return $this->is_principal === 1 ? 'Yes':'No';
-    }
-
+    
     public function fclog()
     {
         return $this->hasMany(Fc007Log::class, 'principal_id', 'id');
     }
 
+    public function summary_log()
+    {
+        return $this->hasMany(SummaryLog::class,'principal_id','id');
+    }
+
     public function vessel()
     {
         return $this->belongsTo(Vessel::class, 'principal_id', 'id');
+    }
+
+    // accessor
+    public function getPrincipalAttribute()
+    {
+        return $this->is_principal === 1 ? 'Yes':'No';
     }
 }

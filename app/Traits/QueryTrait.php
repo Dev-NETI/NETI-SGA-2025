@@ -36,7 +36,20 @@ trait QueryTrait
         $this->storeTrait($query, $errorMsg, $successMsg);
     }
 
-    public function saveFileToStorage($storagePath,$filename)
+    public function hardDestroyTrait($model, $attribute, $parameter)
+    {
+        try {
+            $destroy = $model::where($attribute, $parameter)->first()->delete();
+            if (!$destroy) {
+                session()->flash('error', 'Deleted successfully!');
+            }
+            session()->flash('success', 'Deletion failed!');
+        } catch (Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    public function saveFileToStorage($storagePath, $filename)
     {
         $save = $this->file->storeAs($storagePath, $filename);
         return $save;

@@ -2,6 +2,7 @@
 
 use App\Livewire\Auth\VerificationView;
 use App\Livewire\Reports\SGA\GenerateStoredReportComponent;
+use App\Livewire\Reports\SGA\GenerateStoredSummaryReportComponent;
 use App\Livewire\Views\SGA\SGAView;
 use App\Livewire\Views\User\UserView;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ use App\Livewire\Views\Department\CreateDepartmentView;
 use App\Livewire\Views\Logs\Fc007View;
 use App\Livewire\Views\Logs\SummaryLogView;
 use App\Livewire\Views\SGA\Fc007ProcessModuleView;
+use App\Livewire\Views\SGA\SummaryProcessModuleView;
 use App\Livewire\Views\SgaDashboard\Fc007DashboardView;
 use App\Livewire\Views\SgaDashboard\SgaDashboardMaintenanceView;
 use App\Livewire\Views\SgaDashboard\SummaryDashboardMaintenanceView;
@@ -103,12 +105,14 @@ Route::middleware([
             Route::get('letter-index', LetterView::class)->name('letter-index');
             Route::get('tFee-index', TrainingFeeView::class)->name('tFee-index');
             Route::get('process/fc007/{processId}', Fc007ProcessModuleView::class)->name('process-fc007');
+            Route::get('process/summary/{processId}', SummaryProcessModuleView::class)->name('process-summary');
         });
 
         Route::prefix('generate')->as('generate.')->group(function () {
             Route::get('letter', [LetterComponent::class, 'generate'])->name('letter');
             Route::get('training-fee', [TrainingFeeComponent::class, 'generate'])->name('training-fee');
             Route::get('stored-report', GenerateStoredReportComponent::class)->name('stored-report');
+            Route::get('stored-summary-report', GenerateStoredSummaryReportComponent::class)->name('stored-summary-report');
         });
 
         Route::prefix('report')->as('report.')->group(function () {

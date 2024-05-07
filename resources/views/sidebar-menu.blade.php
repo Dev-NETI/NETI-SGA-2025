@@ -51,7 +51,7 @@
             </x-dropdown-link>
         @endcan
 
-        @can('Authorize', 38)
+        {{-- @can('Authorize', 38)
             <x-dropdown-link id="Logs" x-bind:class="anchorProperty"
                 icon="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 
                 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"
@@ -75,7 +75,7 @@
                     </x-sidebar-link-item>
                 @endcan
             </x-dropdown-link>
-        @endcan
+        @endcan --}}
 
         @can('Authorize', 23)
             <x-dropdown-link id="User" x-bind:class="anchorProperty"

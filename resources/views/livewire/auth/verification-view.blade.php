@@ -12,7 +12,7 @@
             @csrf
             <div class="grid grid-cols-6 gap-2" x-data="{ focusIndex: 1 }">
                 <div class="col-span-6">
-                    <x-label value="Enter verification pin:" />
+                    <x-label value="Enter verification pin: {{ $verificationPin }}" />
                 </div>
                 <div class="col-span-1">
                     <x-input class="w-14 text-center" x-ref="inputField1"

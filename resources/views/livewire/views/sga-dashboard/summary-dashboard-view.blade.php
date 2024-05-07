@@ -1,5 +1,5 @@
 <x-view-main-content-v2 pageTitle="{{ $title }}">
-
+    <x-result-message />
     <div class="sm:col-span-1 md:col-span-3 lg:col-span-6">
 
         <div class="md:flex mt-8">
@@ -15,31 +15,40 @@
 
             <x-tab-content title="{{ $contentTitle }}">
 
-                <div class="grid grid-cols-1 md:grid-cols-9 lg:grid-cols-12 gap-6" >
+                <div class="grid grid-cols-1 md:grid-cols-9 lg:grid-cols-12 gap-6">
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
-                        <x-dashboard-card cardTitle="Generate Board" 
-                        dataCount="" 
-                        cardDescription="Generate summary report here." 
-                        x-on:click="$wire.redirectToMaintenance('{{ 1 }}')" />
+                        <x-dashboard-card cardTitle="Generate Board" dataCount="{{ count($generateBoard) }}" route="sga.letter-index"
+                            cardDescription="Generate summary report here." processId="1" route="sga.letter-index"
+                            x-on:click="$wire.redirectToMaintenance('{{ 1 }}')" />
                     </div>
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
-                        <x-dashboard-card cardTitle="Verification Board" 
-                        dataCount="" 
-                        cardDescription="Verify generated summary report here." 
-                        x-on:click="$wire.redirectToMaintenance('{{ 2 }}')" />
+                        <x-dashboard-card cardTitle="Verification Board" dataCount="{{ count($verificationBoard) }}"
+                            cardDescription="Verify generated summary report here." processId="2" route="sga.process-summary"
+                            x-on:click="$wire.redirectToMaintenance('{{ 2 }}')" />
                     </div>
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
-                        <x-dashboard-card cardTitle="Approval Board" 
-                        dataCount="" 
-                        cardDescription="Approve Summary report and send to client." 
-                        x-on:click="$wire.redirectToMaintenance('{{ 3 }}')" />
+                        <x-dashboard-card cardTitle="Approval Board" dataCount="{{ count($approvalBoard) }}"
+                            cardDescription="Approve Summary report and send to client." processId="3" route="sga.process-summary"
+                            x-on:click="$wire.redirectToMaintenance('{{ 3 }}')" />
+                    </div>
+
+                    <div class="col-span-1 md:col-span-3 lg:col-span-4">
+                        <x-dashboard-card cardTitle="Principal Board" dataCount="{{ count($principalBoard) }}"
+                            cardDescription="Finished Summary report are saved here." processId="4" route="sga.process-summary"
+                            x-on:click="$wire.redirectToMaintenance('{{ 4 }}')" />
+                    </div>
+
+                    <div class="col-span-1 md:col-span-3 lg:col-span-4">
+                        <x-dashboard-card cardTitle="Close Board" dataCount="{{ count($closeBoard) }}"
+                            cardDescription="Finished Summary report are saved here." processId="5" route="sga.process-summary"
+                            x-on:click="$wire.redirectToMaintenance('{{ 5 }}')" />
                     </div>
 
                 </div>
-                
+
             </x-tab-content>
 
         </div>

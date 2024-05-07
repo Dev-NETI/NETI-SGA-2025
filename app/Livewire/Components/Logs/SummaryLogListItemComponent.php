@@ -15,9 +15,8 @@ class SummaryLogListItemComponent extends Component
         return view('livewire.components.logs.summary-log-list-item-component');
     }
 
-    public function show($id)
+    public function show()
     {
-        $summaryFile = SummaryLog::find($id);
-        return Redirect::to(asset('storage/Summary/'.$summaryFile->file_path));
+        $this->dispatch('generate', data:$this->summary);
     }
 }

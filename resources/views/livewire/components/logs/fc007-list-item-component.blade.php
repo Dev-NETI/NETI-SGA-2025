@@ -34,7 +34,7 @@
 
             </div>
 
-            @if (!($statusId == 4))
+            @if ($statusId < 4)
                 <div x-data="{ modal: false }">
 
                     <x-action-dropdown-item label="Add Attachment" type="button" x-on:click="modal=true" />

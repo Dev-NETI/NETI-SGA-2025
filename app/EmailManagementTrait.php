@@ -65,25 +65,21 @@ trait EmailManagementTrait
 
     public function sendEmailNotification($newProcessId, $principalId = null, $currentProcessId)
     {
-        switch ($currentProcessId) {
-            case (1 || 2 || 4):
-                $emailData = Fc007ReportEmailRecipient::where('process_id', $newProcessId)
-                    ->where('is_active', 1)
-                    ->with('user:id,email,f_name')
-                    ->get()
-                    ->pluck('user.email', 'user.f_name');
-                break;
-            default:
-                $emailData = User::whereHas('company', function ($query) use ($principalId) {
-                    $query->whereHas('fclog', function ($query) use ($principalId) {
-                        $query->where('principal_id', $principalId);
-                    });
-                })
-                    ->get()
-                    ->pluck('email');
-                break;
+        if ($currentProcessId == 1 || $currentProcessId == 2 || $currentProcessId == 4) {
+            $emailData = Fc007ReportEmailRecipient::where('process_id', $newProcessId)
+                ->where('is_active', 1)
+                ->with('user:id,email,f_name')
+                ->get()
+                ->pluck('user.email', 'user.f_name');
+        } else {
+            $emailData = User::whereHas('company', function ($query) use ($principalId) {
+                $query->whereHas('fclog', function ($query) use ($principalId) {
+                    $query->where('principal_id', $principalId);
+                });
+            })
+                ->get()
+                ->pluck('email');
         }
-
         return $emailData;
     }
 }

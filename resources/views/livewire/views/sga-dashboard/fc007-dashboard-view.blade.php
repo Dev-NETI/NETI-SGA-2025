@@ -1,5 +1,5 @@
 <x-view-main-content-v2 pageTitle="{{ $title }}">
-
+    <x-result-message />
     <div class="sm:col-span-1 md:col-span-3 lg:col-span-6">
 
         <div class="md:flex mt-8">
@@ -19,7 +19,7 @@
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
                         <x-dashboard-card cardTitle="Generate Board" cardDescription="Generate F-FC-007 report here."
-                            dataCount=""
+                            dataCount="{{ $sentBackBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 1 }}','dashboard.fc007-maintenance')" />
                     </div>
 
@@ -53,7 +53,7 @@
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
                         <x-dashboard-card cardTitle="Close"
                             cardDescription="All finished transactions are stored here." route="sga.process-fc007" processId="6"
-                            dataCount="{{ $principalBoardCount }}"
+                            dataCount="{{ $CloseBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 6 }}','dashboard.fc007-maintenance')" />
                     </div>
 

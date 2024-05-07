@@ -91,7 +91,7 @@ class Fc007ProcessModuleView extends Component
             'file' => 'required',
             'description' => 'required'
         ]);
-
+        $attachmentTypeId = $this->attachmentTypeId($this->processId);
         // save to folder
         $filename = $this->file->hashName();
         $save = $this->saveFileToStorage('public/F-FC-007-Attachments',$filename);
@@ -103,18 +103,17 @@ class Fc007ProcessModuleView extends Component
         //save to database
         $query = Fc007Attachment::create([
             'fc_log_id' => $this->fcLogId,
-            'attachment_type_id' => 1,
+            'attachment_type_id' => $attachmentTypeId,
             'description' => $this->description,
             'filepath' => $filename,
         ]);
-        $store = $this->storeTrait($query, "Saving attachment failed!", "Saving attachment success!");
+        $store = $this->storeTrait($query, "", "");
         if(!$store){
             session()->flash('error', 'Saving attachment failed!');
         }
 
         //update status
         $this->update();
-        session()->flash('success', 'Saving attachment success!');
     }
 
 }

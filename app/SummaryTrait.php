@@ -2,23 +2,20 @@
 
 namespace App;
 
-use App\Traits\FpdiTrait;
-use TCPDF_FONTS;
 use Carbon\Carbon;
+use App\Models\User;
 use NumberFormatter;
 use App\Models\Vessel;
+use App\Models\Company;
 use App\Models\Principal;
 use App\Models\Recipient;
+use App\Traits\FpdiTrait;
 use App\Models\SummaryLog;
-use App\Models\User;
-use App\Models\Vessel_type;
 use App\Traits\QueryTrait;
+use App\Models\Vessel_type;
 use Illuminate\Support\Str;
-use setasign\Fpdi\Tcpdf\Fpdi;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use TCPDF;
 
 trait SummaryTrait
 {
@@ -26,17 +23,25 @@ trait SummaryTrait
     use QueryTrait;
     use UtilitiesTrait;
 
-    public function generateSummary($monthSession, $principalIdSession, $recipientIdSession, $userIdSession, $output = true, $referenceNumber = null)
-    {
+    public function generateSummary(
+        $monthSession,
+        $principalIdSession,
+        $recipientIdSession,
+        $output = true,
+        $referenceNumber = null,
+        $currentProcessId = 1,
+        $generatedByUserId = null,
+        $verifiedByUserId = null,
+        $approvedByUserId = null
+    ) {
         // data
         // session
         $month = $monthSession;
         $principalId = $principalIdSession;
-        $principalData = Principal::find($principalId);
+        $principalData = Company::find($principalId);
         $recipientId = $recipientIdSession;
-        $recipientData = Recipient::find($recipientId);
-        $userId = $userIdSession;
-        $userData = User::find($userId);
+        $recipientData = User::find($recipientId);
+        $comptrollerData = User::where('position_id', 2)->where('is_active', 1)->first();
         $currentDate = Carbon::now()->format('Y F d');
         //vessel type data
         $vesselTypeData = Vessel_type::whereHas('vessel', function ($query) use ($principalId) {
@@ -82,10 +87,10 @@ trait SummaryTrait
             $vesselTypeData,
             $formattedTrainingFee,
             $formattedBankCharge,
-            $userData,
             $formattedMonth,
             $pageWidth,
-            $pageHeight
+            $pageHeight,
+            $comptrollerData
         );
         // LETTER PAGE END
         // LETTER PAGE END
@@ -123,7 +128,7 @@ trait SummaryTrait
                 $pdf->Cell(32, 5, $vessel->remarks, 1, 1, "C");
 
                 if ($index == 34) {
-                    $this->traineeFeeSignature($pdf, $totalFee, $userData);
+                    $this->traineeFeeSignature($pdf, $totalFee, $currentProcessId, $generatedByUserId, $verifiedByUserId, $approvedByUserId);
                     $this->trainingFeePage2(
                         $pdf,
                         $totalFee,
@@ -133,29 +138,42 @@ trait SummaryTrait
                     $totalFee = 0;
                 }
             }
-            $this->traineeFeeSignature($pdf, $totalFee, $userData);
+            $this->traineeFeeSignature($pdf, $totalFee, $currentProcessId, $generatedByUserId, $verifiedByUserId, $approvedByUserId);
         }
         // TRAINEE FEE PAGE END
 
         if ($output) {
             $pdf->Output();
         } else {
-            // save to folder
-            $fileName = $referenceNumber . '.pdf';
-            $filePath = storage_path('app/public/Summary/' . $fileName);
-            $publicFilePath = public_path('storage/Summary/' . $fileName);
-            $pdfContents = $pdf->Output('', 'S');
-            $storeFile = file_put_contents($filePath, $pdfContents);
+            $errorMsg = "Saving summary report failed!";
+            $successMsg = "Summary report saved successfully!";
 
-            if (!$storeFile) {
-                session()->flash('error', ' Saving file failed!');
-            } else {
-                $errorMsg = "Saving summary report failed!";
-                $successMsg = "Summary report saved successfully!";
-                // save to database
-                $this->storeLogs($referenceNumber, $fileName, $errorMsg, $successMsg);
-                return $this->redirect(asset('storage/Summary/' . $fileName));
+            if ($currentProcessId < 4 && $currentProcessId > 1) { //delete old file
+                //delete old file
+                Storage::disk('public')->delete('Summary/' . $referenceNumber . '.pdf');
             }
+
+            if ($currentProcessId > 3) {
+                $query = $this->summaryQuery($currentProcessId, $referenceNumber, NULL, $principalId, $month);
+                // save to database
+                $this->storeLogs($query, $errorMsg, $successMsg);
+            } else {
+                // save to folder
+                $fileName = $referenceNumber . '.pdf';
+                $filePath = storage_path('app/public/Summary/' . $fileName);
+                $pdfContents = $pdf->Output('', 'S');
+                $storeFile = file_put_contents($filePath, $pdfContents);
+
+                if (!$storeFile) {
+                    session()->flash('error', ' Saving file failed!');
+                } else {
+
+                    $query = $this->summaryQuery($currentProcessId, $referenceNumber, $fileName, $principalId, $month);
+                    // save to database
+                    $this->storeLogs($query, $errorMsg, $successMsg);
+                }
+            }
+            return $this->redirectRoute('dashboard.summary');
         }
     }
 
@@ -170,10 +188,10 @@ trait SummaryTrait
         $vesselTypeData,
         $formattedTrainingFee,
         $formattedBankCharge,
-        $userData,
         $formattedMonth,
         $pageWidth,
-        $pageHeight
+        $pageHeight,
+        $comptrollerData
     ) {
         $pdf->AddPage('P', [$pageWidth, $pageHeight]);
 
@@ -194,11 +212,11 @@ trait SummaryTrait
 
         // recipient
         $pdf->setXY(60, 56);
-        $pdf->Cell(80, 0, $recipientData->name, 0, 0, "L");
+        $pdf->Cell(80, 0, $recipientData->summary_recipient_name, 0, 0, "L");
         $pdf->setXY(60, 60);
-        $pdf->Cell(80, 0, $recipientData->position, 0, 0, "L");
+        $pdf->Cell(80, 0, $recipientData->position->name, 0, 0, "L");
         $pdf->setXY(60, 64);
-        $pdf->Cell(80, 0, $recipientData->department, 0, 0, "L");
+        $pdf->Cell(80, 0, $recipientData->department->name, 0, 0, "L");
 
         // content
         $htmlContent = "Dear Sir:
@@ -228,12 +246,12 @@ trait SummaryTrait
 
         // signature
         $pdf->setXY(24, 222);
-        $pdf->Cell(25, 0, Str::upper($userData->full_name), 0, 0, "L");
+        $pdf->Cell(25, 0, Str::upper($comptrollerData->full_name), 0, 0, "L");
         $pdf->setXY(24, 226);
-        $pdf->Cell(25, 0, $userData->position->name, 0, 0, "L");
+        $pdf->Cell(25, 0, $comptrollerData->position->name, 0, 0, "L");
 
-        // Display the PNG image
-        $this->getSignature($pdf, $userData->signature_path, 35, 203, 44, 22);
+        // // Display the PNG image
+        // $this->getSignature($pdf, $userData->signature_path, 35, 203, 44, 22);
     }
 
     public function trainingFeePage(
@@ -293,8 +311,17 @@ trait SummaryTrait
         $pdf->Cell(32, 5, "", 1, 1, "C");
     }
 
-    public function traineeFeeSignature($pdf, $totalFee, $userData)
+    public function traineeFeeSignature($pdf, $totalFee, $currentProcessId, $generatedByUserId = null, $verifiedByUserId = null, $approvedByUserId = null)
     {
+        // dd($verifiedByUserId != null ? 'get verified signature':'get signature for current login');
+        $generatedBySignature = $generatedByUserId != null
+            ?
+            $this->getSignature($pdf, $this->getSignaturePath(
+                User::find($generatedByUserId)
+            ), null, null, 25, 20)
+            :
+            $this->getSignature($pdf, Auth::user()->signature_path, null, null, 25, 20);
+
         $pdf->setX(21);
         $pdf->Cell(7, 5,  "", 1, 0, "C");
         $pdf->Cell(50, 5, "TOTAL", 1, 0, "L");
@@ -306,7 +333,7 @@ trait SummaryTrait
         $pdf->setX(21);
         $pdf->MultiCell(57, 15, 'Prepared by: ' .
             // e-sign
-            $this->getSignature($pdf, 'dabucol e-sign.png', null, null, 25, 20)
+            $generatedBySignature
             . '
         
         
@@ -315,26 +342,127 @@ J.V.DABUCOL', 1, 'L', false, 0);
         ', 1, 'L', false, 0);
         $pdf->MultiCell(32, 15, '
         ', 1, 'L', false, 0);
-        $pdf->MultiCell(32, 15, 'Noted by:' .
-            // e-sign
-            $this->getSignature($pdf, 'macalino e-sign.png', null, null, 25, 17)
-            . '
-        
+
+
+        // verified
+        if ($currentProcessId > 2) {
+            $pdf->MultiCell(32, 15, 'Noted by:' . $this->getSignature($pdf, $this->getSignaturePath(
+                User::find($verifiedByUserId)
+            ), null, null, 25, 20)
+
+                . '
         
 B.R.MACALINO', 1, 'L', false, 0);
-        $pdf->MultiCell(32, 15, 'Approved by: 
-        ' . $this->getSignature($pdf, $userData->signature_path, null, null, 25, 17) . '
-        
-M.A.MONIS', 1, 'L', false, 0);
+        } else if ($currentProcessId == 2) {
+            $pdf->MultiCell(32, 15, 'Noted by:
+            ' . $this->getSignature($pdf, Auth::user()->signature_path, null, null, 25, 20) . '
+            B.R.MACALINO', 1, 'L', false, 0);
+        } else {
+            $pdf->MultiCell(32, 15, 'Noted by:
+            
+            B.R.MACALINO', 1, 'L', false, 0);
+        }
+        // verified end
+
+        //approved
+        if ($currentProcessId > 3) {
+            $pdf->MultiCell(32, 15, 'Approved by:
+            ' . $this->getSignature($pdf, $this->getSignaturePath(
+                User::find($verifiedByUserId)
+            ), null, null, 25, 20) . '
+            M.A.MONIS', 1, 'L', false, 0);
+        } else if ($currentProcessId == 3) {
+            $pdf->MultiCell(32, 15, 'Approved by:
+            ' . $this->getSignature($pdf, Auth::user()->signature_path, null, null, 25, 20) . '
+            M.A.MONIS', 1, 'L', false, 0);
+        } else {
+            $pdf->MultiCell(32, 15, 'Approved by:
+            
+            M.A.MONIS', 1, 'L', false, 0);
+        }
+        //approved end
+
     }
 
-    public function storeLogs($referenceNumber, $filePath, $errorMsg, $successMsg)
+    public function getSignaturePath($query = null)
     {
-        $query = SummaryLog::create([
-            'reference_number' => $referenceNumber,
-            'file_path' => $filePath,
-        ]);
+        if ($query != null) {
+            $signaturePath = $query->signature_path;
+            return $signaturePath;
+        } else {
+            return Auth::user()->signature_path;
+        }
+    }
 
+    public function storeLogs($query, $errorMsg, $successMsg)
+    {
         $this->storeTrait($query, $errorMsg, $successMsg);
+    }
+
+    public function summaryQuery($currentProcessId, $referenceNumber, $filePath = null, $principalId, $monthSession = null)
+    {
+        switch ($currentProcessId) {
+            case 1:
+                $query = SummaryLog::create([
+                    'reference_number' => $referenceNumber,
+                    'file_path' => $filePath,
+                    'status_id' => 2,
+                    'generated_by' => Auth::user()->full_name,
+                    'principal_id' => $principalId,
+                    'month' => $monthSession,
+                    'generated_user_id' => Auth::user()->id,
+                ]);
+                break;
+            case 2:
+                $query = SummaryLog::where('reference_number', $referenceNumber)->first()->update([
+                    'file_path' => $filePath,
+                    'status_id' => 3,
+                    'verified_by' => Auth::user()->full_name,
+                    'verified_user_id' => Auth::user()->id,
+                    'verified_at' => now(),
+                ]);
+                break;
+            case 3:
+                $query = SummaryLog::where('reference_number', $referenceNumber)->first()->update([
+                    'file_path' => $filePath,
+                    'status_id' => 4,
+                    'approved_by' => Auth::user()->full_name,
+                    'approved_user_id' => Auth::user()->id,
+                    'approved_at' => now(),
+                ]);
+                break;
+            case 4:
+                $query = SummaryLog::where('reference_number', $referenceNumber)->first()->update([
+                    'status_id' => 5,
+                    'received_by' => Auth::user()->full_name,
+                    'received_user_id' => Auth::user()->id,
+                    'received_at' => now(),
+                ]);
+                break;
+            default:
+                $query = "";
+                break;
+        }
+
+        return $query;
+    }
+
+    public function buttonLabel($currentStatus)
+    {
+        switch ($currentStatus) {
+            case 1:
+                $buttonLabel = "Send for verification";
+                break;
+            case 2:
+                $buttonLabel = "Send for Approval";
+                break;
+            case 3:
+                $buttonLabel = "Approve";
+                break;
+            default:
+                $buttonLabel = "Confirm";
+                break;
+        }
+        return $buttonLabel;
     }
 }

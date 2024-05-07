@@ -86,16 +86,16 @@ trait FC007Trait
                 }
 
                 // send email notification
-                $emailData = $this->sendEmailNotification(2);
+                $emailData = $this->sendEmailNotification(2,NULL,1);
                 $subject = $this->fcEmailSubject(2);
-                foreach ($emailData as $name => $email) {
-                    Mail::to($email)
-                        ->cc('sherwin.roxas@neti.com.ph')
-                        ->send(new SendFc007Email($referenceNumber, $subject, $name));
-                }
+                // foreach ($emailData as $name => $email) {
+                //     Mail::to($email)
+                //         ->cc('sherwin.roxas@neti.com.ph')
+                //         ->send(new SendFc007Email($referenceNumber, $subject, $name));
+                // }
 
                 session()->flash('success', "F-FC-007 report successfully sent for verification!");
-                return $this->redirectRoute('sga.tFee-index');
+                return $this->redirectRoute('dashboard.fc007');
             }
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Components\SGA;
 
+use App\Models\Company;
 use App\Models\User;
 use App\SummaryTrait;
 use Livewire\Component;
@@ -24,15 +25,11 @@ class GenerateLetterComponent extends Component
     #[Validate([
         'month' => 'required',
         'principal' => 'required',
-        'recipient' => 'required',
-        'signature' => 'required',
     ])]
     public $month;
     public $hash;
     public $principal;
-    public $recipient;
     public $recipientData;
-    public $signature;
     public $generateButton;
     public $isGenerated;
     public $referenceNumber;
@@ -41,9 +38,7 @@ class GenerateLetterComponent extends Component
     #[Layout('layouts.app')]
     public function render()
     {
-        $principalData = Principal::where('is_active', true)
-            ->orderBy('name', 'asc')
-            ->get();
+        $principalData = Company::where('is_principal',1)->where('is_active',1)->get();
         $userData = User::where('is_active', true)
             ->where('position_id', 2)
             ->orderBy('f_name', 'asc')
@@ -53,10 +48,7 @@ class GenerateLetterComponent extends Component
 
     public function updatedPrincipal($value)
     {
-        $this->recipientData = Recipient::where('principal_id', $value)
-            ->where('is_active', true)
-            ->orderBy('name', 'asc')
-            ->get();
+        $this->recipientData = User::where('company_id', $value)->where('is_active', 1)->first();
     }
 
     public function generate()
@@ -65,8 +57,7 @@ class GenerateLetterComponent extends Component
         $this->validate();
         Session::put('month', $this->month);
         Session::put('principalId', $this->principal);
-        Session::put('recipientId', $this->recipient);
-        Session::put('userlId', $this->signature);
+        Session::put('recipientId', $this->recipientData->id);
         $this->isGenerated = true;
         $this->referenceNumber = $this->generateReferenceNumber();
     }
@@ -76,8 +67,13 @@ class GenerateLetterComponent extends Component
         $monthSession = Session::get('month');
         $principalIdSession = Session::get('principalId');
         $recipientIdSession = Session::get('recipientId');
-        $userIdSession = Session::get('userlId');
-        $this->generateSummary($monthSession, $principalIdSession, $recipientIdSession, $userIdSession, false, $this->referenceNumber);
-        // $this->redirectRoute('sga.letter-index');
+        $this->generateSummary($monthSession, $principalIdSession, $recipientIdSession, false, $this->referenceNumber);
+        $this->redirectRoute('dashboard.summary');
     }
+
+    public function cancel()
+    {
+        $this->isGenerated = false;
+    }
+
 }

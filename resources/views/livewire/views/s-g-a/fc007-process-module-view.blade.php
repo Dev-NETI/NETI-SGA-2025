@@ -3,16 +3,11 @@
     <x-result-message />
 
     <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6" x-data="{ sendBackModal: false, sendPaymentSlipModal: false }">
-
-        <div class="col-span-1 md:col-span-3 lg:col-span-4">
-            <livewire:components.logs.fc007-list-component statusId="{{ $processId }}" />
-        </div>
-
-        <div
-            class="col-span-1 md:col-start-4 md:col-span-3 lg:col-span-8 lg:col-start-5  
+        
+        @if ($isGenerated == 1)
+            <div
+                class="col-span-1 md:col-span-6 lg:col-span-12
                  border-sgaDarkBlue border-2 border-dashed">
-
-            @if ($isGenerated == 1)
                 <x-pdf-view reportRoute="/generate/stored-report" referenceNumber="{{ $referenceNumber }}" button="false">
 
                     <div class="flex flex-row">
@@ -21,36 +16,46 @@
                             <x-red-button label="Cancel" wire:click="cancel()" />
                         </div>
                         <div class="mt-4 ml-4">
-                            @if (!($processId == 4))
-                                <x-create-button label="{{ $buttonLabel }}" wire:click="update()"
-                                    wire:confirm="Are you sure you want to verify?" />
-                            @else
-                                <x-create-button label="Upload Payment Slip" class="text-sm"
-                                    x-on:click="sendPaymentSlipModal = true" />
+                            
+                            
+                            @if (!($processId == 6))
+                                {{-- ------------------------------------------------- --}}
+                                {{-- ------------------------------------------------- --}}
+                                @if (!($processId == 4 || $processId == 5))
+                                    <x-create-button label="{{ $buttonLabel }}" wire:click="update()"
+                                        wire:confirm="Are you sure you want to save?" />
+                                @else
+                                    <x-create-button label="{{ $buttonLabel }}" class="text-sm"
+                                        x-on:click="sendPaymentSlipModal = true" />
 
-                                <div x-show="sendPaymentSlipModal">
-                                    <x-modal title="Add Attachment">
+                                    <div x-show="sendPaymentSlipModal">
+                                        <x-modal title="Add Attachment">
 
-                                        <x-form-section submit="storeAttachment" :file="true">
-                                            <x-slot:form>
-                                                <div class="w-full">
-                                                    <x-text-input name="description" title="Description"
-                                                        type="text" wire:model="description" />
-                                                </div>
-                                                <div class="w-full">
-                                                    <x-text-input name="file" title="Choose File" type="file"
-                                                        wire:model="file" />
-                                                </div>
-                                            </x-slot:form>
-                                            <x-slot:actions>
-                                                <x-red-button label="close" x-on:click="sendPaymentSlipModal=false" />
-                                                <x-submit-button label="save" />
-                                            </x-slot:actions>
-                                        </x-form-section>
+                                            <x-form-section submit="storeAttachment" :file="true">
+                                                <x-slot:form>
+                                                    <div class="w-full">
+                                                        <x-text-input name="description" title="Description"
+                                                            type="text" wire:model="description" />
+                                                    </div>
+                                                    <div class="w-full">
+                                                        <x-text-input name="file" title="Choose File" type="file"
+                                                            wire:model="file" />
+                                                    </div>
+                                                </x-slot:form>
+                                                <x-slot:actions>
+                                                    <x-red-button label="close"
+                                                        x-on:click="sendPaymentSlipModal=false" />
+                                                    <x-submit-button label="save" />
+                                                </x-slot:actions>
+                                            </x-form-section>
 
-                                    </x-modal>
-                                </div>
+                                        </x-modal>
+                                    </div>
+                                @endif
+                                {{-- ------------------------------------------------- --}}
+                                {{-- ------------------------------------------------- --}}
                             @endif
+
 
                         </div>
                         @if ($processId < 4)
@@ -63,13 +68,14 @@
                     </div>
 
                 </x-pdf-view>
-            @else
-                <div class="flex justify-center">
-                    <h2 class="text-stone-700 text-2xl font-semibold mt-10">Generated report will be shown here!</h2>
-                </div>
-            @endif
+            </div>
+        @else
+            <div class="col-span-1  md:col-span-6 lg:col-span-12">
+                <livewire:components.logs.fc007-list-component statusId="{{ $processId }}" />
+            </div>
+        @endif
 
-        </div>
+
 
         {{-- sendback modal --}}
         <div x-show="sendBackModal">
