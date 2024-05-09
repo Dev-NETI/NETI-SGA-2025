@@ -6,21 +6,43 @@ use App\Mail\SendFc007Email;
 use App\Models\Fc007Log;
 use App\Traits\FpdiTrait;
 use App\Traits\QueryTrait;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 trait StoredReportTrait
 {
+    use AuthorizesRequests;
     use QueryTrait;
     use UtilitiesTrait;
     use FpdiTrait;
     use EmailManagementTrait;
 
-    // summary methods
-    // summary methods
-    // summary methods end
-    // summary methods end
+    public function authorization($processId)
+    {
+        switch ($processId) {
+            case 1:
+                Gate::authorize('Authorize', 41);
+                break;
+            case 2:
+                Gate::authorize('Authorize', 42);
+                break;
+            case 3:
+                Gate::authorize('Authorize', 43);
+                break;
+            case 4:
+                Gate::authorize('Authorize', 44);
+                break;
+            case 5:
+                Gate::authorize('Authorize', 45);
+                break;
+            default:
+                Gate::authorize('Authorize', 46);
+                break;
+        }
+    }
 
     //training fee methods
     //training fee methods

@@ -6,6 +6,7 @@ use App\EmailManagementTrait;
 use App\Models\SummaryReportEmailRecipient;
 use App\Models\User;
 use App\Traits\QueryTrait;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -24,6 +25,7 @@ class SummaryDashboardMaintenanceView extends Component
 
     public function mount()
     {
+        Gate::authorize('Authorize',29);
         $this->processId = Session::get('processId');
         $this->title = $this->pageTitle($this->processId);
     }

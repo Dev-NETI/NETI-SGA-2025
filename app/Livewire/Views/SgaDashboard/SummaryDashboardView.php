@@ -4,15 +4,23 @@ namespace App\Livewire\Views\SgaDashboard;
 
 use App\DashboardTrait;
 use App\Models\SummaryLog;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class SummaryDashboardView extends Component
 {
+    use AuthorizesRequests;
     use DashboardTrait;
     public $title = "Summary Dashboard";
     public $contentTitle = "Process View";
+
+    public function mount()
+    {
+        Gate::authorize('Authorize',28);
+    }
 
     #[Layout('layouts.app')]
     public function render()

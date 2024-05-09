@@ -20,6 +20,7 @@ class SummaryProcessModuleView extends Component
 
     public function mount($processId = false)
     {
+        $this->authorization($processId);
         if ($processId) {
             $this->processId = $processId;
         }
@@ -51,6 +52,7 @@ class SummaryProcessModuleView extends Component
 
     public function update()
     {
+        $this->authorization($this->processId);
         $this->generateSummary(
             Session::get('month'),
             Session::get('principalId'),

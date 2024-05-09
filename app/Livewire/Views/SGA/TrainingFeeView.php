@@ -15,7 +15,7 @@ class TrainingFeeView extends Component
 
     public function mount()
     {
-        Gate::authorize('Authorize', 3);
+        Gate::authorize('Authorize', 41);
     }
 
     #[Layout('layouts.app')]

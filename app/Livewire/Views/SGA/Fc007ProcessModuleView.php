@@ -37,6 +37,7 @@ class Fc007ProcessModuleView extends Component
 
     public function mount($processId)
     {
+        $this->authorization($processId);
         $this->processId = $processId;
         $this->title = $this->pageTitle($processId);
         $this->buttonLabel = $this->buttonLabel($processId);
@@ -68,6 +69,7 @@ class Fc007ProcessModuleView extends Component
 
     public function update()
     {
+        $this->authorization($this->processId);
         $this->generateFC007($this->fcLogId, $this->referenceNumber, false, $this->processId, $this->principalId);
     }
 

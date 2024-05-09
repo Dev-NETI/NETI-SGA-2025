@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Mail\SendSummaryEmail;
 use Carbon\Carbon;
 use App\Models\User;
 use NumberFormatter;
@@ -15,16 +14,41 @@ use App\Models\SummaryLog;
 use App\Traits\QueryTrait;
 use App\Models\Vessel_type;
 use Illuminate\Support\Str;
+use App\Mail\SendSummaryEmail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 trait SummaryTrait
 {
+    use AuthorizesRequests;
     use FpdiTrait;
     use QueryTrait;
     use UtilitiesTrait;
     use EmailManagementTrait;
+
+    public function authorization($processId)
+    {
+        switch ($processId) {
+            case 1:
+                Gate::authorize('Authorize', 32);
+                break;
+            case 2:
+                Gate::authorize('Authorize', 33);
+                break;
+            case 3:
+                Gate::authorize('Authorize', 34);
+                break;
+            case 4:
+                Gate::authorize('Authorize', 35);
+                break;
+            default:
+                Gate::authorize('Authorize', 36);
+                break;
+        }
+    }
 
     public function generateSummary(
         $monthSession,
