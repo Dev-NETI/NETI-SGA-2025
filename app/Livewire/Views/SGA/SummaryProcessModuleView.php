@@ -71,4 +71,9 @@ class SummaryProcessModuleView extends Component
         $this->isGenerated = false;
     }
 
+    public function storeAttachment()
+    {
+        
+    }
+
 }

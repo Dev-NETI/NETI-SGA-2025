@@ -80,19 +80,6 @@ Route::middleware([
             Route::get('edit/{hash_id}', CreateDepartmentView::class)->name('edit');
         });
 
-        // module is removed
-        // Route::prefix('principal')->as('principal.')->group(function () {
-        //     Route::get('index', PrincipalView::class)->name('index');
-        //     Route::get('create', CreatePrincipalView::class)->name('create');
-        //     Route::get('edit/{hash_id}', CreatePrincipalView::class)->name('edit');
-        // });
-
-        // Route::prefix('recipient')->as('recipient.')->group(function () {
-        //     Route::get('index', RecipientView::class)->name('index');
-        //     Route::get('create', CreateRecipientView::class)->name('create');
-        //     Route::get('edit/{hash_id}', CreateRecipientView::class)->name('edit');
-        // });
-
         //to be added in role, delete if added
         Route::prefix('dashboard')->as('dashboard.')->group(function (){
             Route::get('summary', SummaryDashboardView::class)->name('summary');

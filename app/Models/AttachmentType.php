@@ -15,4 +15,9 @@ class AttachmentType extends Model
     {
         return $this->belongsTo(Fc007Attachment::class, 'attachment_type_id', 'id');
     }
+
+    public function summary_attachment()
+    {
+        return $this->belongsTo(SummaryAttachment::class, 'attachment_type_id', 'id');
+    }
 }

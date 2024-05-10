@@ -11,10 +11,10 @@
 
             <x-action-dropdown-item label="View" type="button" wire:click="show()" />
 
-            {{-- <div x-data="{ attachment: false }">
+            <div x-data="{ attachment: false }">
 
                 <x-action-dropdown-item label="View Attachments" type="button"
-                    wire:click="showAttachment({{ $data->id }})" x-on:click="attachment=true" />
+                    wire:click="showAttachment({{ $summary->id }})" x-on:click="attachment=true" />
                 <div x-show="attachment">
                     <x-modal title="View Attachment">
                         @if ($attachmentData !== null)
@@ -23,7 +23,7 @@
                                 @foreach ($attachmentData as $item)
                                     <x-ul-item :title="$item->description" description="{{ $item->attachment_type->name }}">
                                         <x-anchor label="View" 
-                                            link="{{ asset('storage/F-FC-007-Attachments/' . $item->filepath) }}" />
+                                            link="{{ asset('storage/Summary-Attachments/' . $item->filepath) }}" />
                                     </x-ul-item>
                                 @endforeach
                             </x-ul-search>
@@ -36,7 +36,7 @@
 
             </div>
 
-            @if ($statusId < 4)
+            @if ($statusId <= 3)
                 <div x-data="{ modal: false }">
 
                     <x-action-dropdown-item label="Add Attachment" type="button" x-on:click="modal=true" />
@@ -68,7 +68,7 @@
                     </div>
 
                 </div>
-            @endif --}}
+            @endif
 
 
         </x-action-dropdown>

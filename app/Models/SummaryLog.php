@@ -32,6 +32,11 @@ class SummaryLog extends Model
     }
 
     // relationship
+    public function summary_attachment()
+    {
+        return $this->hasMany(SummaryAttachment::class,'summary_log_id','id');
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class, 'principal_id', 'id');

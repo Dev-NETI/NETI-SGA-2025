@@ -9,7 +9,7 @@
         @if (count($summaryLogData) > 0)
             @foreach ($summaryLogData as $item)
                 <livewire:components.logs.summary-log-list-item-component :summary="$item"
-                    wire:key="{{ $item->id }}" />
+                    wire:key="{{ $item->id }}" statusId="{{ $statusId }}" />
             @endforeach
         @else
         @endif
