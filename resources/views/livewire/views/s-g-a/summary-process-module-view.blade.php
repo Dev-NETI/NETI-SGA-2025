@@ -47,12 +47,12 @@
                             </div> --}}
 
                             </div>
-                            {{-- @if ($processId < 4)
+                            @if ($processId < 4)
                                 <div class="w-full mt-4 ml-4 mr-4">
                                     <x-create-button label="Send Back" class="float-end"
                                         x-on:click="sendBackModal = true" />
                                 </div>
-                            @endif --}}
+                            @endif
                         @endif
 
 
@@ -69,7 +69,7 @@
 
 
         {{-- sendback modal --}}
-        {{-- <div x-show="sendBackModal">
+        <div x-show="sendBackModal">
             <x-modal title="Send Back">
                 <x-form-section submit="updateSendBack">
                     <x-slot:form>
@@ -81,7 +81,7 @@
                     </x-slot:actions>
                 </x-form-section>
             </x-modal>
-        </div> --}}
+        </div>
 
     </div>
 </x-view-main-content-v2>

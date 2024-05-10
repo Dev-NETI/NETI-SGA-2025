@@ -95,7 +95,7 @@ trait StoredReportTrait
                     $this->updateStatus($fcLogId, $processId, $newStatusId);
 
                     // send email notification
-                    // $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
+                    $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
                 }
                 //---------------------------------------------------------------------------------------//
                 //---------------------------------------------------------------------------------------//
@@ -106,7 +106,7 @@ trait StoredReportTrait
                 $this->updateStatus($fcLogId, $processId, $newStatusId);
 
                 // send email notification
-                // $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
+                $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
                 //---------------------------------------------------------------------------------------//
                 //---------------------------------------------------------------------------------------//
             }

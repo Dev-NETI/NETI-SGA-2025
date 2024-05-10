@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Views\SGA;
 
+use App\Models\SummaryLog;
 use App\Models\User;
 use App\SummaryTrait;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class SummaryProcessModuleView extends Component
@@ -17,6 +20,11 @@ class SummaryProcessModuleView extends Component
     public $isGenerated = false;
     public $referenceNumber;
     public $buttonLabel;
+    public $summaryLogId;
+    #[Validate([
+        'sendBackDetails' => 'required|min:5|max:200',
+    ])]
+    public $sendBackDetails;
 
     public function mount($processId = false)
     {
@@ -46,6 +54,7 @@ class SummaryProcessModuleView extends Component
         Session::put('verifiedUserId', $data['verified_user_id']);
         Session::put('approvedUserId', $data['approved_user_id']);
         Session::put('currentProcessId', $this->processId);
+        $this->summaryLogId = $data["id"];
         $this->referenceNumber = $data['reference_number'];
         $this->isGenerated = true;
     }
@@ -71,9 +80,17 @@ class SummaryProcessModuleView extends Component
         $this->isGenerated = false;
     }
 
-    public function storeAttachment()
+    public function updateSendBack()
     {
-        
+        $this->validate();
+        $data = SummaryLog::find($this->summaryLogId);
+        $query = $data->update([
+            'status_id' => 1,
+            'send_back_details' => $this->sendBackDetails,
+            'send_back_at' => now(),
+            'send_back_by' => Auth::user()->full_name,
+        ]);
+        $this->updateTrait($data, 'sga.process-summary', $query, "Sending back failed!", 'Sending back success!');
+        return $this->redirectRoute('sga.process-summary', ['processId' => $this->processId]);
     }
-
 }
