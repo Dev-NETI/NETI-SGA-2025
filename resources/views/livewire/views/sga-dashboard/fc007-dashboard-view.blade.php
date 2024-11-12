@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="col-span-1 md:col-span-3 lg:col-span-4">
-                        <x-dashboard-card cardTitle="Close"
+                        <x-dashboard-card cardTitle="Close Board"
                             cardDescription="All finished transactions are stored here." route="sga.process-fc007" processId="6"
                             dataCount="{{ $CloseBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 6 }}','dashboard.fc007-maintenance')" />

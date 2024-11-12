@@ -17,11 +17,11 @@ class DepartmentSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Department::truncate();
         $data = [
-            '1' => ["Finance Department",1],
-            '2' => ["Finance Department",2],
+            '1' => ["Finance Department", 1],
+            '2' => ["Finance Department", 2],
         ];
 
-        foreach($data as $index=>[$name,$company]){
+        foreach ($data as $index => [$name, $company]) {
             Department::create([
                 'name' => $name,
                 'company_id' =>  $company,
