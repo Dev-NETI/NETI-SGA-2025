@@ -15,7 +15,7 @@ class VesselTypeListComponent extends Component
 
     public function render()
     {
-        $vesselTypeData = Vessel_type::where('is_active', true)
+        $vesselTypeData = Vessel_type::withTrashed()
             ->where('name', 'LIKE', '%' . $this->search . '%')
             ->orderBy('name', 'asc')
             ->paginate(5);

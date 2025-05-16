@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vessel_type extends Model
 {
-    use HasFactory;
-    protected $fillable = ['name','is_active','hash'];
+    use HasFactory, SoftDeletes;
+    protected $fillable = ['name', 'training_fee', 'is_active', 'hash'];
 
     // relationships
     public function vessel()
@@ -19,7 +20,7 @@ class Vessel_type extends Model
     // mutator
     public function setHashAttribute($value)
     {
-        $vesselType = self::orderBy('id','DESC')->first();
+        $vesselType = self::orderBy('id', 'DESC')->first();
         $hash_id = $vesselType != NULL ? encrypt($vesselType->id + 1) : encrypt(1);
         $this->attributes['hash'] = $hash_id;
     }

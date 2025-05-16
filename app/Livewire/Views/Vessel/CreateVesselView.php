@@ -25,12 +25,10 @@ class CreateVesselView extends Component
         'vesselType' => 'required',
         'code' => 'required|min:2',
         'principal' => 'required',
-        'trainingFee' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
     ])]
     public $vessel;
     public $vesselType;
     public $code;
-    public $trainingFee;
     public $vesselId;
     public $principal;
     public $serialNumber;
@@ -40,11 +38,10 @@ class CreateVesselView extends Component
     {
         if ($hash_id != null) {
             $this->hash = $hash_id;
-            $vesselData = Vessel::where('hash', $this->hash)->first();
+            $vesselData = Vessel::where('hash', $this->hash)->withTrashed()->first();
             $this->vessel = $vesselData->name;
             $this->vesselType = $vesselData->vessel_type_id;
             $this->code = $vesselData->code;
-            $this->trainingFee = $vesselData->training_fee;
             $this->vesselId = $vesselData->id;
             $this->principal = $vesselData->principal_id;
             $this->serialNumber = $vesselData->serial_number;
@@ -55,9 +52,9 @@ class CreateVesselView extends Component
     #[Layout('layouts.app')]
     public function render()
     {
-        $vesselTypeData = Vessel_type::where('is_active', 1)->orderBy('name', 'asc')->get();
+        $vesselTypeData = Vessel_type::withTrashed()->orderBy('name', 'asc')->get();
         $principalData = Company::where('is_active', 1)->where('is_principal', 1)->orderBy('name', 'asc')->get();
-        return view('livewire.views.vessel.create-vessel-view', compact('vesselTypeData','principalData'));
+        return view('livewire.views.vessel.create-vessel-view', compact('vesselTypeData', 'principalData'));
     }
 
     public function store()
@@ -69,7 +66,6 @@ class CreateVesselView extends Component
             'hash' => '',
             'name' => $this->vessel,
             'code' => $this->code,
-            'training_fee' => $this->trainingFee,
             'principal_id' => $this->principal,
             'remarks' => $this->remarks,
         ]);
@@ -86,12 +82,11 @@ class CreateVesselView extends Component
         Gate::authorize('Authorize', 9);
         $this->validate();
 
-        $data = Vessel::find($this->vesselId);
+        $data = Vessel::where('id', $this->vesselId)->withTrashed()->first();
         $query = $data->update([
             'vessel_type_id' => $this->vesselType,
             'name' => $this->vessel,
             'code' => $this->code,
-            'training_fee' => $this->trainingFee,
             'principal_id' => $this->principal,
             'serial_number' => $this->serialNumber,
             'remarks' => $this->remarks,
@@ -101,7 +96,7 @@ class CreateVesselView extends Component
         $errorMsg = "Updating vessel failed!";
         $successMsg = "Updating vessel successful!";
 
-        $this->updateTrait($data,$routeBack,$query, $errorMsg, $successMsg);
+        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
         return $this->redirectRoute($routeBack);
     }
 }

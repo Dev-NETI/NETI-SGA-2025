@@ -19,8 +19,11 @@ class CreateVesselTypeView extends Component
     public $hash = NULL;
     public $vesselTypeId;
 
+
     #[Validate('required|min:2')]
     public $vesselType;
+    #[Validate('required|numeric|min:0.01')]
+    public $trainingFee;
 
     public function mount($hash_id = null)
     {
@@ -28,6 +31,7 @@ class CreateVesselTypeView extends Component
             $this->hash = $hash_id;
             $vesselTypeData = Vessel_type::where('hash', $this->hash)->first();
             $this->vesselType = $vesselTypeData->name;
+            $this->trainingFee = $vesselTypeData->training_fee;
             $this->vesselTypeId = $vesselTypeData->id;
         }
     }
@@ -44,7 +48,8 @@ class CreateVesselTypeView extends Component
         $this->validate();
         $query = Vessel_type::create([
             'hash' => '',
-            'name' => $this->vesselType
+            'name' => $this->vesselType,
+            'training_fee' => $this->trainingFee
         ]);
         $errorMsg = "Saving vessel type failed!";
         $successMsg = "Saving vessel type successful!";
@@ -60,7 +65,8 @@ class CreateVesselTypeView extends Component
         $this->validate();
         $data = Vessel_type::find($this->vesselTypeId);
         $query = $data->update([
-            'name' => $this->vesselType
+            'name' => $this->vesselType,
+            'training_fee' => $this->trainingFee
         ]);
         $routeBack = "vessel-type.index";
         $errorMsg = "Updating Vessel type failed!";

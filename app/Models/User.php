@@ -46,11 +46,11 @@ class User extends Authenticatable
             $user = $model::orderBy('id', 'DESC')->first();
             $hash_id = $user != NULL ? encrypt($user->id + 1) : encrypt(1);
             $model->hash = $hash_id;
-            $model->modified_by = Auth::user()->full_name;
+            $model->modified_by = '';
         });
 
         static::updating(function ($model) {
-            $model->modified_by = Auth::user()->full_name;
+            $model->modified_by = '';
         });
     }
 
@@ -121,22 +121,22 @@ class User extends Authenticatable
 
     public function summary_generated_by()
     {
-        return $this->hasMany(SummaryLog::class,'generated_user_id','id');
+        return $this->hasMany(SummaryLog::class, 'generated_user_id', 'id');
     }
 
     public function summary_verified_by()
     {
-        return $this->hasMany(SummaryLog::class,'verified_user_id','id');
+        return $this->hasMany(SummaryLog::class, 'verified_user_id', 'id');
     }
 
     public function summary_approved_by()
     {
-        return $this->hasMany(SummaryLog::class,'approved_user_id','id');
+        return $this->hasMany(SummaryLog::class, 'approved_user_id', 'id');
     }
 
     public function summary_received_by()
     {
-        return $this->hasMany(SummaryLog::class,'received_user_id','id');
+        return $this->hasMany(SummaryLog::class, 'received_user_id', 'id');
     }
 
     // acessor
@@ -147,12 +147,11 @@ class User extends Authenticatable
 
     public function getNameAttribute()
     {
-        return $this->f_name . " " . $this->m_name . " " . $this->l_name." / ".$this->position->name;
+        return $this->f_name . " " . $this->m_name . " " . $this->l_name . " / " . $this->position->name;
     }
 
     public function getSummaryRecipientNameAttribute()
     {
         return $this->f_name . " " . $this->l_name;
     }
-    
 }
