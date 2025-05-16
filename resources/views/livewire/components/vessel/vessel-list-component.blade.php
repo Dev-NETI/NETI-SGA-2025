@@ -1,11 +1,10 @@
 <x-list-view :data="$vesselData" wire:model.live="search">
     <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
         <tr>
-            <x-th>Vessel</x-th>
             <x-th>Code</x-th>
+            <x-th>Vessel</x-th>
             <x-th>Type</x-th>
             <x-th>Principal</x-th>
-            <x-th>Training Fee</x-th>
             <x-th>Serial #</x-th>
             <x-th>Remarks</x-th>
             <x-th>Modified By</x-th>

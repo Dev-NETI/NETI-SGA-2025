@@ -81,7 +81,7 @@ Route::middleware([
         });
 
         //to be added in role, delete if added
-        Route::prefix('dashboard')->as('dashboard.')->group(function (){
+        Route::prefix('dashboard')->as('dashboard.')->group(function () {
             Route::get('summary', SummaryDashboardView::class)->name('summary');
             Route::get('summary-maintenance', SummaryDashboardMaintenanceView::class)->name('summary-maintenance');
             Route::get('fc007', Fc007DashboardView::class)->name('fc007');
@@ -106,7 +106,5 @@ Route::middleware([
             Route::get('summary', SummaryLogView::class)->name('summary');
             Route::get('fc007', Fc007View::class)->name('fc007');
         });
-
     });
-
 });

@@ -5,14 +5,23 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Vessel extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
-        'vessel_type_id', 'hash', 'name', 'code', 'training_fee', 'modified_by', 'is_active', 'principal_id',
-        'serial_number', 'remarks'
+        'vessel_type_id',
+        'hash',
+        'name',
+        'code',
+        'training_fee',
+        'modified_by',
+        'is_active',
+        'principal_id',
+        'serial_number',
+        'remarks'
     ];
 
     protected static function boot()
@@ -53,26 +62,26 @@ class Vessel extends Model
 
     public function getFormattedSerialNumberAttribute()
     {
-        return $this->serial_number."-B";
+        return $this->serial_number . "-B";
     }
 
     public function getIncrementedSerialNumberAttribute()
     {
-        return $this->serial_number+1;
+        return $this->serial_number + 1;
     }
 
     public function getTrainingFeeSerialNumberAttribute()
     {
-        return "Fee# ".$this->incremented_serial_number."-B";
+        return "Fee# " . $this->incremented_serial_number . "-B";
     }
 
     public function getSubtractedSerialNumberAttribute()
     {
-        return "Fee# ".$this->serial_number."-B";
+        return "Fee# " . $this->serial_number . "-B";
     }
 
     public function getFormattedNameWithCodeAttribute()
     {
-        return $this->name." (".$this->code.")";
+        return $this->name . " (" . $this->code . ")";
     }
 }

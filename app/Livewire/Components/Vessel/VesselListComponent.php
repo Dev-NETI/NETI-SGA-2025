@@ -13,9 +13,10 @@ class VesselListComponent extends Component
 
     public function render()
     {
-        $vesselData = Vessel::where('is_active', 1)
-            ->where('name','LIKE','%'.$this->search.'%')
+        $vesselData = Vessel::where('name', 'LIKE', '%' . $this->search . '%')
+            ->orWhere('code', 'LIKE', '%' . $this->search . '%')
             ->orderBy('name', 'asc')
+            ->withTrashed()
             ->paginate(5);
 
         return view('livewire.components.vessel.vessel-list-component', compact('vesselData'));

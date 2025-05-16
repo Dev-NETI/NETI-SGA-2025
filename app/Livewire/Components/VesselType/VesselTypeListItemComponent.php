@@ -21,18 +21,18 @@ class VesselTypeListItemComponent extends Component
         return view('livewire.components.vessel-type.vessel-type-list-item-component');
     }
 
-    public function destroy($id)
+    public function toggleActive($id)
     {
         Gate::authorize('Authorize', 14);
-        $data = Vessel_type::find($id);
-        $query = $data->update([
-            'is_active' => 0,
-        ]);
-        $routeBack = "vessel-type.index";
-        $errorMsg = "Deleting Vessel type failed!";
-        $successMsg = "Deleting Vessel type successful!";
+        $data = Vessel_type::where('id', $id)->withTrashed()->first();
+        $query = $this->vessel->deleted_at ? $data->restore() : $data->delete();
 
-        $this->updateTrait($data, $routeBack, $query, $errorMsg, $successMsg);
+        $routeBack = "vessel-type.index";
+        if (!$query) {
+            session()->flash('error', 'Transaction failed!');
+        }
+        session()->flash('success', $this->vessel->deleted_at ? 'Vessel Type activated successfully!' : 'Vessel Type deactivated successfully!!');
+
         return $this->redirectRoute($routeBack);
     }
 }
