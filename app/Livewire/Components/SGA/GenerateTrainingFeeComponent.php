@@ -26,7 +26,7 @@ class GenerateTrainingFeeComponent extends Component
     #[Validate([
         'month' => 'required',
         'principal' => 'required',
-        'vesselType' => 'required'
+        // 'vesselType' => 'required'
     ])]
     public $month;
     public $principal;
@@ -43,7 +43,7 @@ class GenerateTrainingFeeComponent extends Component
         $principalData = Company::where('is_active', true)->where('is_principal', true)
             ->orderBy('name', 'asc')
             ->get();
-        $vesselTypeData = Vessel_type::where('is_active', true)->orderBy('name', 'asc')->get();
+        $vesselTypeData = Vessel_type::withTrashed()->orderBy('name', 'asc')->get();
         return view('livewire.components.s-g-a.generate-training-fee-component', compact('principalData', 'vesselTypeData', 'sentBackBoardCount'));
     }
 
@@ -53,7 +53,7 @@ class GenerateTrainingFeeComponent extends Component
         $this->validate();
         Session::put('principalId', $this->principal);
         Session::put('month', $this->month);
-        Session::put('vesselTypeId', $this->vesselType);
+        // Session::put('vesselTypeId', $this->vesselType);
         $this->isGenerated = true;
         $this->referenceNumber = $this->generateReferenceNumber();
     }
@@ -66,7 +66,7 @@ class GenerateTrainingFeeComponent extends Component
         Gate::authorize('Authorize', 5);
         Session::put('principalId', $data['principalId']);
         Session::put('month', $data['month']);
-        Session::put('vesselTypeId', $data['vesselType']);
+        // Session::put('vesselTypeId', $data['vesselType']);
         $this->reGenerate = true;
         $this->isGenerated = true;
         $this->referenceNumber = $data['referenceNumber'];
@@ -77,15 +77,21 @@ class GenerateTrainingFeeComponent extends Component
         if ($reGenerate) {
             //delete old file
             $deleteFile = Storage::disk('public')->delete('F-FC-007/' . $this->referenceNumber . '.pdf');
-            if($deleteFile){
-                $this->hardDestroyTrait(Fc007Log::class,'reference_number',$this->referenceNumber);
+            if ($deleteFile) {
+                $this->hardDestroyTrait(Fc007Log::class, 'reference_number', $this->referenceNumber);
             }
         }
-        
+
         $sessionPrincipalId = Session::get('principalId', $this->principal);
         $sessionMonth = Session::get('month', $this->month);
-        $sessionVesselTypeId = Session::get('vesselTypeId', $this->vesselType);
-        $this->generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, false, $this->referenceNumber);
+        // $sessionVesselTypeId = Session::get('vesselTypeId', $this->vesselType);
+        $this->generateFC007(
+            $sessionPrincipalId,
+            $sessionMonth,
+            // $sessionVesselTypeId, 
+            false,
+            $this->referenceNumber
+        );
     }
 
     public function cancel()

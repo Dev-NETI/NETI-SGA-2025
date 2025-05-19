@@ -24,33 +24,39 @@ trait FC007Trait
     use UtilitiesTrait;
     use EmailManagementTrait;
 
-    public function generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, $output = true, $referenceNumber = null)
+    public function generateFC007($sessionPrincipalId, $sessionMonth, $output = true, $referenceNumber = null)
     {
         // data
         $principalId = $sessionPrincipalId;
         $month = $sessionMonth;
-        $vesselTypeId = $sessionVesselTypeId;
-        $vesselTypeData = Vessel_type::find($vesselTypeId);
-        $vesselData = Vessel::where('principal_id', $principalId)
-            ->where('vessel_type_id', $vesselTypeId)
-            ->where('is_active', true)
-            ->orderBy('name', 'asc')
-            ->get();
+
+        // Get all vessel types
+        $vesselTypes = Vessel_type::get();
+
         $formattedMonth = Carbon::createFromFormat("Y-m", $month)->format('F Y');
         $subtractMonth = Carbon::createFromFormat("Y-m", $month)->subMonth()->format('F Y');
         $currentDate = Carbon::now()->format('Y F d');
-        // data end
 
         // initiate fpdi
-        $pdf = $this->initiateFpdi('NETI-SGA', 'NETI-SGA', $vesselTypeData->name . " - " . $formattedMonth . " TRAINING FEE.pdf");
+        $pdf = $this->initiateFpdi('NETI-SGA', 'NETI-SGA', "All Vessel Types - " . $formattedMonth . " TRAINING FEE.pdf");
         $templatePath = storage_path('app/public/SGA/Training Fee Template.pdf');
         $template = $pdf->setSourceFile($templatePath);
         $importedPage = $pdf->importPage($template);
         $pageWidth = 210;
         $pageHeight = 297;
 
-        foreach ($vesselData as $data) {
-            $this->trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight);
+        // Process each vessel type
+        foreach ($vesselTypes as $vesselType) {
+            $vesselData = Vessel::where('principal_id', $principalId)
+                ->where('vessel_type_id', $vesselType->id)
+                ->orderBy('name', 'asc')
+                ->get();
+
+            // Add training fee from vessel type to each vessel
+            foreach ($vesselData as $vessel) {
+                $vessel->training_fee = $vesselType->training_fee;
+                $this->trainingFee($pdf, $importedPage, $vessel, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight);
+            }
         }
 
         //signature 
@@ -80,18 +86,15 @@ trait FC007Trait
                 $successMsg = "Summary report saved successfully!";
                 $this->storeTrait($query, $errorMsg, $successMsg);
 
-                // update serial number
-                foreach ($vesselData as $data) {
-                    $this->updateSerialNumber($data->id, $data->incremented_serial_number, $errorMsg, $successMsg);
-                }
+                // Update serial numbers for all vessels
+                foreach ($vesselTypes as $vesselType) {
+                    $vesselData = Vessel::where('principal_id', $principalId)
+                        ->where('vessel_type_id', $vesselType->id)
+                        ->get();
 
-                // send email notification
-                $emailData = $this->sendEmailNotification(2,NULL,1);
-                $subject = $this->fcEmailSubject(2);
-                foreach ($emailData as $name => $email) {
-                    Mail::to($email)
-                        ->cc('sherwin.roxas@neti.com.ph')
-                        ->send(new SendFc007Email($referenceNumber, $subject, $name));
+                    foreach ($vesselData as $vessel) {
+                        $this->updateSerialNumber($vessel->id, $vessel->incremented_serial_number, $errorMsg, $successMsg);
+                    }
                 }
 
                 session()->flash('success', "F-FC-007 report successfully sent for verification!");
@@ -166,6 +169,11 @@ trait FC007Trait
         $pdf->setXY(180, 105);
         $pdf->Cell(20.5, 5, number_format($lessedFee, 2), 0, 0, "L");
 
-        $this->getSignature($pdf, Auth::user()->signature_path, 42, 270, 12, 12);
+        // Prepared By
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $pdf->setXY(36.5, 272.5);
+        $pdf->Cell(20.5, 5, "C.G. Robles", 0, 0, "L");
+        // $this->getSignature($pdf, Auth::user()->signature_path, 42, 270, 12, 12);
+        $this->getSignature($pdf, 'Miss-Tel-Sig.png', 53, 268, 22, 22);
     }
 }

@@ -1,4 +1,4 @@
-<div class="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-9 mt-8 gap-6">
+<div class="grid grid-cols-1 mt-8 gap-6">
 
     @if ($rejectedList)
         {{-- ----------------------------------------------------------------------------------- --}}
@@ -35,29 +35,32 @@
             </div>
         @else
             @if ($sentBackBoardCount > 0)
-                <div class="col-span-1 md:col-start-4 md:col-span-2 lg:col-start-8 lg:col-span-2">
-                    <x-red-button label="View rejected reports" class="float-end" wire:click="showRejected()" />
+                <div class="flex justify-end mb-4">
+                    <x-red-button label="View rejected reports" wire:click="showRejected()" />
                 </div>
             @endif
 
-            <form class="sm:col-span-1 md:col-start-2 md:col-span-3 lg:col-start-3 lg:col-span-5 flex-row"
-                wire:submit.prevent="generate">
-                @csrf
-                <div>
-                    <x-text-input name="month" title="Select month" wire:model="month" type="month" />
-                </div>
-                <div>
-                    <x-select-input name="principal" title="Select principal" wire:model="principal" :data="$principalData"
-                        :hash="$hash" />
-                </div>
-                <div>
-                    <x-select-input name="vesselType" title="Select vessel type" wire:model="vesselType"
-                        :data="$vesselTypeData" :hash="$hash" />
-                </div>
-                <div>
-                    <x-submit-button label="Generate" />
-                </div>
-            </form>
+            <div class="flex justify-center px-20">
+                <form class="w-full max-w-2xl" wire:submit.prevent="generate">
+                    @csrf
+                    <div class="space-y-4">
+                        <div>
+                            <x-text-input name="month" title="Select month" wire:model="month" type="month" />
+                        </div>
+                        <div>
+                            <x-select-input name="principal" title="Select principal" wire:model="principal" :data="$principalData"
+                                :hash="$hash" />
+                        </div>
+                        {{-- <div>
+                            <x-select-input name="vesselType" title="Select vessel type" wire:model="vesselType"
+                                :data="$vesselTypeData" :hash="$hash" />
+                        </div> --}}
+                        <div>
+                            <x-submit-button label="Generate" />
+                        </div>
+                    </div>
+                </form>
+            </div>
         @endif
         {{-- ----------------------------------------------------------------------------------- --}}
         {{-- ----------------------------------------------------------------------------------- --}}

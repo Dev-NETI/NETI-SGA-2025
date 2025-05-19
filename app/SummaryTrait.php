@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use IntlNumberFormatter;
 
 trait SummaryTrait
 {
@@ -72,20 +73,18 @@ trait SummaryTrait
         $currentDate = Carbon::now()->format('Y F d');
         //vessel type data
         $vesselTypeData = Vessel_type::whereHas('vessel', function ($query) use ($principalId) {
-            $query->where('principal_id', $principalId)
-                ->where('is_active', true);
+            $query->where('principal_id', $principalId);
         })
             ->orderBy('id', 'asc')->get();
         // training fee
         $bankCharge = 10;
-        $trainingFee = Vessel::where('principal_id', $principalId)->where('is_active', true)->sum('training_fee');
+        $trainingFee = Vessel_type::sum('training_fee');
         $totalTrainingFee = $trainingFee + $bankCharge;
         // formatted training fee
         $formattedBankCharge = number_format($bankCharge, 2);
         $formattedTrainingFee = number_format($trainingFee, 2);
         $formattedTotalTrainingFee = number_format($totalTrainingFee, 2);
-        $formatter = new NumberFormatter('en', NumberFormatter::SPELLOUT);
-        $formattedStringTotalTrainingFee = $formatter->format($totalTrainingFee);
+        $formattedStringTotalTrainingFee = \Illuminate\Support\Number::spell($totalTrainingFee);
         // month in word
         $formattedMonth = Carbon::createFromFormat("Y-m", $month)->format('F Y');
         // data end
@@ -145,14 +144,16 @@ trait SummaryTrait
 
             // vessel data
             $totalFee = 0;
+            $vesselCount = $vesselData->count();
+            $totalFee = $vesselType->training_fee * $vesselCount;
+
             foreach ($vesselData as $index => $vessel) {
-                $totalFee += $vessel->training_fee;
                 $pdf->setX(21);
                 $pdf->Cell(7, 5, $index + 1, 1, 0, "C");
                 $pdf->Cell(50, 5, $vessel->name, 1, 0, "L");
                 $pdf->Cell(18, 5, $vessel->code, 1, 0, "C");
                 $pdf->Cell(32, 5, $vessel->formatted_serial_number, 1, 0, "C");
-                $pdf->Cell(32, 5, ($index + 1 == 1 ? "$  " : "") . number_format($vessel->training_fee, 2), 1, 0, "R");
+                $pdf->Cell(32, 5, ($index + 1 == 1 ? "$  " : "") . number_format($vesselType->training_fee, 2), 1, 0, "R");
                 $pdf->Cell(32, 5, $vessel->remarks, 1, 1, "C");
 
                 if ($index == 34) {
@@ -170,50 +171,53 @@ trait SummaryTrait
         }
         // TRAINEE FEE PAGE END
 
-        if ($output) {
-            $pdf->Output();
-        } else {
-            $errorMsg = "Saving summary report failed!";
-            $successMsg = "Summary report saved successfully!";
+        $pdf->Output();
 
-            if ($currentProcessId < 4 && $currentProcessId > 1) { //delete old file
-                //delete old file
-                Storage::disk('public')->delete('Summary/' . $referenceNumber . '.pdf');
-            }
+        // temporary comment
+        // if ($output) {
+        //     $pdf->Output();
+        // } else {
+        //     $errorMsg = "Saving summary report failed!";
+        //     $successMsg = "Summary report saved successfully!";
 
-            if ($currentProcessId > 3) {
-                $query = $this->summaryQuery($currentProcessId, $referenceNumber, NULL, $principalId, $month);
-                // save to database
-                $this->storeLogs($query, $errorMsg, $successMsg);
-            } else {
-                // save to folder
-                $fileName = $referenceNumber . '.pdf';
-                $filePath = storage_path('app/public/Summary/' . $fileName);
-                $pdfContents = $pdf->Output('', 'S');
-                $storeFile = file_put_contents($filePath, $pdfContents);
+        //     if ($currentProcessId < 4 && $currentProcessId > 1) { //delete old file
+        //         //delete old file
+        //         Storage::disk('public')->delete('Summary/' . $referenceNumber . '.pdf');
+        //     }
 
-                if (!$storeFile) {
-                    session()->flash('error', ' Saving file failed!');
-                } else {
+        //     if ($currentProcessId > 3) {
+        //         $query = $this->summaryQuery($currentProcessId, $referenceNumber, NULL, $principalId, $month);
+        //         // save to database
+        //         $this->storeLogs($query, $errorMsg, $successMsg);
+        //     } else {
+        //         // save to folder
+        //         $fileName = $referenceNumber . '.pdf';
+        //         $filePath = storage_path('app/public/Summary/' . $fileName);
+        //         $pdfContents = $pdf->Output('', 'S');
+        //         $storeFile = file_put_contents($filePath, $pdfContents);
 
-                    $query = $this->summaryQuery($currentProcessId, $referenceNumber, $fileName, $principalId, $month);
-                    // save to database
-                    $this->storeLogs($query, $errorMsg, $successMsg);
-                }
-            }
+        //         if (!$storeFile) {
+        //             session()->flash('error', ' Saving file failed!');
+        //         } else {
 
-            // send email notification
-            $emailRecipient = $this->getSummaryReportRecipient($currentProcessId, $principalId);
-            $emailSubject = $this->SummaryEmailSubject($currentProcessId);
-            foreach ($emailRecipient as $name => $email) {
-                Mail::to($email)
-                    ->cc('sherwin.roxas@neti.com.ph')
-                    ->send(new SendSummaryEmail($referenceNumber, $emailSubject, $name));
-            }
+        //             $query = $this->summaryQuery($currentProcessId, $referenceNumber, $fileName, $principalId, $month);
+        //             // save to database
+        //             $this->storeLogs($query, $errorMsg, $successMsg);
+        //         }
+        //     }
+
+        //     // send email notification
+        //     $emailRecipient = $this->getSummaryReportRecipient($currentProcessId, $principalId);
+        //     $emailSubject = $this->SummaryEmailSubject($currentProcessId);
+        //     foreach ($emailRecipient as $name => $email) {
+        //         Mail::to($email)
+        //             ->cc('sherwin.roxas@neti.com.ph')
+        //             ->send(new SendSummaryEmail($referenceNumber, $emailSubject, $name));
+        //     }
 
 
-            return $this->redirectRoute('dashboard.summary');
-        }
+        //     return $this->redirectRoute('dashboard.summary');
+        // }
     }
 
     public function letterPage(
@@ -268,27 +272,36 @@ trait SummaryTrait
 
         //vessel type data and price
         $pdf->setXY(40, 106.7);
+        $totalTrainingFee = 0;
         foreach ($vesselTypeData as $vesselType) {
-            // dump($vesselType->vessel);
-            // dump($vesselType->vessel->sum('training_fee'));
+            $vesselCount = $vesselType->vessel->count();
+            $totalFee = $vesselType->training_fee * $vesselCount;
+            $totalTrainingFee += $totalFee;
+
             $pdf->setX(40);
             $pdf->Cell(38, 0, $vesselType->name, 0, 0, "L");
-            $pdf->Cell(30, 0, number_format($vesselType->vessel->sum('training_fee'), 2), 0, 1, "R");
+            $pdf->Cell(30, 0, number_format($totalFee, 2), 0, 1, "R");
         }
 
         // total
         $pdf->setXY(85, 150.5);
-        $pdf->Cell(25, 0, $formattedTrainingFee, 0, 0, "R");
+        $pdf->Cell(25, 0, number_format($totalTrainingFee, 2), 0, 0, "R");
         $pdf->setXY(85, 154.5);
         $pdf->Cell(25, 0, $formattedBankCharge, 0, 0, "R");
         $pdf->setXY(85, 158.5);
-        $pdf->Cell(25, 0, $formattedTotalTrainingFee, 0, 0, "R");
+        $pdf->Cell(25, 0, number_format($totalTrainingFee + floatval($formattedBankCharge), 2), 0, 0, "R");
 
         // signature
         $pdf->setXY(24, 222);
-        $pdf->Cell(25, 0, Str::upper($comptrollerData->full_name), 0, 0, "L");
+        $pdf->Cell(25, 0, "M.A. Monis", 0, 0, "L");
         $pdf->setXY(24, 226);
-        $pdf->Cell(25, 0, $comptrollerData->position->name, 0, 0, "L");
+        // $pdf->Cell(25, 0, $comptrollerData->position->name, 0, 0, "L");
+        $pdf->Cell(25, 0, 'Comptroller', 0, 0, "L");
+
+        $pdf->setXY(24, 240);
+        $pdf->Cell(25, 0, "A.R. Macanas", 0, 0, "L");
+        $pdf->setXY(24, 244);
+        $pdf->Cell(25, 0, 'President', 0, 0, "L");
 
         // Display the PNG image
         if ($currentProcessId > 2) {
@@ -412,11 +425,11 @@ trait SummaryTrait
 
         //signature names
         $pdf->setX(21);
-        $pdf->Cell(57, 5,  'J.V.DABUCOL', 'LBR', 0, "L");
+        $pdf->Cell(57, 5,  'C.G. Robles', 'LBR', 0, "L");
         $pdf->Cell(18, 5,  '', 'LBR', 0, "L");
         $pdf->Cell(32, 5,  '', 'LBR', 0, "L");
-        $pdf->Cell(32, 5,  'B.R.MACALINO', 'LBR', 0, "L");
-        $pdf->Cell(32, 5,  'M.A.MONIS', 'LBR', 0, "L");
+        $pdf->Cell(32, 5,  'M.A. Monis', 'LBR', 0, "L");
+        $pdf->Cell(32, 5,  'A.R. Macanas', 'LBR', 0, "L");
     }
 
     public function getSignaturePath($query = null)

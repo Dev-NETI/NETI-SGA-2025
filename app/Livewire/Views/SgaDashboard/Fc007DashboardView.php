@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Session;
 class Fc007DashboardView extends Component
 {
     use UtilitiesTrait;
-    public $title = "F-FC-007 Dashboard";
-    public $contentTitle = "Process View";
+    public $title = "Dashboard";
+    public $contentTitle = "FC-007";
 
     public function mount()
     {
-        Gate::authorize('Authorize',37);
+        Gate::authorize('Authorize', 37);
     }
 
     #[Layout('layouts.app')]

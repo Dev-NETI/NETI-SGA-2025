@@ -2,7 +2,7 @@
 
     <x-result-message />
 
-    <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6" x-data="{ sendBackModal: false, sendPaymentSlipModal: false }">
+    <div class="grid grid-cols-1 gap-6" x-data="{ sendBackModal: false, sendPaymentSlipModal: false }">
         
         @if ($isGenerated == 1)
             <div
@@ -58,19 +58,20 @@
 
 
                         </div>
-                        @if ($processId < 4)
+                        {{-- temporary comment --}}
+                        {{-- @if ($processId < 4)
                             <div class="w-full mt-4 ml-4 mr-4">
                                 <x-create-button label="Send Back" class="float-end"
                                     x-on:click="sendBackModal = true" />
                             </div>
-                        @endif
+                        @endif --}}
 
                     </div>
 
                 </x-pdf-view>
             </div>
         @else
-            <div class="col-span-1  md:col-span-6 lg:col-span-12">
+            <div class="col-span-1  ">
                 <livewire:components.logs.fc007-list-component statusId="{{ $processId }}" />
             </div>
         @endif
@@ -78,7 +79,8 @@
 
 
         {{-- sendback modal --}}
-        <div x-show="sendBackModal">
+        {{-- temporary comment --}}
+        {{-- <div x-show="sendBackModal">
             <x-modal title="Send Back">
                 <x-form-section submit="updateSendBack">
                     <x-slot:form>
@@ -90,7 +92,7 @@
                     </x-slot:actions>
                 </x-form-section>
             </x-modal>
-        </div>
+        </div> --}}
 
     </div>
 </x-view-main-content-v2>
