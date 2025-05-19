@@ -16,8 +16,7 @@ class TrainingFeeComponent extends Component
     {
         $sessionPrincipalId = Session::get('principalId');
         $sessionMonth = Session::get('month');
-        $sessionVesselTypeId = Session::get('vesselTypeId');
-        $this->generateFC007($sessionPrincipalId,$sessionMonth,$sessionVesselTypeId);
+        // $sessionVesselTypeId = Session::get('vesselTypeId');
+        $this->generateFC007($sessionPrincipalId, $sessionMonth);
     }
-
 }

@@ -21,7 +21,7 @@ class RoleSeeder extends Seeder
             '1' => ['SGA Module'],
             '2' => ['Generate Letter (SGA Module)'],
             '3' => ['Generate Training Fee (SGA Module)'],
-            
+
             '4' => ['Vessel Management'],
             '5' => ['Vessel View (Vessel Management)'],
             '6' => ['Create Vessel (Vessel Management)'],
@@ -31,7 +31,7 @@ class RoleSeeder extends Seeder
             '10' => ['Create Vessel Type (Vessel Management)'],
             '11' => ['Edit Vessel Type (Vessel Management)'],
             '12' => ['Delete Vessel Type (Vessel Management)'],
-            
+
             '13' => ['User Management'],
             '14' => ['Users View (User Management)'],
             '15' => ['Create User (User Management)'],
@@ -47,8 +47,8 @@ class RoleSeeder extends Seeder
             '25' => ['Create Department (User Management)'],
             '26' => ['Edit Department (User Management)'],
             '27' => ['Delete Department (User Management)'],
-            
-            '28' => ['Summary Report Dashboard'],//starting from here, hindi pa naimplement gates, do delete if ok na
+
+            '28' => ['Summary Report Dashboard'], //starting from here, hindi pa naimplement gates, do delete if ok na
             '29' => ['Summary Maintenance'],
             '30' => ['Add Summary Email Recipient(Summary Dashboard Module)'],
             '31' => ['Delete Summary Email Recipient(Summary Dashboard Module)'],
@@ -58,25 +58,23 @@ class RoleSeeder extends Seeder
             '35' => ['Principal Board(Summary Dashboard Module)'],
             '36' => ['Close Board(Summary Dashboard Module)'],
 
-            '37' => ['Training Fee Report Dashboard'],//starting from here, hindi pa naimplement gates, do delete if ok na
+            '37' => ['Training Fee Report Dashboard'], //starting from here, hindi pa naimplement gates, do delete if ok na
             '38' => ['Training Fee Maintenance'],
             '39' => ['Add Training Fee Email Recipient(Training Fee Dashboard Module)'],
             '40' => ['Delete Training Fee Email Recipient(Training Fee Dashboard Module)'],
             '41' => ['Generate Board(Training Fee Dashboard Module)'],
             '42' => ['Verification Board(Training Fee Dashboard Module)'],
-            '43' => ['Approval Board(Training Fee Dashboard Module)'],
-            '44' => ['Principal Board(Training Fee Dashboard Module)'],
+            '43' => ['Comptroller Board(Training Fee Dashboard Module)'],
+            '44' => ['GM Board(Training Fee Dashboard Module)'],
             '45' => ['O.R. Board(Training Fee Dashboard Module)'],
             '46' => ['Close Board(Training Fee Dashboard Module)'],
-            
+
         ];
 
-        foreach($data as $index=>[$name]){
+        foreach ($data as $index => [$name]) {
             Role::create([
                 'name' => $name
             ]);
         }
-
     }
-    
 }

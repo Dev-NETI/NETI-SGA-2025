@@ -33,9 +33,9 @@
             </div>
         @else
             @if ($sentBackBoardCount > 0)
-                <div class="col-span-1 md:col-start-4 md:col-span-2 lg:col-start-8 lg:col-span-2">
+                {{-- <div class="col-span-1 md:col-start-4 md:col-span-2 lg:col-start-8 lg:col-span-2">
                     <x-red-button label="View rejected reports" class="float-end" wire:click="showRejected()" />
-                </div>
+                </div> --}}
             @endif
             <form class="sm:col-span-1 md:col-start-2 md:col-span-3 lg:col-start-3 lg:col-span-5 flex-row"
                 wire:submit.prevent="generate">

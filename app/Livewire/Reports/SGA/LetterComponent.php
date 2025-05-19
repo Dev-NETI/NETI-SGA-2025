@@ -18,5 +18,4 @@ class LetterComponent extends Component
         $recipientId = Session::get('recipientId');
         $this->generateSummary($month, $principalId, $recipientId);
     }
-
 }

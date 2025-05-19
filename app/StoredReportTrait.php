@@ -19,6 +19,7 @@ trait StoredReportTrait
     use UtilitiesTrait;
     use FpdiTrait;
     use EmailManagementTrait;
+    use SummaryTrait;
 
     public function authorization($processId)
     {
@@ -95,7 +96,7 @@ trait StoredReportTrait
                     $this->updateStatus($fcLogId, $processId, $newStatusId);
 
                     // send email notification
-                    $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
+                    // $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
                 }
                 //---------------------------------------------------------------------------------------//
                 //---------------------------------------------------------------------------------------//
@@ -111,7 +112,7 @@ trait StoredReportTrait
                 //---------------------------------------------------------------------------------------//
             }
 
-            return $this->redirectRoute('sga.process-fc007', ['processId' => $processId]);
+            return $this->redirectRoute('dashboard.fc007', ['processId' => $processId]);
         }
     }
 
@@ -169,14 +170,12 @@ trait StoredReportTrait
 
     public function attachSignature($pdf, $processId)
     {
-        switch ($processId) {
-            case 2:
-                $this->getSignature($pdf, Auth::user()->signature_path, 90, 269, 12, 12);
-                break;
-            case 3:
-                $this->getSignature($pdf, Auth::user()->signature_path, 170, 269, 12, 12);
-                break;
-        }
+        // Verified By
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $pdf->setXY(152, 272.5);
+        $pdf->Cell(20.5, 5, "B.A. Nadayao", 0, 0, "L");
+        // $this->getSignature($pdf, Auth::user()->signature_path, 175, 269, 12, 12);
+        $this->getSignature($pdf, 'Miss Deth Sig.png', 162, 260, 40, 40);
     }
 
     public function getNewStatus($processId)
