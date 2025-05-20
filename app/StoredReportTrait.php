@@ -172,10 +172,10 @@ trait StoredReportTrait
     {
         // Verified By
         $pdf->SetFont('Helvetica', 'B', 9);
-        $pdf->setXY(152, 272.5);
+        $pdf->setXY(168, 272.5);
         $pdf->Cell(20.5, 5, "B.A. Nadayao", 0, 0, "L");
         // $this->getSignature($pdf, Auth::user()->signature_path, 175, 269, 12, 12);
-        $this->getSignature($pdf, 'Miss Deth Sig.png', 162, 260, 40, 40);
+        $this->getSignature($pdf, 'Miss Deth Sig.png', 168, 265, 23, 23);
     }
 
     public function getNewStatus($processId)

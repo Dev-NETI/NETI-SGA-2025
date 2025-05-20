@@ -1,4 +1,4 @@
-<div class="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-9 mt-8">
+<div class="grid grid-cols-3 mt-8">
     <x-result-message />
 
     @if ($rejectedList)
@@ -37,7 +37,7 @@
                     <x-red-button label="View rejected reports" class="float-end" wire:click="showRejected()" />
                 </div> --}}
             @endif
-            <form class="sm:col-span-1 md:col-start-2 md:col-span-3 lg:col-start-3 lg:col-span-5 flex-row"
+            <form class="col-span-1 col-start-2 flex-row"
                 wire:submit.prevent="generate">
                 @csrf
                 <div>

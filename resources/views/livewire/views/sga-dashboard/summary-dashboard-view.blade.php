@@ -8,8 +8,8 @@
                 class="flex-column space-y space-y-4 text-sm font-medium 
             text-gray-500 dark:text-gray-400 md:me-4 mb-4 md:mb-0">
 
-                <x-tab-button route="dashboard.summary" :active="true" label="Summary" />
-                <x-tab-button route="dashboard.fc007" :active="false" label="FC-007" />
+                <x-tab-button route="dashboard.summary" :active="true" label="Letter & Summary" />
+                <x-tab-button route="dashboard.fc007" :active="false" label="SGA" />
 
             </ul>
 

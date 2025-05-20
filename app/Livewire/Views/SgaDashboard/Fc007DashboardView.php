@@ -13,7 +13,7 @@ class Fc007DashboardView extends Component
 {
     use UtilitiesTrait;
     public $title = "Dashboard";
-    public $contentTitle = "FC-007";
+    public $contentTitle = "SGA";
 
     public function mount()
     {

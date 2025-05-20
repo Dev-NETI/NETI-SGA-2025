@@ -129,7 +129,6 @@ trait SummaryTrait
         $importedTrainingFeePage = $pdf->importPage($trainingFeeTemplate);
 
         foreach ($vesselTypeData as $vesselType) {
-
             $vesselData = $vesselType->vessel;
             $this->trainingFeePage(
                 $pdf,
@@ -143,9 +142,10 @@ trait SummaryTrait
             );
 
             // vessel data
-            $totalFee = 0;
             $vesselCount = $vesselData->count();
-            $totalFee = $vesselType->training_fee * $vesselCount;
+            $pageCount = ceil($vesselCount / 35); // Calculate number of pages needed
+            $totalFee = 0;
+            $forwardedBalance = 0;
 
             foreach ($vesselData as $index => $vessel) {
                 $pdf->setX(21);
@@ -156,68 +156,76 @@ trait SummaryTrait
                 $pdf->Cell(32, 5, ($index + 1 == 1 ? "$  " : "") . number_format($vesselType->training_fee, 2), 1, 0, "R");
                 $pdf->Cell(32, 5, $vessel->remarks, 1, 1, "C");
 
-                if ($index == 34) {
+                $totalFee += $vesselType->training_fee;
+
+                // If we've reached 35 vessels or it's the last vessel
+                if (($index + 1) % 35 == 0 || $index + 1 == $vesselCount) {
                     $this->traineeFeeSignature($pdf, $totalFee, $currentProcessId, $generatedByUserId, $verifiedByUserId, $approvedByUserId);
-                    $this->trainingFeePage2(
-                        $pdf,
-                        $totalFee,
-                        $pageWidth,
-                        $pageHeight
-                    );
-                    $totalFee = 0;
+
+                    // If there are more vessels to process, create a new page
+                    if ($index + 1 < $vesselCount) {
+                        $forwardedBalance = $totalFee;
+                        $this->trainingFeePage2(
+                            $pdf,
+                            $forwardedBalance,
+                            $pageWidth,
+                            $pageHeight
+                        );
+                        $totalFee = 0; // Reset total for next page
+                    }
                 }
             }
-            $this->traineeFeeSignature($pdf, $totalFee, $currentProcessId, $generatedByUserId, $verifiedByUserId, $approvedByUserId);
         }
         // TRAINEE FEE PAGE END
-
-        $pdf->Output();
-
         // temporary comment
-        // if ($output) {
-        //     $pdf->Output();
-        // } else {
-        //     $errorMsg = "Saving summary report failed!";
-        //     $successMsg = "Summary report saved successfully!";
-
-        //     if ($currentProcessId < 4 && $currentProcessId > 1) { //delete old file
-        //         //delete old file
-        //         Storage::disk('public')->delete('Summary/' . $referenceNumber . '.pdf');
-        //     }
-
-        //     if ($currentProcessId > 3) {
-        //         $query = $this->summaryQuery($currentProcessId, $referenceNumber, NULL, $principalId, $month);
-        //         // save to database
-        //         $this->storeLogs($query, $errorMsg, $successMsg);
-        //     } else {
-        //         // save to folder
-        //         $fileName = $referenceNumber . '.pdf';
-        //         $filePath = storage_path('app/public/Summary/' . $fileName);
-        //         $pdfContents = $pdf->Output('', 'S');
-        //         $storeFile = file_put_contents($filePath, $pdfContents);
-
-        //         if (!$storeFile) {
-        //             session()->flash('error', ' Saving file failed!');
-        //         } else {
-
-        //             $query = $this->summaryQuery($currentProcessId, $referenceNumber, $fileName, $principalId, $month);
-        //             // save to database
-        //             $this->storeLogs($query, $errorMsg, $successMsg);
-        //         }
-        //     }
-
-        //     // send email notification
-        //     $emailRecipient = $this->getSummaryReportRecipient($currentProcessId, $principalId);
-        //     $emailSubject = $this->SummaryEmailSubject($currentProcessId);
-        //     foreach ($emailRecipient as $name => $email) {
-        //         Mail::to($email)
-        //             ->cc('sherwin.roxas@neti.com.ph')
-        //             ->send(new SendSummaryEmail($referenceNumber, $emailSubject, $name));
-        //     }
+        // $pdf->Output();
 
 
-        //     return $this->redirectRoute('dashboard.summary');
-        // }
+        if ($output) {
+            $pdf->Output();
+        } else {
+            $errorMsg = "Saving summary report failed!";
+            $successMsg = "Summary report saved successfully!";
+
+            if ($currentProcessId < 4 && $currentProcessId > 1) { //delete old file
+                //delete old file
+                Storage::disk('public')->delete('Summary/' . $referenceNumber . '.pdf');
+            }
+
+            if ($currentProcessId > 3) {
+                $query = $this->summaryQuery($currentProcessId, $referenceNumber, NULL, $principalId, $month);
+                // save to database
+                $this->storeLogs($query, $errorMsg, $successMsg);
+            } else {
+                // save to folder
+                $fileName = $referenceNumber . '.pdf';
+                $filePath = storage_path('app/public/Summary/' . $fileName);
+                $pdfContents = $pdf->Output('', 'S');
+                $storeFile = file_put_contents($filePath, $pdfContents);
+
+                if (!$storeFile) {
+                    session()->flash('error', ' Saving file failed!');
+                } else {
+
+                    $query = $this->summaryQuery($currentProcessId, $referenceNumber, $fileName, $principalId, $month);
+                    // save to database
+                    $this->storeLogs($query, $errorMsg, $successMsg);
+                }
+            }
+
+            // send email notification
+            // temporary comment
+            // $emailRecipient = $this->getSummaryReportRecipient($currentProcessId, $principalId);
+            // $emailSubject = $this->SummaryEmailSubject($currentProcessId);
+            // foreach ($emailRecipient as $name => $email) {
+            //     Mail::to($email)
+            //         ->cc('sherwin.roxas@neti.com.ph')
+            //         ->send(new SendSummaryEmail($referenceNumber, $emailSubject, $name));
+            // }
+
+
+            return $this->redirectRoute('dashboard.summary');
+        }
     }
 
     public function letterPage(
@@ -292,15 +300,15 @@ trait SummaryTrait
         $pdf->Cell(25, 0, number_format($totalTrainingFee + floatval($formattedBankCharge), 2), 0, 0, "R");
 
         // signature
-        $pdf->setXY(24, 222);
+        $pdf->setXY(24, 217);
         $pdf->Cell(25, 0, "M.A. Monis", 0, 0, "L");
-        $pdf->setXY(24, 226);
+        $pdf->setXY(24, 221);
         // $pdf->Cell(25, 0, $comptrollerData->position->name, 0, 0, "L");
         $pdf->Cell(25, 0, 'Comptroller', 0, 0, "L");
 
-        $pdf->setXY(24, 240);
+        $pdf->setXY(24, 235);
         $pdf->Cell(25, 0, "A.R. Macanas", 0, 0, "L");
-        $pdf->setXY(24, 244);
+        $pdf->setXY(24, 239);
         $pdf->Cell(25, 0, 'President', 0, 0, "L");
 
         // Display the PNG image
@@ -381,31 +389,40 @@ trait SummaryTrait
         $pdf->Cell(57, 5,  'Prepared by: ', 'LTR', 0, "L");
         $pdf->Cell(18, 5,  '', 'LTR', 0, "L");
         $pdf->Cell(32, 5,  '', 'LTR', 0, "L");
-        $pdf->Cell(32, 5,  'Noted by: ', 'LTR', 0, "L");
+        $pdf->Cell(32, 5,  '', 'LTR', 0, "L");
         $pdf->Cell(32, 5,  'Approved by: ', 'LTR', 1, "L");
         //signatures
 
         $pdf->setX(21);
         // generated by
-        if ($generatedByUserId != null) {
-            $pdf->Cell(57, 8,  $this->getSignature($pdf, $this->getSignaturePath(
-                User::find($generatedByUserId)
-            ), null, null, 25, 20), 'LR', 0, "C");
-        } else {
-            $pdf->Cell(57, 8,  $this->getSignature($pdf, Auth::user()->signature_path, null, null, 25, 20), 'LR', 0, "C");
-        }
+        // if ($generatedByUserId != null) {
+        //     $pdf->Cell(57, 8,  $this->getSignature($pdf, $this->getSignaturePath(
+        //         User::find($generatedByUserId)
+        //     ), null, null, 25, 20), 'LR', 0, "C");
+        // } else {
+        //     $pdf->Cell(57, 8,  $this->getSignature($pdf, Auth::user()->signature_path, null, null, 25, 20), 'LR', 0, "C");
+        // }
+        // getSignature($pdf, $signaturePath, $x, $y, $w, $h)
+        $pdf->Cell(57, 8,  $this->getSignature($pdf, 'Miss-Tel-Sig.png', 22, null, 18, 18), 'LR', 0, "C");
         // generated end
 
         $pdf->Cell(18, 8,  '', 'LR', 0, "L");
         $pdf->Cell(32, 8,  '', 'LR', 0, "L");
 
         // verified
-        if ($currentProcessId > 2) {
-            $pdf->Cell(32, 8,  $this->getSignature($pdf, $this->getSignature($pdf, $this->getSignaturePath(
-                User::find($verifiedByUserId)
-            ), null, null, 25, 20), null, null, 25, 20), 'LR', 0, "L");
-        } else if ($currentProcessId == 2) {
-            $pdf->Cell(32, 8,  $this->getSignature($pdf, Auth::user()->signature_path, null, null, 25, 20), 'LR', 0, "L");
+        // if ($currentProcessId > 2) {
+        //     $pdf->Cell(32, 8,  $this->getSignature($pdf, $this->getSignature($pdf, $this->getSignaturePath(
+        //         User::find($verifiedByUserId)
+        //     ), null, null, 25, 20), null, null, 25, 20), 'LR', 0, "L");
+        // } else if ($currentProcessId == 2) {
+        //     $pdf->Cell(32, 8,  $this->getSignature($pdf, Auth::user()->signature_path, null, null, 25, 20), 'LR', 0, "L");
+        // } else {
+        //     $pdf->Cell(32, 8,  '', 'LR', 0, "L");
+        // }
+
+        if ($currentProcessId >= 2) {
+            // getSignature($pdf, $signaturePath, $x, $y, $w, $h)
+            $pdf->Cell(32, 8,  $this->getSignature($pdf, 'Miss Deth Sig.png', 159, NULL, 22, 22), 'LR', 0, "L");
         } else {
             $pdf->Cell(32, 8,  '', 'LR', 0, "L");
         }
@@ -428,8 +445,8 @@ trait SummaryTrait
         $pdf->Cell(57, 5,  'C.G. Robles', 'LBR', 0, "L");
         $pdf->Cell(18, 5,  '', 'LBR', 0, "L");
         $pdf->Cell(32, 5,  '', 'LBR', 0, "L");
-        $pdf->Cell(32, 5,  'M.A. Monis', 'LBR', 0, "L");
-        $pdf->Cell(32, 5,  'A.R. Macanas', 'LBR', 0, "L");
+        $pdf->Cell(32, 5,  '', 'LBR', 0, "L");
+        $pdf->Cell(32, 5,  'B.A. Nadayao', 'LBR', 0, "L");
     }
 
     public function getSignaturePath($query = null)
