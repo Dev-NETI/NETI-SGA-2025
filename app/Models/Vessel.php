@@ -83,6 +83,11 @@ class Vessel extends Model
 
     public function getFormattedNameWithCodeAttribute()
     {
-        return $this->name . " (" . $this->code . ")";
+        if ($this->code == NULL) {
+            $formattedName = $this->name;
+        } else {
+            $formattedName = $this->name . " (" . $this->code . ")";
+        }
+        return $formattedName;
     }
 }
