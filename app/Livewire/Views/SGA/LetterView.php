@@ -11,8 +11,8 @@ use Livewire\Attributes\Layout;
 class LetterView extends Component
 {
     use AuthorizesRequests;
-    public $title="SGA";
-    public $contentTitle="Summary";
+    public $title = "SGA";
+    public $contentTitle = "Summary";
 
     public function mount()
     {

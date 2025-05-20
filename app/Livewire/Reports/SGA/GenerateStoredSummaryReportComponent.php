@@ -14,11 +14,11 @@ class GenerateStoredSummaryReportComponent extends Component
     public function __invoke()
     {
         $this->generateSummary(
-            Session::get('month'), 
-            Session::get('principalId'), 
-            Session::get('recipientId'), 
-            true, 
-            Session::get('referenceNumber'), 
+            Session::get('month'),
+            Session::get('principalId'),
+            Session::get('recipientId'),
+            true,
+            Session::get('referenceNumber'),
             Session::get('currentProcessId'),
             Session::get('generatedUserId'),
             Session::get('verifiedUserId'),

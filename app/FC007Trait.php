@@ -174,6 +174,6 @@ trait FC007Trait
         $pdf->setXY(36.5, 272.5);
         $pdf->Cell(20.5, 5, "C.G. Robles", 0, 0, "L");
         // $this->getSignature($pdf, Auth::user()->signature_path, 42, 270, 12, 12);
-        $this->getSignature($pdf, 'Miss-Tel-Sig.png', 53, 268, 22, 22);
+        $this->getSignature($pdf, 'Miss-Tel-Sig.png', 37, 266, 20, 20);
     }
 }

@@ -50,7 +50,7 @@ class GenerateLetterComponent extends Component
             ->where('position_id', 2)
             ->orderBy('f_name', 'asc')
             ->get();
-        return view('livewire.components.s-g-a.generate-letter-component', compact('principalData', 'userData','sentBackBoardCount'));
+        return view('livewire.components.s-g-a.generate-letter-component', compact('principalData', 'userData', 'sentBackBoardCount'));
     }
 
     public function updatedPrincipal($value)
@@ -74,8 +74,8 @@ class GenerateLetterComponent extends Component
         if ($this->reGenerate) {
             //delete old file
             $deleteFile = Storage::disk('public')->delete('Summary/' . $this->referenceNumber . '.pdf');
-            if($deleteFile){
-                $this->hardDestroyTrait(SummaryLog::class,'reference_number',$this->referenceNumber);
+            if ($deleteFile) {
+                $this->hardDestroyTrait(SummaryLog::class, 'reference_number', $this->referenceNumber);
             }
         }
 
@@ -106,7 +106,7 @@ class GenerateLetterComponent extends Component
     {
         Gate::authorize('Authorize', 4);
         $recipientData = User::where('company_id', $data['principalId'])->where('is_active', 1)->first();
-        
+
         Session::put('month', $data['month']);
         Session::put('principalId', $data['principalId']);
         Session::put('recipientId', $recipientData->id);
@@ -116,5 +116,4 @@ class GenerateLetterComponent extends Component
         $this->cancelRejectedList();
         $this->isGenerated = true;
     }
-
 }

@@ -15,7 +15,7 @@ trait UtilitiesTrait
         $pdf->Image($imagePath, $x, $y, $w, $h, 'PNG', '', '', false, 300, '', false, false, 0, false, false);
     }
 
-    public function redirectToMaintenance($id,$route)
+    public function redirectToMaintenance($id, $route)
     {
         Session::put('processId', $id);
         return $this->redirectRoute($route);

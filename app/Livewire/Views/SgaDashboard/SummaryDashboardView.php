@@ -14,18 +14,18 @@ class SummaryDashboardView extends Component
 {
     use AuthorizesRequests;
     use DashboardTrait;
-    public $title = "Summary Dashboard";
-    public $contentTitle = "Process View";
+    public $title = "Dashboard";
+    public $contentTitle = "Letter and Summary";
 
     public function mount()
     {
-        Gate::authorize('Authorize',28);
+        Gate::authorize('Authorize', 28);
     }
 
     #[Layout('layouts.app')]
     public function render()
     {
-        $summaryLogData = SummaryLog::orderBy('id','DESC')->get();
+        $summaryLogData = SummaryLog::orderBy('id', 'DESC')->get();
         $generateBoard = $summaryLogData->where('status_id', 1);
         $verificationBoard = $summaryLogData->where('status_id', 2);
         $approvalBoard = $summaryLogData->where('status_id', 3);
@@ -33,7 +33,11 @@ class SummaryDashboardView extends Component
         $closeBoard = $summaryLogData->where('status_id', 5);
 
         return view('livewire.views.sga-dashboard.summary-dashboard-view', compact(
-            'generateBoard','verificationBoard','approvalBoard','principalBoard','closeBoard'
+            'generateBoard',
+            'verificationBoard',
+            'approvalBoard',
+            'principalBoard',
+            'closeBoard'
         ));
     }
 
@@ -42,5 +46,4 @@ class SummaryDashboardView extends Component
         Session::put('processId', $id);
         return $this->redirectRoute('dashboard.summary-maintenance');
     }
-
 }
