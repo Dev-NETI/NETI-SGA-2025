@@ -24,14 +24,14 @@ trait FC007Trait
     use UtilitiesTrait;
     use EmailManagementTrait;
 
-    public function generateFC007($sessionPrincipalId, $sessionMonth, $output = true, $referenceNumber = null)
+    public function generateFC007($sessionPrincipalId, $sessionMonth, $sessionVesselTypeId, $output = true, $referenceNumber = null)
     {
         // data
         $principalId = $sessionPrincipalId;
         $month = $sessionMonth;
 
         // Get all vessel types
-        $vesselTypes = Vessel_type::get();
+        $vesselType = Vessel_type::where('id', $sessionVesselTypeId)->first();
 
         $formattedMonth = Carbon::createFromFormat("Y-m", $month)->format('F Y');
         $subtractMonth = Carbon::createFromFormat("Y-m", $month)->subMonth()->format('F Y');
@@ -45,18 +45,16 @@ trait FC007Trait
         $pageWidth = 210;
         $pageHeight = 297;
 
-        // Process each vessel type
-        foreach ($vesselTypes as $vesselType) {
-            $vesselData = Vessel::where('principal_id', $principalId)
-                ->where('vessel_type_id', $vesselType->id)
-                ->orderBy('name', 'asc')
-                ->get();
+        // Get vessels for the specific vessel type
+        $vesselData = Vessel::where('principal_id', $principalId)
+            ->where('vessel_type_id', $vesselType->id)
+            ->orderBy('name', 'asc')
+            ->get();
 
-            // Add training fee from vessel type to each vessel
-            foreach ($vesselData as $vessel) {
-                $vessel->training_fee = $vesselType->training_fee;
-                $this->trainingFee($pdf, $importedPage, $vessel, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight);
-            }
+        // Add training fee from vessel type to each vessel
+        foreach ($vesselData as $vessel) {
+            $vessel->training_fee = $vesselType->training_fee;
+            $this->trainingFee($pdf, $importedPage, $vessel, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight);
         }
 
         //signature 
@@ -87,14 +85,8 @@ trait FC007Trait
                 $this->storeTrait($query, $errorMsg, $successMsg);
 
                 // Update serial numbers for all vessels
-                foreach ($vesselTypes as $vesselType) {
-                    $vesselData = Vessel::where('principal_id', $principalId)
-                        ->where('vessel_type_id', $vesselType->id)
-                        ->get();
-
-                    foreach ($vesselData as $vessel) {
-                        $this->updateSerialNumber($vessel->id, $vessel->incremented_serial_number, $errorMsg, $successMsg);
-                    }
+                foreach ($vesselData as $vessel) {
+                    $this->updateSerialNumber($vessel->id, $vessel->incremented_serial_number, $errorMsg, $successMsg);
                 }
 
                 session()->flash('success', "F-FC-007 report successfully sent for verification!");
@@ -115,6 +107,7 @@ trait FC007Trait
 
     public function trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight)
     {
+        $vesselPrefix = $data->prefix != NULL ? $data->prefix : 'MV';
         $pdf->AddPage('P', [$pageWidth, $pageHeight]);
         $pdf->useTemplate($importedPage);
         // Set font
@@ -125,7 +118,7 @@ trait FC007Trait
         $pdf->Cell(20.5, 5, $data->training_fee_serial_number, 0, 0, "C");
         // name of vessel
         $pdf->setXY(92, 54.8);
-        $pdf->Cell(25, 5, $data->formatted_name_with_code, 0, 0, "C");
+        $pdf->Cell(25, 5, $vesselPrefix . " " . $data->formatted_name_with_code, 0, 0, "C");
         // current date
         $pdf->setXY(165, 54.8);
         $pdf->Cell(25, 5, $currentDate, 0, 0, "C");
