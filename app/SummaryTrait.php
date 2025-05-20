@@ -153,7 +153,7 @@ trait SummaryTrait
                 $pdf->Cell(50, 5, $vessel->name, 1, 0, "L");
                 $pdf->Cell(18, 5, $vessel->code, 1, 0, "C");
                 $pdf->Cell(32, 5, $vessel->formatted_serial_number, 1, 0, "C");
-                $pdf->Cell(32, 5, ($index + 1 == 1 ? "$  " : "") . number_format($vesselType->training_fee, 2), 1, 0, "R");
+                $pdf->Cell(32, 5, "$  " . number_format($vesselType->training_fee, 2), 1, 0, "R");
                 $pdf->Cell(32, 5, $vessel->remarks, 1, 1, "C");
 
                 $totalFee += $vesselType->training_fee;
@@ -292,13 +292,15 @@ trait SummaryTrait
         }
 
         // total
-        $pdf->setXY(85, 150.5);
+        $pdf->setXY(85, 139.5);
         $pdf->Cell(25, 0, number_format($totalTrainingFee, 2), 0, 0, "R");
-        $pdf->setXY(85, 154.5);
+        $pdf->setXY(85, 143.5);
         $pdf->Cell(25, 0, $formattedBankCharge, 0, 0, "R");
-        $pdf->setXY(85, 158.5);
+        $pdf->setXY(85, 147.5);
         $pdf->Cell(25, 0, number_format($totalTrainingFee + floatval($formattedBankCharge), 2), 0, 0, "R");
 
+        $pdf->setXY(24, 160);
+        $pdf->Cell(25, 0, "Total amount due is USD " . number_format($totalTrainingFee + floatval($formattedBankCharge), 2) . " which we appreciate your kind remittance to our bank account as follows:", 0, 0, "L");
         // signature
         $pdf->setXY(24, 217);
         $pdf->Cell(25, 0, "MARIA CRISTINA A. MONIS", 0, 0, "L");
@@ -307,7 +309,7 @@ trait SummaryTrait
         $pdf->Cell(25, 0, 'Comptroller', 0, 0, "L");
 
         $pdf->setXY(24, 235);
-        $pdf->Cell(25, 0, "ARNEL R. MACANAS", 0, 0, "L");
+        $pdf->Cell(25, 0, "CE ARNEL R. MACANAS", 0, 0, "L");
         $pdf->setXY(24, 239);
         $pdf->Cell(25, 0, 'President', 0, 0, "L");
 
@@ -381,9 +383,10 @@ trait SummaryTrait
         $pdf->Cell(50, 5, "TOTAL", 1, 0, "L");
         $pdf->Cell(18, 5, "", 1, 0, "C");
         $pdf->Cell(32, 5, "", 1, 0, "C");
+        $pdf->SetFont('Helvetica', 'BU', 9);
         $pdf->Cell(32, 5, "$  " . number_format($totalFee, 2), 1, 0, "R");
         $pdf->Cell(32, 5, "", 1, 1, "C");
-
+        $pdf->SetFont('Helvetica', 'B', 8);
         //signature heading
         $pdf->setX(21);
         $pdf->Cell(57, 5,  'Prepared by: ', 'LTR', 0, "L");
