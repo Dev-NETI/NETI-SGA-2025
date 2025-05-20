@@ -107,7 +107,7 @@ trait FC007Trait
 
     public function trainingFee($pdf, $importedPage, $data, $currentDate, $formattedMonth, $subtractMonth, $pageWidth, $pageHeight)
     {
-        $vesselPrefix = $data->prefix != NULL ? $data->prefix : 'MV';
+        $vesselPrefix = $data->prefix != NULL ? $data->prefix : '';
         $pdf->AddPage('P', [$pageWidth, $pageHeight]);
         $pdf->useTemplate($importedPage);
         // Set font

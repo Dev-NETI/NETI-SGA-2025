@@ -28,6 +28,7 @@ class CreateVesselView extends Component
     ])]
     public $vessel;
     public $vesselType;
+    public $prefix = "";
     public $code;
     public $vesselId;
     public $principal;
@@ -46,6 +47,7 @@ class CreateVesselView extends Component
             $this->principal = $vesselData->principal_id;
             $this->serialNumber = $vesselData->serial_number;
             $this->remarks = $vesselData->remarks;
+            $this->prefix = $vesselData->prefix;
         }
     }
 
@@ -68,6 +70,7 @@ class CreateVesselView extends Component
             'code' => $this->code,
             'principal_id' => $this->principal,
             'remarks' => $this->remarks,
+            'prefix' => $this->prefix,
         ]);
         $errorMsg = "Saving vessel failed!";
         $successMsg = "Saving vessel successful!";
@@ -90,6 +93,7 @@ class CreateVesselView extends Component
             'principal_id' => $this->principal,
             'serial_number' => $this->serialNumber,
             'remarks' => $this->remarks,
+            'prefix' => $this->prefix,
         ]);
 
         $routeBack = "vessel.index";

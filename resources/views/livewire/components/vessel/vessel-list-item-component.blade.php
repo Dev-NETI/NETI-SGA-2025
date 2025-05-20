@@ -1,6 +1,7 @@
 <tr class="border-b border-gray-200 dark:border-gray-700  {{ $vessel->deleted_at ? 'bg-red-700' : '' }}">
     <x-td>{{ $vessel->code }}</x-td>
     <x-td>{{ $vessel->name }}</x-td>
+    <x-td>{{ $vessel->prefix }}</x-td>
     <x-td>{{ $vessel->vessel_type->name }}</x-td>
     <x-td>{{ $vessel->principal->name }}</x-td>
     <x-td>{{ $vessel->serial_number }}</x-td>
