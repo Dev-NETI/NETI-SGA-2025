@@ -406,7 +406,7 @@ trait SummaryTrait
         //     $pdf->Cell(57, 8,  $this->getSignature($pdf, Auth::user()->signature_path, null, null, 25, 20), 'LR', 0, "C");
         // }
         // getSignature($pdf, $signaturePath, $x, $y, $w, $h)
-        $pdf->Cell(57, 8,  $this->getSignature($pdf, 'Miss-Tel-Sig.png', 22, null, 18, 18), 'LR', 0, "C");
+        $pdf->Cell(57, 8,  $this->getSignature($pdf, 'Miss-Tel-Sig.png', 22, null, 15, 15), 'LR', 0, "C");
         // generated end
 
         $pdf->Cell(18, 8,  '', 'LR', 0, "L");
