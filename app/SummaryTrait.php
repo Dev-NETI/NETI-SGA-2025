@@ -301,13 +301,13 @@ trait SummaryTrait
 
         // signature
         $pdf->setXY(24, 217);
-        $pdf->Cell(25, 0, "M.A. Monis", 0, 0, "L");
+        $pdf->Cell(25, 0, "MARIA CRISTINA A. MONIS", 0, 0, "L");
         $pdf->setXY(24, 221);
         // $pdf->Cell(25, 0, $comptrollerData->position->name, 0, 0, "L");
         $pdf->Cell(25, 0, 'Comptroller', 0, 0, "L");
 
         $pdf->setXY(24, 235);
-        $pdf->Cell(25, 0, "A.R. Macanas", 0, 0, "L");
+        $pdf->Cell(25, 0, "ARNEL R. MACANAS", 0, 0, "L");
         $pdf->setXY(24, 239);
         $pdf->Cell(25, 0, 'President', 0, 0, "L");
 

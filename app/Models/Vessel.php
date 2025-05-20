@@ -15,6 +15,7 @@ class Vessel extends Model
         'vessel_type_id',
         'hash',
         'name',
+        'prefix',
         'code',
         'training_fee',
         'modified_by',

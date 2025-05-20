@@ -26,7 +26,7 @@ class GenerateTrainingFeeComponent extends Component
     #[Validate([
         'month' => 'required',
         'principal' => 'required',
-        // 'vesselType' => 'required'
+        'vesselType' => 'required'
     ])]
     public $month;
     public $principal;
@@ -53,7 +53,7 @@ class GenerateTrainingFeeComponent extends Component
         $this->validate();
         Session::put('principalId', $this->principal);
         Session::put('month', $this->month);
-        // Session::put('vesselTypeId', $this->vesselType);
+        Session::put('vesselTypeId', $this->vesselType);
         $this->isGenerated = true;
         $this->referenceNumber = $this->generateReferenceNumber();
     }
@@ -66,7 +66,7 @@ class GenerateTrainingFeeComponent extends Component
         Gate::authorize('Authorize', 5);
         Session::put('principalId', $data['principalId']);
         Session::put('month', $data['month']);
-        // Session::put('vesselTypeId', $data['vesselType']);
+        Session::put('vesselTypeId', $data['vesselType']);
         $this->reGenerate = true;
         $this->isGenerated = true;
         $this->referenceNumber = $data['referenceNumber'];
@@ -84,11 +84,11 @@ class GenerateTrainingFeeComponent extends Component
 
         $sessionPrincipalId = Session::get('principalId', $this->principal);
         $sessionMonth = Session::get('month', $this->month);
-        // $sessionVesselTypeId = Session::get('vesselTypeId', $this->vesselType);
+        $sessionVesselTypeId = Session::get('vesselTypeId', $this->vesselType);
         $this->generateFC007(
             $sessionPrincipalId,
             $sessionMonth,
-            // $sessionVesselTypeId, 
+            $sessionVesselTypeId,
             false,
             $this->referenceNumber
         );

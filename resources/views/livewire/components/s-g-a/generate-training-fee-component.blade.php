@@ -51,10 +51,10 @@
                             <x-select-input name="principal" title="Select principal" wire:model="principal" :data="$principalData"
                                 :hash="$hash" />
                         </div>
-                        {{-- <div>
+                        <div>
                             <x-select-input name="vesselType" title="Select vessel type" wire:model="vesselType"
                                 :data="$vesselTypeData" :hash="$hash" />
-                        </div> --}}
+                        </div>
                         <div>
                             <x-submit-button label="Generate" />
                         </div>
