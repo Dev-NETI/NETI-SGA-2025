@@ -27,7 +27,7 @@ class VesselTypeSeeder extends Seeder
             "8" => ["BUNKER LNG"],
         ];
 
-        foreach($data as $index=>[$name]){
+        foreach ($data as $index => [$name]) {
             Vessel_type::create([
                 'name' => $name,
                 'hash' => encrypt($name)

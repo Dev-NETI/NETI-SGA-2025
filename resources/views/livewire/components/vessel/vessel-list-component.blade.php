@@ -3,6 +3,7 @@
         <tr>
             <x-th>Code</x-th>
             <x-th>Vessel</x-th>
+            <x-th>Prefix</x-th>
             <x-th>Type</x-th>
             <x-th>Principal</x-th>
             <x-th>Serial #</x-th>
