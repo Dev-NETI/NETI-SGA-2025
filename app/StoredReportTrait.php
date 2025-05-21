@@ -141,26 +141,26 @@ trait StoredReportTrait
             case 2:
                 $update = $query->update([
                     'status_id' => $newStatusId,
-                    'verified_by' => Auth::user()->full_name,
+                    'verified_by' => Auth::user()->full_name ?? ' ',
                     'verified_at' => now(),
                 ]);
                 break;
             case 3:
                 $update = $query->update([
                     'status_id' => $newStatusId,
-                    'approved_by' => Auth::user()->full_name,
+                    'approved_by' => Auth::user()->full_name ?? ' ',
                     'approved_at' => now(),
                 ]);
             case 4:
                 $update = $query->update([
                     'status_id' => $newStatusId,
-                    'payment_slip_by' => Auth::user()->full_name,
+                    'payment_slip_by' => Auth::user()->full_name ?? ' ',
                     'payment_slip_at' => now(),
                 ]);
             case 5:
                 $update = $query->update([
                     'status_id' => $newStatusId,
-                    'or_by' => Auth::user()->full_name,
+                    'or_by' => Auth::user()->full_name ?? ' ',
                     'or_at' => now(),
                 ]);
                 break;

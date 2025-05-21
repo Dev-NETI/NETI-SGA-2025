@@ -50,7 +50,7 @@ class Fc007ListItemComponent extends Component
                 $attachmentTypeData = null;
                 break;
         }
-        
+
         return view('livewire.components.logs.fc007-list-item-component', compact('attachmentTypeData'));
     }
 
