@@ -141,26 +141,26 @@ trait FC007Trait
         $lessedFee = $addedFee - $trainingFee;
         $pdf->SetFont('Helvetica', 'B', 9);
         $pdf->setXY(180, 74);
-        $pdf->Cell(20.5, 5, number_format($trainingFee, 2), 0, 0, "L");
+        $pdf->Cell(15, 5, number_format($trainingFee, 2), 0, 0, "R");
 
         $pdf->setXY(180, 79);
-        $pdf->Cell(20.5, 5, number_format($trainingFee, 2), 0, 0, "L");
+        $pdf->Cell(15, 5, number_format($trainingFee, 2), 0, 0, "R");
 
         $pdf->SetFont('Helvetica', '', 9);
         $pdf->setXY(180, 86);
-        $pdf->Cell(20.5, 5, number_format($trainingFee, 2), 0, 0, "L");
+        $pdf->Cell(15, 5, number_format($trainingFee, 2), 0, 0, "R");
 
         $pdf->SetFont('Helvetica', 'B', 9);
         $pdf->setXY(180, 92.3);
-        $pdf->Cell(20.5, 5, number_format($addedFee, 2), 0, 0, "L");
+        $pdf->Cell(15, 5, number_format($addedFee, 2), 0, 0, "R");
 
         $pdf->SetFont('Helvetica', '', 9);
         $pdf->setXY(180, 99);
-        $pdf->Cell(20.5, 5, number_format($trainingFee, 2), 0, 0, "L");
+        $pdf->Cell(15, 5, number_format($trainingFee, 2), 0, 0, "R");
 
         $pdf->SetFont('Helvetica', 'B', 9);
         $pdf->setXY(180, 105);
-        $pdf->Cell(20.5, 5, number_format($lessedFee, 2), 0, 0, "L");
+        $pdf->Cell(15, 5, number_format($lessedFee, 2), 0, 0, "R");
 
         // Prepared By
         $pdf->SetFont('Helvetica', 'B', 9);
