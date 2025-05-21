@@ -19,16 +19,13 @@ trait EmailManagementTrait
                 $title = "Verification Board";
                 break;
             case '3':
-                $title = "Approval Board";
+                $title = "Comptroller Board";
                 break;
             case '4':
-                $title = "Principal Board";
-                break;
-            case '5':
-                $title = "O.R. Board";
+                $title = "President Board";
                 break;
             default:
-                $title = "";
+                $title = "Close Board";
                 break;
         }
 
@@ -45,19 +42,13 @@ trait EmailManagementTrait
                 $subject = "Verification Process";
                 break;
             case '3':
-                $subject = "Approval Process";
+                $subject = "Comptroller Process";
                 break;
             case '4':
-                $subject = "Principal Process";
-                break;
-            case '5':
-                $subject = "Upload O.R. Process";
-                break;
-            case '6':
-                $subject = "O.R ready for viewing";
+                $subject = "President Process";
                 break;
             default:
-                $subject = "";
+                $subject = "Close Process";
                 break;
         }
 
@@ -74,10 +65,10 @@ trait EmailManagementTrait
                 $subject = "Letter and Summary Report for Approval";
                 break;
             case '3':
-                $subject = "Letter and Summary Report sent to Principal";
+                $subject = "Letter and Summary Report for Approval";
                 break;
             default:
-                $subject = "Letter and Summary Report received by Principal";
+                $subject = "Letter and Summary Report transaction finished!";
                 break;
         }
 

@@ -19,8 +19,7 @@ class ProcessSeeder extends Seeder
             'Generate Board',
             'Verification Board',
             'Comptroller Board',
-            'GM Board',
-            'OR Board',
+            'President Board',
             'Close Board'
         ];
 

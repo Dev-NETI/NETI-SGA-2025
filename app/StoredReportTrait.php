@@ -36,11 +36,11 @@ trait StoredReportTrait
             case 4:
                 Gate::authorize('Authorize', 44);
                 break;
-            case 5:
-                Gate::authorize('Authorize', 45);
-                break;
+            // case 5:
+            //     Gate::authorize('Authorize', 45);
+            //     break;
             default:
-                Gate::authorize('Authorize', 46);
+                Gate::authorize('Authorize', 45);
                 break;
         }
     }
@@ -73,7 +73,7 @@ trait StoredReportTrait
         } else {
             $newStatusId = $this->getNewStatus($processId);
 
-            if ($processId < 4) { //replace old file becuase of signature attachment => update status => send email
+            if ($processId < 3) { //replace old file becuase of signature attachment => update status => send email
                 //---------------------------------------------------------------------------------------//
                 //---------------------------------------------------------------------------------------//
                 //delete old file
@@ -107,7 +107,7 @@ trait StoredReportTrait
                 $this->updateStatus($fcLogId, $processId, $newStatusId);
 
                 // send email notification
-                $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
+                // $this->sendEmail($newStatusId, $principalId, $processId, $referenceNumber);
                 //---------------------------------------------------------------------------------------//
                 //---------------------------------------------------------------------------------------//
             }
@@ -212,11 +212,8 @@ trait StoredReportTrait
             case 3:
                 $label = "Approve";
                 break;
-            case 4:
-                $label = "Send Payment Slip";
-                break;
             default:
-                $label = "Upload O.R.";
+                $label = "Approve";
                 break;
         }
         return $label;
@@ -232,13 +229,10 @@ trait StoredReportTrait
                 $successMessage = "Report successfully sent for approval!";
                 break;
             case 4:
-                $successMessage = "Report successfully sent to principal!";
-                break;
-            case 5:
-                $successMessage = "Payment slip successfully sent to NETI!";
+                $successMessage = "Report successfully sent for approval!";
                 break;
             default:
-                $successMessage = "Official Receipt successfully sent to principal!";
+                $successMessage = "Report approved by president!";
                 break;
         }
         return $successMessage;

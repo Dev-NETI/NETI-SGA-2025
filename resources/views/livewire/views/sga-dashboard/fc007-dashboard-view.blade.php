@@ -31,29 +31,29 @@
                     <div class="col-span-1">
                         <x-dashboard-card cardTitle="Comptroller Board"
                             cardDescription="Approve F-FC-007 report." route="sga.process-fc007"
-                            processId="3" dataCount="{{ $approvalBoardCount }}"
+                            processId="3" dataCount="{{ $comptrollerBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 3 }}','dashboard.fc007-maintenance')" />
                     </div>
 
                     <div class="col-span-1">
-                        <x-dashboard-card cardTitle="GM Board"
+                        <x-dashboard-card cardTitle="President Board"
                             cardDescription="Approve F-FC-007 report." route="sga.process-fc007" processId="4"
-                            dataCount="{{ $principalBoardCount }}"
+                            dataCount="{{ $presidentBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 4 }}','dashboard.fc007-maintenance')" />
                     </div>
 
-                    <div class="col-span-1">
+                    {{-- <div class="col-span-1">
                         <x-dashboard-card cardTitle="O.R Board"
                             cardDescription="Upload Official Receipt here." route="sga.process-fc007" processId="5"
                             dataCount="{{ $OrBoardCount }}"
                             x-on:click="$wire.redirectToMaintenance('{{ 5 }}','dashboard.fc007-maintenance')" />
-                    </div>
+                    </div> --}}
 
                     <div class="col-span-1">
                         <x-dashboard-card cardTitle="Close Board"
-                            cardDescription="All finished transactions are stored here." route="sga.process-fc007" processId="6"
+                            cardDescription="All finished transactions are stored here." route="sga.process-fc007" processId="5"
                             dataCount="{{ $CloseBoardCount }}"
-                            x-on:click="$wire.redirectToMaintenance('{{ 6 }}','dashboard.fc007-maintenance')" />
+                            x-on:click="$wire.redirectToMaintenance('{{ 5 }}','dashboard.fc007-maintenance')" />
                     </div>
 
                 </div>

@@ -25,19 +25,19 @@ class Fc007DashboardView extends Component
     {
         $sentBackBoardCount = count(Fc007Log::where('status_id', 1)->get());
         $verifyBoardCount = count(Fc007Log::where('status_id', 2)->get());
-        $approvalBoardCount = count(Fc007Log::where('status_id', 3)->get());
-        $principalBoardCount = count(Fc007Log::where('status_id', 4)->get());
-        $OrBoardCount = count(Fc007Log::where('status_id', 5)->get());
-        $CloseBoardCount = count(Fc007Log::where('status_id', 6)->get());
+        $comptrollerBoardCount = count(Fc007Log::where('status_id', 3)->get());
+        $presidentBoardCount = count(Fc007Log::where('status_id', 4)->get());
+        // $OrBoardCount = count(Fc007Log::where('status_id', 5)->get());
+        $CloseBoardCount = count(Fc007Log::where('status_id', 5)->get());
 
         return view(
             'livewire.views.sga-dashboard.fc007-dashboard-view',
             compact(
                 'sentBackBoardCount',
                 'verifyBoardCount',
-                'approvalBoardCount',
-                'principalBoardCount',
-                'OrBoardCount',
+                'comptrollerBoardCount',
+                'presidentBoardCount',
+                // 'OrBoardCount',
                 'CloseBoardCount'
             )
         );
