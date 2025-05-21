@@ -13,18 +13,19 @@
                     <div class="flex flex-row">
 
                         <div class="mt-4 ml-4">
-                            <x-red-button label="Cancel" wire:click="cancel()" />
+                            <x-red-button label="{{$processId != 5 ? 'Cancel' : 'Close'}}" wire:click="cancel()" />
                         </div>
                         <div class="mt-4 ml-4">
                             
-                            
-                            @if (!($processId == 6))
                                 {{-- ------------------------------------------------- --}}
                                 {{-- ------------------------------------------------- --}}
-                                @if (!($processId == 4 || $processId == 5))
+                                {{-- @if (!($processId == 4 || $processId == 5)) --}}
+                                @if ($processId != 5)
                                     <x-create-button label="{{ $buttonLabel }}" wire:click="update()"
-                                        wire:confirm="Are you sure you want to save?" />
-                                @else
+                                    wire:confirm="Are you sure you want to save?" />
+                                @endif
+                                    
+                                {{-- @else
                                     <x-create-button label="{{ $buttonLabel }}" class="text-sm"
                                         x-on:click="sendPaymentSlipModal = true" />
 
@@ -51,11 +52,9 @@
 
                                         </x-modal>
                                     </div>
-                                @endif
+                                @endif --}}
                                 {{-- ------------------------------------------------- --}}
                                 {{-- ------------------------------------------------- --}}
-                            @endif
-
 
                         </div>
                         {{-- temporary comment --}}

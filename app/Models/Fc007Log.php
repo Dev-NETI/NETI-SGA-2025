@@ -10,10 +10,24 @@ class Fc007Log extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'reference_number', 'file_path', 'modified_by', 'hash', 'status_id', 'generated_by',
-        'verified_by', 'verified_at', 'approved_by', 'approved_at', 'send_back_details',
-        'send_back_at', 'send_back_by', 'principal_id', 'payment_slip_by', 'payment_slip_at',
-        'or_by', 'or_at'
+        'reference_number',
+        'file_path',
+        'modified_by',
+        'hash',
+        'status_id',
+        'generated_by',
+        'verified_by',
+        'verified_at',
+        'approved_by',
+        'approved_at',
+        'send_back_details',
+        'send_back_at',
+        'send_back_by',
+        'principal_id',
+        'payment_slip_by',
+        'payment_slip_at',
+        'or_by',
+        'or_at'
     ];
 
     protected static function boot()

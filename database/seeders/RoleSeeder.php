@@ -65,8 +65,8 @@ class RoleSeeder extends Seeder
             '41' => ['Generate Board(Training Fee Dashboard Module)'],
             '42' => ['Verification Board(Training Fee Dashboard Module)'],
             '43' => ['Comptroller Board(Training Fee Dashboard Module)'],
-            '44' => ['GM Board(Training Fee Dashboard Module)'],
-            '45' => ['O.R. Board(Training Fee Dashboard Module)'],
+            '44' => ['President Board(Training Fee Dashboard Module)'],
+            // '45' => ['O.R. Board(Training Fee Dashboard Module)'],
             '46' => ['Close Board(Training Fee Dashboard Module)'],
 
         ];
