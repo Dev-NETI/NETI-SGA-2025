@@ -142,7 +142,7 @@ class User extends Authenticatable
     // acessor
     public function getFullNameAttribute()
     {
-        return $this->f_name . " " . $this->m_name . " " . $this->l_name;
+        return $this->f_name . " " .  $this->l_name;
     }
 
     public function getNameAttribute()

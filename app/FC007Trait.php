@@ -77,7 +77,7 @@ trait FC007Trait
                     'reference_number' => $referenceNumber,
                     'file_path' => $fileName,
                     'status_id' => 2,
-                    'generated_by' => Auth::user()->full_name,
+                    'generated_by' => Auth::user()->full_name ?? ' ',
                     'principal_id' => $principalId,
                 ]);
                 $errorMsg = "Saving summary report failed!";
